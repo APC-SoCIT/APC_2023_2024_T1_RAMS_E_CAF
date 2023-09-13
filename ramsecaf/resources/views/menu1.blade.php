@@ -84,12 +84,13 @@
         <div class="container">
             <div class="heading_container heading_center">
                 <h2>
-                    Our Menu
+                  {{$product[0]->store_name}}
                 </h2>
             </div>
 
             <ul class="filters_menu">
                 <li class="active" data-filter=".all">All</li>
+                <li data-filter=".ricemeals">Best Sellers</li>
                 <li data-filter=".ricemeals">Rice Meals</li>
                 <li data-filter=".pasta">Pasta</li>
                 <li data-filter=".beverages">Beverages
@@ -102,7 +103,7 @@
                     <div class="col-sm-6 col-lg-3 all {{$product->category}}">
                         <div class="box">
                             <div>
-                                    <div class="img-box hover-zoom">
+                                    <div class="img-box">
                                         <img src="{{url('images/'.$product->image)}}" alt="">
                                     </div>
                                 

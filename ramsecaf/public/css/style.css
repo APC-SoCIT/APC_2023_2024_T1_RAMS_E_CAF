@@ -586,7 +586,7 @@ a:focus {
 
 .food_section .box:hover .img-box img {
   -webkit-transform: scale(1.1);
-          transform: scale(1.1);
+          transform: scale(1.8);
 }
 
 .food_section .btn-box {

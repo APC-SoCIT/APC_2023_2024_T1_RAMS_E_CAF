@@ -79,3 +79,5 @@ Route::get('/aviewreports', [mainController::class, 'aviewreports'])->name('avie
 Route::get('/aeditvendor', [mainController::class, 'aeditvendor'])->name('aeditvendor');
 
 Route::get('/vendorupdatestatus/{id}', [mainController::class, 'vendorupdatestatus'])->name('vendorupdatestatus');
+
+Route::get('/success/{cartid}', [mainController::class, 'success'])->name('success');

@@ -19,14 +19,32 @@ use Carbon\Carbon;
 class mainController extends Controller
 {
     public function Home()
-    {
-        $vendor = User::where('vendor',1)->get();
-        return view("index", ['vendor'=>$vendor]);
-    }
+{
+    $vendor = User::where('vendor', 1)->get();
+    $userid = Auth::user()->get()->first()->id;
+
+    // For Kitchen Express
+    $kitchen_Express = Cart::where('user_id', $userid)->where('store', 'Kitchen Express')->get()->last();
+    $kitchen_Express_list = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $kitchen_Express->id)->get();
+
+    // For Red Brew (Assuming you have a similar database structure)
+
+
+    // For La Mudras (Assuming you have a similar database structure)
+
+
+    return view("index", [
+        'vendor' => $vendor,
+        "kitchen_express" => $kitchen_Express,
+        'kitchen_Express_list' => $kitchen_Express_list,
+
+
+    ]);
+}
 
     public function userlogin(Request $request)
     {
-        
+
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             Alert::error('Incorrect email/password!', '')->showConfirmButton('Confirm', '#AA0F0A');
             return back();
@@ -45,7 +63,6 @@ class mainController extends Controller
                 return redirect()->route("aviewreports");
             }
         }
-        
     }
 
     public function signout(Request $request)
@@ -60,11 +77,11 @@ class mainController extends Controller
 
     public function vendorhome()
     {
-        
+
         // Get current date and time 
-        $now = Carbon::now(); 
+        $now = Carbon::now();
         // Get start and end of day 
-        $startOfDay = $now->copy()->startOfDay(); 
+        $startOfDay = $now->copy()->startOfDay();
         $endOfDay = $now->copy()->endOfDay();
         // Get today's sales
         $today = Carbon::today();
@@ -90,49 +107,50 @@ class mainController extends Controller
             ->whereBetween('created_at', [$startOfYear, $endOfYear]);
 
         $productlist = DB::table('order_product')
-        ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->select(
-            'productname',
-            'price',
-            DB::raw('count(*) as productsold'),
-            DB::raw('SUM(product_total * product_quantity) as total')
-        )
-        ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
-        ->groupBy('productname', 'price')
-        ->get();
+            ->join('product', 'product.id', '=', 'order_product.product_id')
+            ->select(
+                'productname',
+                'price',
+                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_total * product_quantity) as total')
+            )
+            ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
+            ->groupBy('productname', 'price')
+            ->get();
 
-        $startOfWeek = Carbon::now()->startOfWeek(); $endOfWeek = Carbon::now()->endOfWeek();
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
         $productlist_week = DB::table('order_product')
-        ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->select(
-            'productname',
-            'price',
-            DB::raw('count(*) as productsold'),
-            DB::raw('SUM(product_total * product_quantity) as total')
-        )
-        ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
-        ->groupBy('productname', 'price')
-        ->get();
-        
-        
+            ->join('product', 'product.id', '=', 'order_product.product_id')
+            ->select(
+                'productname',
+                'price',
+                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_total * product_quantity) as total')
+            )
+            ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
+            ->groupBy('productname', 'price')
+            ->get();
+
+
         $productlist_month = DB::table('order_product')
-        ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->select(
-            'productname',
-            'price',
-            DB::raw('count(*) as productsold'),
-            DB::raw('SUM(product_total * product_quantity) as total')
-        )
-        ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
-        ->groupBy('productname', 'price')
-        ->get();
+            ->join('product', 'product.id', '=', 'order_product.product_id')
+            ->select(
+                'productname',
+                'price',
+                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_total * product_quantity) as total')
+            )
+            ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
+            ->groupBy('productname', 'price')
+            ->get();
 
         return view('vhome', [
             "product_week" => $productlist_week,
             "product_month" => $productlist_month,
             "product" => $productlist,
             'today_sales' => $todaySales,
-            'weekly_sales'=> $weeklySales,
+            'weekly_sales' => $weeklySales,
             'monthly_sales' => $monthlySales,
             'yearly_sales' => $yearlySales
         ]);
@@ -159,7 +177,7 @@ class mainController extends Controller
     public function addtocart($product_id)
     {
         $userid = Auth::user()->get()->first()->id;
-        $store = Product::where('id',$product_id)->get()->first()->store_name;
+        $store = Product::where('id', $product_id)->get()->first()->store_name;
         $cart_count = Cart::where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "pending")->count();
         if ($cart_count == 0) {
             Cart::create([
@@ -188,35 +206,33 @@ class mainController extends Controller
             ]);
         }
         toast('Item added to cart', 'success');
-        if($store == 'Kitchen Express'){
+        if ($store == 'Kitchen Express') {
             $product = Product::where("store_name", "Kitchen Express")->get();
             return redirect()->route("kitchenexpress", ["product" => $product]);
         }
-        if($store == 'La Mudras Corner'){
+        if ($store == 'La Mudras Corner') {
             $product = Product::where("store_name", "La Mudras Corner")->get();
             return redirect()->route("lamudras", ["product" => $product]);
         }
-        if($store == 'Red Brew'){
+        if ($store == 'Red Brew') {
             $product = Product::where("store_name", "Red Brew")->get();
             return redirect()->route("redbrew", ["product" => $product]);
         }
-        
     }
 
     public function proceedtocart()
     {
         $userid = Auth::user()->get()->first()->id;
-        if (Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 ) {
+        if (Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0) {
             Alert::warning('No item was added to cart', '')->showConfirmButton('Confirm', '#FCAE28');
             // return redirect()->route("home", ["product" => $product]);
             return back();
         }
-        
+
 
         $cart_id = Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->last()->id;
         $product = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cart_id)->get();
         return view("cart", ["product" => $product]);
-
     }
 
     public function addquantity($productid, $cartid)
@@ -237,19 +253,19 @@ class mainController extends Controller
     {
         $cart_id = Order_product::where("product_id", $productid)->where("cart_id", $cartid)->get()->first();
         if ($cart_id->product_quantity == 1) {
-            $store = Cart::where('id',$cartid)->get()->first()->store;
+            $store = Cart::where('id', $cartid)->get()->first()->store;
             $cart_id->delete();
             if (Order_product::where("cart_id", $cartid)->get()->count() == 0) {
                 Cart::where("id", $cartid)->delete();
-                if($store == 'Kitchen Express'){
+                if ($store == 'Kitchen Express') {
                     $product = Product::where("store_name", "Kitchen Express")->get();
                     return redirect()->route("kitchenexpress", ["product" => $product]);
                 }
-                if($store == 'La Mudras Corner'){
+                if ($store == 'La Mudras Corner') {
                     $product = Product::where("store_name", "La Mudras Corner")->get();
                     return redirect()->route("lamudras", ["product" => $product]);
                 }
-                if($store == 'Red Brew'){
+                if ($store == 'Red Brew') {
                     $product = Product::where("store_name", "Red Brew")->get();
                     return redirect()->route("redbrew", ["product" => $product]);
                 }
@@ -270,6 +286,96 @@ class mainController extends Controller
 
     public function payment($cartid)
     {
+
+
+        $user_id = Cart::where("id", $cartid)->get()->first()->user_id;
+
+        $name = User::where('id', $user_id)->get()->first()->name;
+        $email = User::where('id', $user_id)->get()->first()->email;
+        $store = Cart::where("id", $cartid)->get()->first()->store;
+
+        $result = Order_product::join("product", "product.id", "=", "order_product.product_id")
+            ->where("cart_id", $cartid)
+            ->get();
+
+        $jsonFormattedResult = $result->toJson();
+        $data = json_decode($jsonFormattedResult, true);
+
+        // Create a new array with "amount," "name," "quantity," and "currency" fields
+        $filteredData = array_map(function ($item) {
+            // Assuming "price" is the amount field
+            // Format the amount with two decimal places and add a zero before if needed
+            $formattedAmount = number_format($item["price"], 2, '', '');
+
+            return [
+                "currency" => "PHP",
+                "amount" => intval($formattedAmount),
+                "name" => $item["productname"],
+                // Assuming "productname" is the name field
+                "quantity" => $item["product_quantity"],
+            ];
+        }, $data);
+
+        // Encode the filtered data back to JSON format
+        $jsonResult = json_encode($filteredData);
+
+        $client = new \GuzzleHttp\Client();
+
+        $response = $client->request('POST', 'https://api.paymongo.com/v1/checkout_sessions', [
+            'body' => '{"data":
+                {"attributes":
+                    {"billing":
+                        {"name":"' . $name . '",
+                            "email":"' . $email . '"},
+                            "send_email_receipt":true,
+                            "show_description":true,
+                            "show_line_items":true,
+                            "description":"' . $store . '",
+                            "line_items":' . $jsonResult . ',
+                                "payment_method_types":[
+                                    "gcash","grab_pay","paymaya"
+                                ],
+                                "reference_number":"ORDER' . Cart::where("id", $cartid)->get()->first()->id . '",
+                                "success_url":"http://127.0.0.1:8000/success/' . Cart::where("id", $cartid)->get()->first()->id . '",
+                                "cancel_url":"http://127.0.0.1:8000/proceedtocart"}}}',
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'accept' => 'application/json',
+                'authorization' => 'Basic c2tfdGVzdF9YNnlqaVFpcHdjNTdWY2lob3ZkcWhOSHo6',
+            ],
+        ]);
+
+
+        // Assuming $responseData contains the JSON response
+        $responseData = json_decode($response->getBody(), true);
+
+        // Access the 'checkout_url' attribute
+        $checkoutUrl = $responseData['data']['attributes']['checkout_url'];
+
+        // Now, $checkoutUrl contains the checkout URL
+
+        return redirect($checkoutUrl);
+
+        // $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cartid)->get();
+        // $pendingorders = Cart::where("id", $cartid)->get();
+        // $pendingorders->first()->update(["cart_status" => "paid"]);
+        // $orderproduct = Order_product::where('cart_id', $cartid)->get();
+        // foreach ($orderproduct as $prod) {
+        //     Product::where('id', $prod->product_id)->first()->update([
+        //         "stocks" => (Product::where('id', $prod->product_id)->first()->stocks) - $prod->product_quantity
+        //     ]);
+        // }
+        // $user = User::where("id", Cart::where("id", $cartid)->first()->user_id)->get()->first();
+        // $cartitem = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "paid")->get();
+        // $cart = Cart::where("cart_status", "paid")->get();
+
+        // return view("myProfile", ["product" => $cartitem, "cart" => $cart]);
+    }
+
+
+    public function success($cartid)
+    {
+
         $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cartid)->get();
         $pendingorders = Cart::where("id", $cartid)->get();
         $pendingorders->first()->update(["cart_status" => "paid"]);
@@ -285,7 +391,6 @@ class mainController extends Controller
 
         return view("myProfile", ["product" => $cartitem, "cart" => $cart]);
     }
-
     public function order_summary($cartid)
     {
         $cart = Cart::where("id", $cartid)->get()->last();
@@ -306,7 +411,6 @@ class mainController extends Controller
     {
         $cart = Cart::where('id', $request->cartid)->get()->first()->update(['cart_status' => 'claimed']);
         return redirect()->route("vieworders");
-
     }
 
     public function orders_summary($cartid)
@@ -337,7 +441,6 @@ class mainController extends Controller
         ]);
         Alert::success('Thank you!', 'Your feedback has been submitted')->showConfirmButton('Confirm', '#FCAE28');
         return redirect()->route("complete");
-
     }
 
     public function receipt($cartid)
@@ -352,42 +455,35 @@ class mainController extends Controller
     {
         $user = Auth::user()->role;
         if ($user == "vendor-ke") {
-            $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->
-                join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "paid")->where("store", "Kitchen Express")->get();
+            $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "paid")->where("store", "Kitchen Express")->get();
             $cart = Cart::where("cart_status", "paid")->where("store", "Kitchen Express")->get();
 
-            $cartitems_claimed = Order_product::join("product", "product.id", "=", "order_product.product_id")->
-                join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "claimed")->where("store", "Kitchen Express")->get();
+            $cartitems_claimed = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "claimed")->where("store", "Kitchen Express")->get();
             $cart_claimed = Cart::where("cart_status", "claimed")->where("store", "Kitchen Express")->get();
 
-            $productlist = Product::where("store_name", "Kitchen Express")->where('isactive',1)->get();
+            $productlist = Product::where("store_name", "Kitchen Express")->where('isactive', 1)->get();
             return view("vorders", ["product_list" => $productlist, "product" => $cartitems, "cart" => $cart, "product_claimed" => $cartitems_claimed, "cart_claimed" => $cart_claimed]);
         }
         if ($user == "vendor-rb") {
-            $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->
-                join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "paid")->where("store", "Red Brew")->get();
+            $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "paid")->where("store", "Red Brew")->get();
             $cart = Cart::where("cart_status", "paid")->where("store", "Red Brew")->get();
 
-            $cartitems_claimed = Order_product::join("product", "product.id", "=", "order_product.product_id")->
-                join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "claimed")->where("store", "Red Brew")->get();
+            $cartitems_claimed = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "claimed")->where("store", "Red Brew")->get();
             $cart_claimed = Cart::where("cart_status", "claimed")->where("store", "Red Brew")->get();
 
-            $productlist = Product::where("store_name", "Red Brew")->where('isactive',1)->get();
+            $productlist = Product::where("store_name", "Red Brew")->where('isactive', 1)->get();
             return view("vorders", ["product_list" => $productlist, "product" => $cartitems, "cart" => $cart, "product_claimed" => $cartitems_claimed, "cart_claimed" => $cart_claimed]);
         }
         if ($user == "vendor-lm") {
-            $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->
-                join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "paid")->where("store", "La Mudras Corner")->get();
+            $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "paid")->where("store", "La Mudras Corner")->get();
             $cart = Cart::where("cart_status", "paid")->where("store", "La Mudras Corner")->get();
 
-            $cartitems_claimed = Order_product::join("product", "product.id", "=", "order_product.product_id")->
-                join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "claimed")->where("store", "La Mudras Corner")->get();
+            $cartitems_claimed = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "claimed")->where("store", "La Mudras Corner")->get();
             $cart_claimed = Cart::where("cart_status", "claimed")->where("store", "La Mudras Corner")->get();
 
-            $productlist = Product::where("store_name", "La Mudras Corner")->where('isactive',1)->get();
+            $productlist = Product::where("store_name", "La Mudras Corner")->where('isactive', 1)->get();
             return view("vorders", ["product_list" => $productlist, "product" => $cartitems, "cart" => $cart, "product_claimed" => $cartitems_claimed, "cart_claimed" => $cart_claimed]);
         }
-
     }
 
     public function completeorder()
@@ -440,26 +536,21 @@ class mainController extends Controller
     {
         $user = Auth::user()->role;
         if ($user == "vendor-ke") {
-            $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->
-                select('feedback.*', 'cart.store')->where('store', 'Kitchen Express')->get();
+            $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->select('feedback.*', 'cart.store')->where('store', 'Kitchen Express')->get();
             return view("vviewfeedback", ["feedbacklist" => $feedbacklist,]);
         }
         if ($user == "vendor-rb") {
-            $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->
-                select('feedback.*', 'cart.store')->where('store', 'Red Brew')->get();
+            $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->select('feedback.*', 'cart.store')->where('store', 'Red Brew')->get();
             return view("vviewfeedback", ["feedbacklist" => $feedbacklist,]);
         }
         if ($user == "vendor-lm") {
-            $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->
-                select('feedback.*', 'cart.store')->where('store', 'La Mudras Corner')->get();
+            $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->select('feedback.*', 'cart.store')->where('store', 'La Mudras Corner')->get();
             return view("vviewfeedback", ["feedbacklist" => $feedbacklist,]);
         }
         if ($user == "admin") {
-            $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->
-                select('feedback.*', 'cart.store')->get();
+            $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->select('feedback.*', 'cart.store')->get();
             return view("viewfeedbacks", ["feedbacklist" => $feedbacklist,]);
         }
-
     }
 
     public function updatemenu(Request $request)
@@ -488,7 +579,6 @@ class mainController extends Controller
             Product::where('id', $id)->get()->first()->update([
                 'isactive' => 0,
             ]);
-
         } else {
             Product::where('id', $id)->get()->first()->update([
                 'isactive' => 1,
@@ -541,68 +631,68 @@ class mainController extends Controller
 
     public function aviewreports()
     {
-         // Get current date and time 
-         $now = Carbon::now(); 
-         // Get start and end of day 
-         $startOfDay = $now->copy()->startOfDay(); 
-         $endOfDay = $now->copy()->endOfDay();
-         // Get today's sales
-         $today = Carbon::today();
-         $todaySales = DB::table('order_product')
-             ->whereDate('created_at', $today)
-             ->sum('product_total');
-         // Get weekly sales
-         $startOfWeek = Carbon::now()->startOfWeek();
-         $endOfWeek = Carbon::now()->endOfWeek();
-         $weeklySales = DB::table('order_product')
-             ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-             ->sum('product_total');
-         // Get monthly sales
-         $startOfMonth = Carbon::now()->startOfMonth();
-         $endOfMonth = Carbon::now()->endOfMonth();
-         $monthlySales = DB::table('order_product')
-             ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-             ->sum('product_total');
-         // Get yearly sales
-         $startOfYear = Carbon::now()->startOfYear();
-         $endOfYear = Carbon::now()->endOfYear();
-         $yearlySales = DB::table('order_product')
-             ->whereBetween('created_at', [$startOfYear, $endOfYear]);
- 
-         $productlist = DB::table('order_product')
-         ->join('product', 'product.id', '=', 'order_product.product_id')
-         ->select(
-             'productname',
-             'price',
-             DB::raw('count(*) as productsold'),
-             DB::raw('SUM(product_total * product_quantity) as total')
-         )
-         ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
-         ->groupBy('productname', 'price')
-         ->get();
+        // Get current date and time 
+        $now = Carbon::now();
+        // Get start and end of day 
+        $startOfDay = $now->copy()->startOfDay();
+        $endOfDay = $now->copy()->endOfDay();
+        // Get today's sales
+        $today = Carbon::today();
+        $todaySales = DB::table('order_product')
+            ->whereDate('created_at', $today)
+            ->sum('product_total');
+        // Get weekly sales
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+        $weeklySales = DB::table('order_product')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->sum('product_total');
+        // Get monthly sales
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $monthlySales = DB::table('order_product')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->sum('product_total');
+        // Get yearly sales
+        $startOfYear = Carbon::now()->startOfYear();
+        $endOfYear = Carbon::now()->endOfYear();
+        $yearlySales = DB::table('order_product')
+            ->whereBetween('created_at', [$startOfYear, $endOfYear]);
 
-         $startOfWeek = Carbon::now()->startOfWeek(); $endOfWeek = Carbon::now()->endOfWeek();
-         $productlist_week = DB::table('order_product')
-         ->join('product', 'product.id', '=', 'order_product.product_id')
-         ->select(
-             'productname',
-             'price',
-             DB::raw('count(*) as productsold'),
-             DB::raw('SUM(product_total * product_quantity) as total')
-         )
-         ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
-         ->groupBy('productname', 'price')
-         ->get();
- 
-         return view('viewreports', [
-             "product_week" => $productlist_week,
-             "product" => $productlist,
-             'today_sales' => $todaySales,
-             'weekly_sales'=> $weeklySales,
-             'monthly_sales' => $monthlySales,
-             'yearly_sales' => $yearlySales
-         ]);
-        
+        $productlist = DB::table('order_product')
+            ->join('product', 'product.id', '=', 'order_product.product_id')
+            ->select(
+                'productname',
+                'price',
+                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_total * product_quantity) as total')
+            )
+            ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
+            ->groupBy('productname', 'price')
+            ->get();
+
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+        $productlist_week = DB::table('order_product')
+            ->join('product', 'product.id', '=', 'order_product.product_id')
+            ->select(
+                'productname',
+                'price',
+                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_total * product_quantity) as total')
+            )
+            ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
+            ->groupBy('productname', 'price')
+            ->get();
+
+        return view('viewreports', [
+            "product_week" => $productlist_week,
+            "product" => $productlist,
+            'today_sales' => $todaySales,
+            'weekly_sales' => $weeklySales,
+            'monthly_sales' => $monthlySales,
+            'yearly_sales' => $yearlySales
+        ]);
     }
 
     public function aeditvendor()
@@ -621,7 +711,6 @@ class mainController extends Controller
             User::where('id', $id)->update([
                 'isactive' => 0,
             ]);
-
         } else {
             User::where('id', $id)->update([
                 'isactive' => 1,
@@ -629,6 +718,4 @@ class mainController extends Controller
         }
         return redirect()->route('aeditvendor');
     }
-
- 
 }

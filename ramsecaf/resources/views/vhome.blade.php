@@ -254,6 +254,14 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         </div>
     </div>
 
+    <div class="card mb-4">
+              <div class="card-body">
+                <p><strong>Pickup time starts:</strong></p>
+                <p style="display:none" type="hidden">{{$new_time = date('H:i:s', strtotime('+20 minutes', strtotime(date('H:i:s'))))}}</p>
+                <p class="mb-0">asdasda</p>
+              </div>
+            </div>
+
     <!-- jQery -->
     <script src="js/jquery-3.4.1.min.js"></script>
     <!-- popper js -->
