@@ -36,23 +36,26 @@
     <link href="css/responsive.css" rel="stylesheet" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
 
 
 </head>
 
 <body>
 
-    <div class="bg-box">
-        <img src="images/ramsbgprofile.jpg" alt="">
+<div class="bg-box">
+<img src="images/kexpresscaf.png" id="kexpresscafimg">
     </div>
     <!-- header section -->
-    <header class="header_section">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg custom_nav-container">
-                <img src="images/ramslogo.png">
+    <header class="header_section" id="knavbg">
+        <div class="container-fluid" >
+            <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
+            <img src="images/kitchenexpress.png" width="100" height="100" >
                 <a class="navbar-brand" href="/vendorhome">
                     <span>
-                        <p>Rams E-Caf</p>
+                        <p class="kcursive">Kitchen Xpress</p>
                     </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -149,9 +152,9 @@
             <div class="col-12">
                 <ol class="list-group list-group">
                     <li class="list-group-item text-center">
-                            <h1>Edit Menu
+                            <h1 class="kcursive">Edit Menu
                                 <a href="#additem" data-bs-toggle="modal" data-bs-target="#additem" tabindex="">
-                            <button type="button" class="btn btn-warning float-end fw-bold">+ Add Item</button>
+                            <button type="button" class="btn btn-warning float-end fw-bold" class="kcursive">+ Add Item</button>
                         </a>
                     </h1>
                             <table class="table">

@@ -37,23 +37,26 @@
     <link href="css/responsive.css" rel="stylesheet" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
 
 
 </head>
 
 <body>
 
-    <div class="bg-box">
-        <img src="images/ramsbgprofile.jpg" alt="">
+<div class="bg-box">
+<img src="images/kexpresscaf.png" id="kexpresscafimg">
     </div>
     <!-- header section -->
-    <header class="header_section">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg custom_nav-container">
-                <img src="images/ramslogo.png">
+    <header class="header_section" id="knavbg">
+        <div class="container-fluid" >
+            <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
+            <img src="images/kitchenexpress.png" width="100" height="100" >
                 <a class="navbar-brand" href="/vendorhome">
                     <span>
-                        <p>Rams E-Caf</p>
+                        <p class="kcursive">Kitchen Xpress</p>
                     </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -92,8 +95,8 @@
         <div class="row">
             <div class="col-4">
                 <ol class="list-group list-group">
-                    <li class="list-group-item text-center">
-                            <h1>Pending Orders</h1>
+                    <li class="list-group-item text-center" >
+                            <h1 class="kcursive">Pending Orders</h1>
                     </li>
 
                     @forEach($cart as $cart)
@@ -129,7 +132,7 @@
                 <ol class="list-group list-group">
                     <li class="list-group-item text-center">
                         <div class="">
-                            <h1>Completed Orders</h1>
+                            <h1 class="kcursive">Completed Orders</h1>
                         </div>
                     </li>
 
@@ -158,7 +161,7 @@
                 <ol class="list-group list-group">
                     <li class="list-group-item text-center">
                         <div class="">
-                            <h1>Edit Stock</h1>
+                            <h1 class="kcursive">Edit Stock</h1>
                             <!-- <a href="profile.html" class="mb-3">
                                 <button type="button" class="btn btn-outline-warning active">Rice Meals</button>
                             </a>

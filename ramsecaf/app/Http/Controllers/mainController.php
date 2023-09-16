@@ -76,102 +76,143 @@ class mainController extends Controller
     }
 
     public function vendorhome()
-    {
+{
+    // Get current date and time 
+    $now = Carbon::now();
+    // Get start and end of day 
+    $startOfDay = $now->copy()->startOfDay();
+    $endOfDay = $now->copy()->endOfDay();
+    // Get today's sales
+    $today = Carbon::today();
+    $todaySales = DB::table('order_product')
+        ->whereDate('created_at', $today)
+        ->sum('product_total');
+    // Get weekly sales
+    $startOfWeek = Carbon::now()->startOfWeek();
+    $endOfWeek = Carbon::now()->endOfWeek();
+    $weeklySales = DB::table('order_product')
+        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+        ->sum('product_total');
+    // Get monthly sales
+    $startOfMonth = Carbon::now()->startOfMonth();
+    $endOfMonth = Carbon::now()->endOfMonth();
+    $monthlySales = DB::table('order_product')
+        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        ->sum('product_total');
+    // Get yearly sales
+    $startOfYear = Carbon::now()->startOfYear();
+    $endOfYear = Carbon::now()->endOfYear();
+    $yearlySales = DB::table('order_product')
+        ->whereBetween('created_at', [$startOfYear, $endOfYear]);
 
-        // Get current date and time 
-        $now = Carbon::now();
-        // Get start and end of day 
-        $startOfDay = $now->copy()->startOfDay();
-        $endOfDay = $now->copy()->endOfDay();
-        // Get today's sales
-        $today = Carbon::today();
-        $todaySales = DB::table('order_product')
-            ->whereDate('created_at', $today)
-            ->sum('product_total');
-        // Get weekly sales
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-        $weeklySales = DB::table('order_product')
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->sum('product_total');
-        // Get monthly sales
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
-        $monthlySales = DB::table('order_product')
-            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-            ->sum('product_total');
-        // Get yearly sales
-        $startOfYear = Carbon::now()->startOfYear();
-        $endOfYear = Carbon::now()->endOfYear();
-        $yearlySales = DB::table('order_product')
-            ->whereBetween('created_at', [$startOfYear, $endOfYear]);
+    $productlist = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->select(
+            'productname',
+            'price',
+            DB::raw('count(*) as productsold'),
+            DB::raw('SUM(product_total * product_quantity) as total')
+        )
+        ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
+        ->groupBy('productname', 'price')
+        ->get();
 
-        $productlist = DB::table('order_product')
-            ->join('product', 'product.id', '=', 'order_product.product_id')
-            ->select(
-                'productname',
-                'price',
-                DB::raw('count(*) as productsold'),
-                DB::raw('SUM(product_total * product_quantity) as total')
-            )
-            ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
-            ->groupBy('productname', 'price')
-            ->get();
-
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-        $productlist_week = DB::table('order_product')
-            ->join('product', 'product.id', '=', 'order_product.product_id')
-            ->select(
-                'productname',
-                'price',
-                DB::raw('count(*) as productsold'),
-                DB::raw('SUM(product_total * product_quantity) as total')
-            )
-            ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
-            ->groupBy('productname', 'price')
-            ->get();
+    $startOfWeek = Carbon::now()->startOfWeek();
+    $endOfWeek = Carbon::now()->endOfWeek();
+    $productlist_week = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->select(
+            'productname',
+            'price',
+            DB::raw('count(*) as productsold'),
+            DB::raw('SUM(product_total * product_quantity) as total')
+        )
+        ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
+        ->groupBy('productname', 'price')
+        ->get();
 
 
-        $productlist_month = DB::table('order_product')
-            ->join('product', 'product.id', '=', 'order_product.product_id')
-            ->select(
-                'productname',
-                'price',
-                DB::raw('count(*) as productsold'),
-                DB::raw('SUM(product_total * product_quantity) as total')
-            )
-            ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
-            ->groupBy('productname', 'price')
-            ->get();
+    $productlist_month = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->select(
+            'productname',
+            'price',
+            DB::raw('count(*) as productsold'),
+            DB::raw('SUM(product_total * product_quantity) as total')
+        )
+        ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
+        ->groupBy('productname', 'price')
+        ->get();
 
-        return view('vhome', [
-            "product_week" => $productlist_week,
-            "product_month" => $productlist_month,
-            "product" => $productlist,
-            'today_sales' => $todaySales,
-            'weekly_sales' => $weeklySales,
-            'monthly_sales' => $monthlySales,
-            'yearly_sales' => $yearlySales
-        ]);
-    }
+    // Get the top 3 best-selling products
+    $bestSellers = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->select(
+            'productname',
+            'price',
+            DB::raw('count(*) as productsold'),
+            DB::raw('SUM(product_total * product_quantity) as total')
+        )
+        ->groupBy('productname', 'price')
+        ->orderByDesc('productsold')
+        ->limit(3) // Limit the result to the top 3 products
+        ->get();
+
+    return view('vhome', [
+        "product_week" => $productlist_week,
+        "product_month" => $productlist_month,
+        "product" => $productlist,
+        'today_sales' => $todaySales,
+        'weekly_sales' => $weeklySales,
+        'monthly_sales' => $monthlySales,
+        'yearly_sales' => $yearlySales,
+        'best_sellers' => $bestSellers, // Pass the best sellers to the view
+    ]);
+}
+
 
     public function kitchenexpress()
     {
-        $product = Product::where("store_name", "Kitchen Express")->get();
-        return view("menu1", ["product" => $product]);
+        
+        $userid = Auth::user()->get()->first()->id;
+        if(Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'Kitchen Express'){
+            $product = Product::where("store_name", "Kitchen Express")->get();
+            return view("menu1", ["product" => $product]);
+        }
+        if (Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store != 'Kitchen Express') {
+            Alert::warning('You have pending items from '.Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store , '')->showConfirmButton('Confirm', '#FCAE28');
+            // return redirect()->route("home", ["product" => $product]);
+            return back();
+        }
+       
     }
 
     public function lamudras()
     {
-        $product = Product::where("store_name", "La Mudras Corner")->get();
-        return view("menu1", ["product" => $product]);
+        $userid = Auth::user()->get()->first()->id;
+        if(Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'La Mudras Corner'){
+            $product = Product::where("store_name", "La Mudras Corner")->get();
+            return view("menu1", ["product" => $product]);
+        }
+        if (Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store != 'La Mudras Corner') {
+            Alert::warning('You have pending items from '.Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store , '')->showConfirmButton('Confirm', '#FCAE28');
+            // return redirect()->route("home", ["product" => $product]);
+            return back();
+        }
     }
 
     public function redbrew()
     {
-        $product = Product::where("store_name", "Red Brew")->get();
-        return view("menu1", ["product" => $product]);
+        $userid = Auth::user()->get()->first()->id;
+        if(Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'Red Brew'){
+            $product = Product::where("store_name", "Red Brew")->get();
+            return view("menu1", ["product" => $product]);
+        }
+        if (Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store != 'Red Brew') {
+            Alert::warning('You have pending items from '.Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store , '')->showConfirmButton('Confirm', '#FCAE28');
+            // return redirect()->route("home", ["product" => $product]);
+            return back();
+        }
     }
 
     public function addtocart($product_id)
@@ -225,7 +266,6 @@ class mainController extends Controller
         $userid = Auth::user()->get()->first()->id;
         if (Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0) {
             Alert::warning('No item was added to cart', '')->showConfirmButton('Confirm', '#FCAE28');
-            // return redirect()->route("home", ["product" => $product]);
             return back();
         }
 
@@ -234,6 +274,33 @@ class mainController extends Controller
         $product = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cart_id)->get();
         return view("cart", ["product" => $product]);
     }
+
+    public function orderAgain($cartid)
+{
+    $userid = Auth::user()->get()->first()->id;
+
+    // Retrieve the products from the specified cart
+    $products = Order_product::where('cartid', $cartid)->get();
+
+    // Create a new cart for the authenticated user (assuming user is authenticated)
+    $newCart = Cart::create([
+        'user_id' => auth()->user()->id,
+        'cart_status' => 'pending' // You can change the status as needed
+    ]);
+
+    // Add the products from the previous order to the new cart
+    foreach ($products as $product) {
+        $newCart->orderProducts()->create([
+            'product_id' => $product->product_id,
+            'quantity' => $product->quantity
+        ]);
+    }
+
+    // Redirect the user to their cart or any other appropriate page
+    return redirect()->route('cart')->with('success', 'Products added to cart successfully.');
+}
+
+
 
     public function addquantity($productid, $cartid)
     {
@@ -499,14 +566,17 @@ class mainController extends Controller
         if ($adj == "+") {
             $stock = Product::where("id", $id)->get()->first()->stocks;
             Product::where("id", $id)->get()->first()->update([
-                "stocks" => $stock + 1
+                "stocks" => $stock + 1     
             ]);
-        } else {
+        }
+         else {
             $stock = Product::where("id", $id)->get()->first()->stocks;
             Product::where("id", $id)->get()->first()->update([
                 "stocks" => $stock - 1
+
             ]);
         }
+        
         return redirect()->route("vieworders");
     }
 
@@ -718,4 +788,10 @@ class mainController extends Controller
         }
         return redirect()->route('aeditvendor');
     }
+
+    
+
+
+
+
 }

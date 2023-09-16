@@ -120,14 +120,7 @@
                     <!-- Data -->
                     <p><strong>{{$product->productname}}</strong></p>
                     <p class="text-start"><strong>₱ {{$product->price}}</strong></p>
-                    <button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
-                      title="Remove item">
-                      <!-- <i class="fas fa-trash"></i> --> 🗑
-                    </button>
-                    <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
-                      title="Move to the wish list">
-                      <!-- <i class="fas fa-heart"></i> --> ♡
-                    </button>
+                   
                     <!-- Data -->
                   </div>
 
@@ -158,22 +151,22 @@
             </div>
 
             <div class="card mb-4">
-              <div class="card-body">
-                <p><strong>Pickup time starts:</strong></p>
-                <p style="display:none" type="hidden">{{$new_time = date('H:i:s', strtotime('+20 minutes', strtotime(date('H:i:s'))))}}</p>
-                <p class="mb-0">{{$new_time}}</p>
-                
-              </div>
-            </div>
+    <div class="card-body">
+        <p><strong>Pickup time starts:</strong></p>
+        <?php
+        $pickup_time = date('H:i:s', strtotime('+20 minutes', strtotime(date('H:i:s'))));
+        ?>
+        <p class="mb-0">{{$pickup_time}}</p>
+    </div>
+</div>
+
+
             <div class="card mb-4 mb-lg-0">
               <div class="card-body">
                 <p><strong>We accept</strong></p>
                 <img class="me-2" width="45px" src="images/gcash.png" alt="" />
                 <img class="me-2" width="45px" src="images/paymaya.jpg" alt="" />
                 <img class="me-2" width="45px" src="images/grabpay.png" alt="" />
-                <img class="me-2" width="45px"
-                  src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
-                  alt="Mastercard" />
               </div>
             </div>
           </div>

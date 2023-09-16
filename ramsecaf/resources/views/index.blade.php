@@ -110,10 +110,10 @@
                 <div class="col-md-7 col-lg-6 ">
                   <div class="detail-box">
                     <h1>
-                    Red Brew
+                    La Mudra's Corner
                     </h1>
                     <div class="btn-box">
-                      <a href="/redbrew" class="btn1">
+                      <a href="/lamudras" class="btn1">
                         Order Now
                       </a>
                     </div>
@@ -130,10 +130,10 @@
                 <div class="col-md-7 col-lg-6 ">
                   <div class="detail-box">
                     <h1>
-                    La Mudra's Corner
+                    Red Brew
                     </h1>
                     <div class="btn-box">
-                      <a href="/lamudras" class="btn1">
+                      <a href="/redbrew" class="btn1">
                         Order Now
                       </a>
                     </div>
@@ -153,67 +153,8 @@
         </div>
 
         <div class="text-center text-white my-4">
-    <h1>
-        Order it Again:
-    </h1>
+
 </div>
-
-<div class="container"> <!-- Added a container for better alignment -->
-    <div class="row">
-        <div class="col-md-4"> <!-- Added "col-md-4" to create three equal-width columns for medium-sized screens -->
-            <div class="shadow-lg card mb-4 bg-light text-black"> <!-- Added "bg-warning" for yellow background and "text-white" for white text -->
-                <div class="card-body "> <!-- Added the "border" class -->
-                <div class="d-flex justify-content-between text-black">
-                <strong>Kitchen Xpress</strong>
-                <div class="btn-box shadow-lg btn btn-warning text-black">
-                      <a href="/kitchenexpress" class="btn1 text-black">
-                        Order Again
-                      </a>
-                    </div>
-                </div>
-                    <p style="display:none" type="hidden">{{$new_time = date('H:i:s', strtotime('+20 minutes', strtotime(date('H:i:s'))))}}</p>
-                    <p class="mb-0">
-                <strong>
-                  Order # {{$kitchen_express->id}}</p>
-                </strong>  
-                <hr style="background-color:white">
-                    @foreach($kitchen_Express_list as $kitchen_Express_list
-)
-                    <p>{{$kitchen_Express_list->productname}}</p>
-                    @endforEach
-                </div>
-            </div>
-        </div>
-        
-    <!-- <div class="col-md-4">
-    <div class="shadow-lg card mb-4 bg-light text-black">
-            <div class="card-body text-center"> 
-            <div class="d-flex justify-content-between">
-                <strong>La Mudra's</strong>
-                <button class="shadow-lg btn btn-warning text-black">Order Again</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-   
-    <div class="col-md-4">
-    <div class="shadow-lg card mb-4 bg-light text-black">
-            <div class="card-body text-center"> 
-            <div class="d-flex justify-content-between">
-                <strong>Red Brew</strong>
-                <button class="shadow-lg btn btn-warning text-black">Order Again</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div> -->
-</div>
-
-
-
-
-
 
       </div>
 

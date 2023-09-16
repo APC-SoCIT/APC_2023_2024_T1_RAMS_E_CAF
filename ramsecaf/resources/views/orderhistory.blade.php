@@ -69,47 +69,39 @@
   <!-- end header section -->
 
   <ol class="list-group list-group m-5">
-    <li class="list-group-item d-flex justify-content-between align-items-start">
-      <div class="text-center">
-        <h1>Completed Orders</h1>
-        <a href="/profile">
-          <button type="button" class="btn btn-outline-warning ">Current Orders</button>
-        </a>
-        <a href="/complete">
-          <button type="button" class="btn btn-outline-success active">Completed Orders</button>
-        </a>
-      </div>
-    </li>
-    @forEach($cart as $cart)
-    <a href="/receipt/{{$cart->id}}" style="color:black">
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="text-center">
+      <h1>Completed Orders</h1>
+      <a href="/profile">
+        <button type="button" class="btn btn-outline-warning">Current Orders</button>
+      </a>
+      <a href="/complete">
+        <button type="button" class="btn btn-outline-success active">Completed Orders</button>
+      </a>
+    </div>
+  </li>
+  @forEach($cart as $cart)
+  <a href="/receipt/{{$cart->id}}" style="color:black">
     <li class="list-group-item d-flex justify-content-between align-items-start">
       <div class="ms-2">
-        
-        <h5 class="" class="row"><strong class="h3 fw-bold">{{$cart->store}} <span class="badge rounded-pill bg-success"> Order # {{$cart->id}}</span></strong></h5>
-
-@forEach($product as $items)
-
-@if($items->cart_id == $cart->id)
-
- <h6 class="m-0 mx-3">{{$items->product_quantity."x ". $items->productname}}</h6>
-
-@endif
-
-@endforEach
-  
-     
+        <h5 class="row"><strong class="h3 fw-bold">{{$cart->store}} <span class="badge rounded-pill bg-success"> Order # {{$cart->id}}</span></strong></h5>
+        @forEach($product as $items)
+        @if($items->cart_id == $cart->id)
+        <h6 class="m-0 mx-3">{{$items->product_quantity."x ". $items->productname}}</h6>
+        @endif
+        @endforEach
       </div>
-      
-      @if(!$feedback->contains('cart_id',$cart->id))
-      <a href="/feedbackview/{{$cart->id}}" class="btn btn-warning mb-3 mx-2" type="submit">Provide Feedback</a>   
-      @endif 
-      
+      <div class="d-flex">
+        @if(!$feedback->contains('cart_id',$cart->id))
+        <a href="/feedbackview/{{$cart->id}}" class="btn btn-primary mb-3 mx-2" type="submit">Provide Feedback</a>
+        @endif 
+        <a href="" class="btn btn-warning mb-3 mx-2" type="">Order Again</a>
+      </div>
     </li>
-    
-    </a>
-    
-    @endforEach
-  </ol>
+  </a>
+  @endforEach
+</ol>
+
 
 
       <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">

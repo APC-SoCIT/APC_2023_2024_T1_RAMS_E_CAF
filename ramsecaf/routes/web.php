@@ -81,3 +81,12 @@ Route::get('/aeditvendor', [mainController::class, 'aeditvendor'])->name('aeditv
 Route::get('/vendorupdatestatus/{id}', [mainController::class, 'vendorupdatestatus'])->name('vendorupdatestatus');
 
 Route::get('/success/{cartid}', [mainController::class, 'success'])->name('success');
+
+Route::get('/orderagain/{cartid}', [MainController::class, 'orderAgain'])->name('orderagain');
+
+
+
+
+
+
+

@@ -56,7 +56,7 @@
 			<div class="input-group-text">
 			<input  type="checkbox" onclick="enablebutton(this)" class="input-group-text" id="inputGroup-sizing-sm">	
 			</div>
-			<input type="text" class="form-control" aria-label="Text input with checkbox" placeholder="I, comply to the data privacy notice of Asia Pacific College.">
+			<input type="text" class="form-control" aria-label="Text input with checkbox" placeholder="I, comply to the data privacy notice of Asia Pacific College." disabled>
 			</div>
 
 			

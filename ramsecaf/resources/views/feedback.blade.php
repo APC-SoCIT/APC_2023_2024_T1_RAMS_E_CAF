@@ -100,12 +100,17 @@
                       <div class="mb-3">
                       <textarea class="form-control" name="comment_2" id="exampleFormControlTextarea1" rows="3" required></textarea>
                       </div>
+                        
                         <button type="submit" class="btn btn-warning">Submit Feedback</button>
-                    </form>
+                    </form> 
                   </div>
                 </div>
               </div>
             </div>
+            <a href="/complete" class="user_link">
+            <button class="btn btn-danger">Cancel</button>
+              </a>
+            
           </div>
 
           <div class="modal fade" id="addtocart" tabindex="-1" aria-labelledby="addtocartLabel" aria-hidden="true">

@@ -35,6 +35,10 @@ h2 {
   font-family: 'Dancing Script', cursive;
 }
 
+.container {
+  width: relative;
+}
+
 .heading_container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -100,6 +104,16 @@ a:focus {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+          
+}
+
+#headcolor {
+  background-color:rgba(00,00,0, 0.50);
+  width: 100%;
+  margin: auto;
+  align-self: center;
+  padding-right: 15%;
+  padding-left: 15%;
 }
 
 .bg-box {
@@ -108,6 +122,20 @@ a:focus {
   left: 0;
   width: 100%;
   height: 100%;
+  background-color: #8C2E3F;
+  background-repeat: repeat;
+}
+
+#kexpresscafimg {
+  opacity: 0.10;
+}
+
+#kfeedback{
+  background-color: #E3D6D8;
+}
+
+.kcursive {
+  font-family: 'Courgette', cursive;
 }
 
 .bg-box img {
@@ -115,6 +143,32 @@ a:focus {
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+ 
+}
+
+.list-group-item {
+  background-color: #E3D6D8;
+}
+
+#bestseller {
+  background-color: #E3D6D8;
+}
+
+#dailysales {
+  background-color: #E3D6D8;
+}
+
+#weeklysales {
+  background-color:#E3D6D8;
+}
+
+#monthlysales {
+  background-color: #E3D6D8;
+}
+
+.col-12{
+  overflow-y: scroll;
+  max-height: 835px;
 }
 
 .sub_page .hero_area {
@@ -143,12 +197,14 @@ a:focus {
 }
 
 .header_section .container-fluid {
-  padding-right: 25px;
-  padding-left: 25px;
+  padding-right: 0%;
+  padding-left: 0%;
+  background-image: url(../public/images/woodtexture.jpg);
 }
 
 .navbar-brand {
-  font-family: 'Dancing Script', cursive;
+  align-content: center;
+  padding-top: 20px;
 }
 
 .navbar-brand span {
@@ -586,7 +642,7 @@ a:focus {
 
 .food_section .box:hover .img-box img {
   -webkit-transform: scale(1.1);
-          transform: scale(1.8);
+          transform: scale(1.1);
 }
 
 .food_section .btn-box {
@@ -683,6 +739,7 @@ a:focus {
   outline: none;
   -webkit-box-shadow: none;
           box-shadow: none;
+  text-align: center;
 }
 
 .book_section .form_container .form-control::-webkit-input-placeholder {
@@ -1005,4 +1062,3 @@ a:focus {
   color: inherit;
 }
 /*# sourceMappingURL=style.css.map */
-
