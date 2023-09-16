@@ -91,37 +91,134 @@
     <!-- end header section -->
 
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <ol class="list-group list-group">
-                    <li class="list-group-item text-center">
-                        <div class="">
-                            <h1 class="kcursive">Feedbacks</h1>
-                        </div>
-                    </li>
-                    @if (!$feedbacklist->isEmpty())
-                    @forEach($feedbacklist as $feedbacklist)
-                    <div class="card m-3 text-center" id="kfeedback">
-                    <div class="card-header">
-                    <h5 class="" class="row"><strong class="h3 fw-bold fs-4"><span
-                                        class="badge rounded-pill bg-success"> Order #
-                                        {{$feedbacklist->cart_id}}</span></strong></h5>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{$feedbacklist->comment_1}}</h5>
+
+    <div class="row">
+
+        <div class="col-6">
+
+            <ol class="list-group list-group">
+
+                <li class="list-group-item text-center">
+
+                    <div>
+
+                        <h1 class="kcursive">Food Feedback</h1>
+
+                        <button class="btn btn-success m-2" onclick="filterFeedback('food', 'positive')">Positive Feedback</button>
+
+                        <button class="btn btn-danger m-2" onclick="filterFeedback('food', 'negative')">Negative Feedback</button>
 
                     </div>
-                    <div class="card-footer text-muted">
-                        {{$feedbacklist->created_at}}
+
+                </li>
+
+                <div class="comment_1">
+
+                    @if (!$feedbacklist->isEmpty())
+
+                    @forEach($feedbacklist as $feedbacklists)
+
+                    <div class="card m-3 text-center {{$feedbacklists->sentiment_1}}" id="kfeedback">
+
+                        <div class="card-header">
+
+                            <h5 class="row"><strong class="h3 fw-bold fs-4"><span
+
+                                    class="badge rounded-pill bg-success"> Order #
+
+                                    {{$feedbacklists->cart_id}}</span></strong></h5>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">{{$feedbacklists->comment_1}}</h5>
+
+                        </div>
+
+                        <div class="card-footer text-muted">
+
+                            {{$feedbacklists->created_at}}
+
+                        </div>
+
                     </div>
-                    </div>
+
                     @endforEach
+
                     @endif
-                    
-                </ol>
-            </div>
+
+                </div>
+
+            </ol>
+
         </div>
+
+ 
+
+        <div class="col-6">
+
+            <ol class="list-group list-group">
+
+                <li class="list-group-item text-center">
+
+                    <div>
+
+                        <h1 class="kcursive">Vendor Feedback</h1>
+
+                        <button class="btn btn-success m-2" onclick="filterFeedback('vendor', 'positive')">Positive Feedback</button>
+
+                        <button class="btn btn-danger m-2" onclick="filterFeedback('vendor', 'negative')">Negative Feedback</button>
+
+                    </div>
+
+                </li>
+
+                <div class="comment_2">
+
+                    @if (!$feedbacklist->isEmpty())
+
+                    @forEach($feedbacklist as $feedbacklist)
+
+                    <div class="card m-3 text-center {{$feedbacklist->sentiment_2}}" id="kfeedback">
+
+                        <div class="card-header">
+
+                            <h5 class="row"><strong class="h3 fw-bold fs-4"><span
+
+                                    class="badge rounded-pill bg-success"> Order #
+
+                                    {{$feedbacklist->cart_id}}</span></strong></h5>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">{{$feedbacklist->comment_2}}</h5>
+
+                        </div>
+
+                        <div class="card-footer text-muted">
+
+                            {{$feedbacklist->created_at}}
+
+                        </div>
+
+                    </div>
+
+                    @endforEach
+
+                    @endif
+
+                </div>
+
+            </ol>
+
+        </div>
+
     </div>
+
+</div>
 
     <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">
         <div class="modal-dialog">

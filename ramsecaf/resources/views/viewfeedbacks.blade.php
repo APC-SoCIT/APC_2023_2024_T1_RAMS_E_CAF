@@ -86,7 +86,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-12">
+            <div class="col-6">
                 <ol class="list-group list-group">
                     <li class="list-group-item text-center">
                         <div class="">
@@ -100,23 +100,21 @@
                     <h5 class="" class="row"><strong class="h3 fw-bold fs-4">
                     {{$feedbacklist->store}}
                     <span
-                                        class="badge rounded-pill bg-success"> Order #
-                                        {{$feedbacklist->cart_id}}</span></strong></h5>
+                            class="badge rounded-pill bg-success"> Order #
+                            {{$feedbacklist->cart_id}}</span></strong></h5>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{$feedbacklist->comment_1}}</h5>
-
                     </div>
                     <div class="card-footer text-muted">
                         {{$feedbacklist->created_at}}
                     </div>
                     </div>
                     @endforEach
-                    
-                    
-
                 </ol>
             </div>
+            
+
         </div>
     </div>
 

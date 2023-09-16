@@ -95,7 +95,7 @@
         @if(!$feedback->contains('cart_id',$cart->id))
         <a href="/feedbackview/{{$cart->id}}" class="btn btn-primary mb-3 mx-2" type="submit">Provide Feedback</a>
         @endif 
-        <a href="" class="btn btn-warning mb-3 mx-2" type="">Order Again</a>
+        <a href="/orderagain/{{$cart->id}}" class="btn btn-warning mb-3 mx-2" type="">Order Again</a>
       </div>
     </li>
   </a>

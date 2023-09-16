@@ -96,20 +96,20 @@
                       <div class="mb-3">
                       <textarea class="form-control" name="comment_1" id="exampleFormControlTextarea1" rows="3" required></textarea>
                       </div>
-                      <p>Please provide your honest feedback for the Rams E-Caf WebApp.</p>
+                      <p>Please provide your honest feedback for the food.</p>
                       <div class="mb-3">
                       <textarea class="form-control" name="comment_2" id="exampleFormControlTextarea1" rows="3" required></textarea>
                       </div>
-                        
+                      <a href="/complete" class="user_link btn btn-danger">
+                      Cancel
+                        </a>
                         <button type="submit" class="btn btn-warning">Submit Feedback</button>
                     </form> 
                   </div>
                 </div>
               </div>
             </div>
-            <a href="/complete" class="user_link">
-            <button class="btn btn-danger">Cancel</button>
-              </a>
+            
             
           </div>
 

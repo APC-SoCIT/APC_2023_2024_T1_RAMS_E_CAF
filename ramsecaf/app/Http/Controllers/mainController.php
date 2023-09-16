@@ -13,6 +13,7 @@ use App\Models\Order_product;
 use App\Models\Feedback;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Sentiment\Analyzer;
 
 
 
@@ -279,25 +280,29 @@ class mainController extends Controller
 {
     $userid = Auth::user()->get()->first()->id;
 
-    // Retrieve the products from the specified cart
-    $products = Order_product::where('cartid', $cartid)->get();
+        // Retrieve the products from the specified cart
+        $products = Order_product::where('cart_id', $cartid)->get();
 
-    // Create a new cart for the authenticated user (assuming user is authenticated)
-    $newCart = Cart::create([
-        'user_id' => auth()->user()->id,
-        'cart_status' => 'pending' // You can change the status as needed
-    ]);
 
-    // Add the products from the previous order to the new cart
-    foreach ($products as $product) {
-        $newCart->orderProducts()->create([
-            'product_id' => $product->product_id,
-            'quantity' => $product->quantity
+        // Create a new cart for the authenticated user (assuming user is authenticated)
+        $newCart = Cart::create([
+            'user_id' => $userid,
+            'cart_status' => 'pending', // You can change the status as needed
+            'store' => Cart::where('id', $cartid)->get()->last()->store,
         ]);
-    }
 
-    // Redirect the user to their cart or any other appropriate page
-    return redirect()->route('cart')->with('success', 'Products added to cart successfully.');
+        // Add the products from the previous order to the new cart
+        foreach ($products as $product) {
+            Order_product::create([
+                'cart_id' => $newCart->id,
+                'product_id' => $product->product_id,
+                'product_quantity' => $product->product_quantity,
+                'product_total' => $product->product_total
+            ]);
+        }
+    
+        // Redirect the user to their cart or any other appropriate page
+        return redirect()->route('proceedtocart');
 }
 
 
@@ -477,6 +482,7 @@ class mainController extends Controller
     public function order_confirm(Request $request)
     {
         $cart = Cart::where('id', $request->cartid)->get()->first()->update(['cart_status' => 'claimed']);
+        toast('Order Claimed!', 'success');
         return redirect()->route("vieworders");
     }
 
@@ -500,11 +506,79 @@ class mainController extends Controller
 
     public function feedback(Request $request)
     {
+        $analyzer = new Analyzer();
+        // Include your sentiment analysis library or implement one if not available
+        // Example: require_once('sentiment.php');
+
+        // Define new food-related words and their sentiment scores
+        $newWords = [
+            'delicious' => '2.0',
+            'tasty' => '1.5',
+            'yummy' => '1.5',
+            'exquisite' => '2.0',
+            'bland' => '-1.5',
+            'unappetizing' => '-2.0',
+            'disgusting' => '-2.5',
+            'satisfying' => '1.0',
+            'overcooked' => '-1.0',
+            'scrumptious' => '2.0',
+            'mouthwatering' => '1.8',
+            'flavorful' => '1.7',
+            'appetizing' => '1.4',
+            'tasteless' => '-1.3',
+            'horrible' => '-2.5',
+            'repulsive' => '-2.3',
+            'palatable' => '1.2',
+            'undercooked' => '-1.2',
+            'divine' => '2.2',
+            'heavenly' => '2.1',
+            'savory' => '1.6',
+            'disappointing' => '-1.8',
+            'amazing' => '2.5',
+            'fantastic' => '2.4',
+            'mediocre' => '-1.0',
+            'soggy' => '-1.4',
+            'juicy' => '1.7',
+            // Add more food-related words and their sentiment scores as needed
+        ];
+
+        $analyzer->updateLexicon($newWords);
+
+        $output_text_comment1 = $analyzer->getSentiment(str_replace("very", "", $request->comment_1));
+        $output_text_comment2 = $analyzer->getSentiment(str_replace("very", "", $request->comment_2));
+        $mood        = '';
+
+        if ($output_text_comment1['neg'] > 0 && $output_text_comment1['neg'] < 0.49) {
+            $mood_comment1 = 'Negative ';
+        } elseif ($output_text_comment1['neg'] > 0.49) {
+            $mood_comment1 = 'Negative';
+        }
+
+        if ($output_text_comment1['pos'] > 0 && $output_text_comment1['pos'] < 0.49) {
+            $mood_comment1 = 'Positive ';
+        } elseif ($output_text_comment1['pos'] > 0.49) {
+            $mood_comment1 = 'Positive';
+        }
+
+        if ($output_text_comment2['neg'] > 0 && $output_text_comment2['neg'] < 0.49) {
+            $mood_comment2 = 'Negative ';
+        } elseif ($output_text_comment2['neg'] > 0.49) {
+            $mood_comment2 = 'Negative';
+        }
+
+        if ($output_text_comment2['pos'] > 0 && $output_text_comment2['pos'] < 0.49) {
+            $mood_comment2 = 'Positive ';
+        } elseif ($output_text_comment2['pos'] > 0.49) {
+            $mood_comment2 = 'Positive';
+        }
+
         Feedback::create([
             "user_id" => $request->user_id,
             "cart_id" => $request->cart_id,
             "comment_1" => $request->comment_1,
             "comment_2" => $request->comment_2,
+            "sentiment_1" => $mood_comment1,
+            "sentiment_2" => $mood_comment2,
         ]);
         Alert::success('Thank you!', 'Your feedback has been submitted')->showConfirmButton('Confirm', '#FCAE28');
         return redirect()->route("complete");
@@ -568,13 +642,15 @@ class mainController extends Controller
             Product::where("id", $id)->get()->first()->update([
                 "stocks" => $stock + 1     
             ]);
+            toast('Added item successfully', 'success');
         }
+        
          else {
             $stock = Product::where("id", $id)->get()->first()->stocks;
             Product::where("id", $id)->get()->first()->update([
                 "stocks" => $stock - 1
-
             ]);
+            toast('Deducted item successfully', 'success');
         }
         
         return redirect()->route("vieworders");
