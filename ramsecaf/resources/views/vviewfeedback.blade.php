@@ -89,138 +89,96 @@
     </header>
 
     <!-- end header section -->
+<body>
 
-    <div class="container">
-
+<div class="container">
     <div class="row">
-
         <div class="col-6">
-
             <ol class="list-group list-group">
-
                 <li class="list-group-item text-center">
-
-                    <div>
-
-                        <h1 class="kcursive">Food Feedback</h1>
-
-                        <button class="btn btn-success m-2" onclick="filterFeedback('food', 'positive')">Positive Feedback</button>
-
-                        <button class="btn btn-danger m-2" onclick="filterFeedback('food', 'negative')">Negative Feedback</button>
-
-                    </div>
-
+                <div>
+                    <h1 class="kcursive">Food Feedback</h1>
+                    <button class="btn btn-outline-success active m-2" id="positiveButton" onclick="filterFeedback('food', 'Positive'); highlightButton('positiveButton', 'negativeButton')">Positive Feedback</button>
+                    <button class="btn btn-outline-danger active m-2" id="negativeButton" onclick="filterFeedback('food', 'Negative'); highlightButton('negativeButton', 'positiveButton')">Negative Feedback</button>
+                </div>
                 </li>
-
                 <div class="comment_1">
-
                     @if (!$feedbacklist->isEmpty())
-
-                    @forEach($feedbacklist as $feedbacklists)
-
-                    <div class="card m-3 text-center {{$feedbacklists->sentiment_1}}" id="kfeedback">
-
-                        <div class="card-header">
-
-                            <h5 class="row"><strong class="h3 fw-bold fs-4"><span
-
-                                    class="badge rounded-pill bg-success"> Order #
-
-                                    {{$feedbacklists->cart_id}}</span></strong></h5>
-
-                        </div>
-
-                        <div class="card-body">
-
-                            <h5 class="card-title">{{$feedbacklists->comment_1}}</h5>
-
-                        </div>
-
-                        <div class="card-footer text-muted">
-
-                            {{$feedbacklists->created_at}}
-
-                        </div>
-
-                    </div>
-
-                    @endforEach
-
+                        @forEach($feedbacklist as $feedbacklists)
+                            <div class="card m-3 text-center {{$feedbacklists->sentiment_1}} food">
+                                <div class="card-header">
+                                    <h5 class="row"><strong class="h3 fw-bold fs-4"><span class="badge rounded-pill bg-{{$feedbacklists->sentiment_1 === 'Positive' ? 'success' : 'danger'}}"> Order # {{$feedbacklists->cart_id}}</span></strong></h5>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{$feedbacklists->comment_1}}</h5>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    {{$feedbacklists->created_at}}
+                                </div>
+                            </div>
+                        @endforEach
                     @endif
-
                 </div>
-
             </ol>
-
         </div>
-
- 
-
         <div class="col-6">
-
             <ol class="list-group list-group">
-
                 <li class="list-group-item text-center">
-
                     <div>
-
                         <h1 class="kcursive">Vendor Feedback</h1>
-
-                        <button class="btn btn-success m-2" onclick="filterFeedback('vendor', 'positive')">Positive Feedback</button>
-
-                        <button class="btn btn-danger m-2" onclick="filterFeedback('vendor', 'negative')">Negative Feedback</button>
-
+                        <button class="btn btn-outline-success active m-2" onclick="filterFeedback('vendor', 'Positive')">Positive Feedback</button>
+                        <button class="btn btn-outline-danger active m-2" onclick="filterFeedback('vendor', 'Negative')">Negative Feedback</button>
                     </div>
-
                 </li>
-
                 <div class="comment_2">
-
                     @if (!$feedbacklist->isEmpty())
-
-                    @forEach($feedbacklist as $feedbacklist)
-
-                    <div class="card m-3 text-center {{$feedbacklist->sentiment_2}}" id="kfeedback">
-
-                        <div class="card-header">
-
-                            <h5 class="row"><strong class="h3 fw-bold fs-4"><span
-
-                                    class="badge rounded-pill bg-success"> Order #
-
-                                    {{$feedbacklist->cart_id}}</span></strong></h5>
-
-                        </div>
-
-                        <div class="card-body">
-
-                            <h5 class="card-title">{{$feedbacklist->comment_2}}</h5>
-
-                        </div>
-
-                        <div class="card-footer text-muted">
-
-                            {{$feedbacklist->created_at}}
-
-                        </div>
-
-                    </div>
-
-                    @endforEach
-
+                        @forEach($feedbacklist as $feedbacklist)
+                            <div class="card m-3 text-center {{$feedbacklist->sentiment_2}} vendor">
+                                <div class="card-header">
+                                    <h5 class="row"><strong class="h3 fw-bold fs-4"><span class="badge rounded-pill bg-{{$feedbacklist->sentiment_2 === 'Positive' ? 'success' : 'danger'}}"> Order # {{$feedbacklist->cart_id}}</span></strong></h5>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{$feedbacklist->comment_2}}</h5>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    {{$feedbacklist->created_at}}
+                                </div>
+                            </div>
+                        @endforEach
                     @endif
-
                 </div>
-
             </ol>
-
         </div>
-
     </div>
-
 </div>
 
-    <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">
+<script>
+    function filterFeedback(type, sentiment) {
+        const feedbackItems = document.querySelectorAll(`.${type}`);
+        feedbackItems.forEach(item => {
+            if (sentiment === 'All' || item.classList.contains(sentiment)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+<script>
+    function highlightButton(selectedButton, otherButton) {
+        const selectedBtn = document.getElementById(selectedButton);
+        const otherBtn = document.getElementById(otherButton);
+
+        selectedBtn.classList.remove('');
+        selectedBtn.classList.add('btn-outline-success');
+
+        otherBtn.classList.remove('active');
+        otherBtn.classList.add('');
+    }
+</script>
+
+<div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -231,7 +189,7 @@
                     Are you sure you want to log out?
                 </div>
                 <div class="modal-footer">
-                    <a href="{{url('/signout')}}">
+                <a href="{{url('/signout')}}">
                         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Yes</button>
                     </a>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
@@ -239,6 +197,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!-- jQery -->
     <script src="js/jquery-3.4.1.min.js"></script>

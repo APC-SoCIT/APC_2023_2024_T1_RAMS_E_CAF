@@ -69,7 +69,7 @@
             <ul class="navbar-nav  mx-auto ">
             </ul>
             <div class="user_option">
-              <a href="profile.html" class="user_link">
+              <a href="/profile" class="user_link">
                 <i class="fa fa-user" aria-hidden="true"></i>
                 Profile
               </a>

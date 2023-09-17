@@ -47,35 +47,35 @@
             <img src="images/ramsbg.jpg" alt="">
         </div>
         <!-- header section -->
-    <header class="header_section">
-      <div class="container">
-        <nav class="navbar navbar-expand-lg custom_nav-container">
-          <img src="images/ramslogo.png">
-          <a class="navbar-brand" href="/home">
-            <span>
-              <p>Rams E-Caf</p>
-            </span>
-          </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class=""> </span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav  mx-auto ">
-            </ul>
-            <div class="user_option">
+        <header class="header_section">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg custom_nav-container">
+        <img src="images/ramslogo.png">
+        <a class="navbar-brand" href="/home">
+          <span>
+            <p>Rams E-Caf</p>
+          </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class=""> </span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav  mx-auto ">
+          </ul>
+          <div class="user_option">
             <a href="/profile" class="user_link">
               <i class="fa fa-user" aria-hidden="true"></i>
               Profile
             </a>
-              <a href="#logout" data-bs-toggle="modal" data-bs-target="#logout" tabindex="-1">
-                <button type="button" class="btn btn-warning">Log Out</button>
-              </a>
-            </div>
+            <a href="#logout" data-bs-toggle="modal" data-bs-target="#logout" tabindex="-1">
+              <button type="button" class="btn btn-warning">Log Out</button>
+            </a>
           </div>
-        </nav>
-      </div>
-    </header>
+        </div>
+      </nav>
+    </div>
+  </header>
     <!-- end header section -->
     </div>
     <!-- food section -->
