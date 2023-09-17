@@ -84,90 +84,19 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 
     <!-- end header section -->
 
-    <div class="col-4">
-    <ol class="list-group list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="">
-                <h1>Kitchen Express</h1>
-                <h1>Weekly Sales</h1>
-            </div>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Qty</th>
-                        <th scope="col">Item</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($product_week as $product_week)
-                        <tr>
-                            <td>{{$product_week->productsold}}</td>
-                            <td>{{$product_week->productname}}</td>
-                            <td>₱{{$product_week->price}}</td>
-                            <td>₱{{$product_week->total}}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </li>
-        <li class="list-group-item align-items-end float-end">
-            <h3> Total Sale: ₱{{$weekly_sales}} </h3>
-        </li>
-    </ol>
-</div>
+    <div class="container">
 
-<!-- Daily Sales Section -->
-<div class="col-4">
-    <ol class="list-group list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="">
-                <h1>Kitchen Express</h1>
-                <h1>Daily Sales</h1>
-            </div>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Qty</th>
-                        <th scope="col">Item</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Total</th>
-                    </tr>
-                </thead>
-                <!-- Populate this table with daily sales data -->
-                <tbody>
-                    @foreach ($product_day as $product_day)
-                        <tr>
-                            <td>{{$product_day->productsold}}</td>
-                            <td>{{$product_day->productname}}</td>
-                            <td>₱{{$product_day->price}}</td>
-                            <td>₱{{$product_day->total}}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </li>
-        <li class="list-group-item align-items-end float-end">
-            <h3> Total Sale: ₱{{$daily_sales}} </h3>
-        </li>
-    </ol>
-</div>
+        <div class="row">
 
-<!-- Monthly Sales Section -->
-<div class="col-4">
+            <div class="col-6 mt-4">
     <ol class="list-group list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="">
-                <h1>Kitchen Express</h1>
-                <h1>Monthly Sales</h1>
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
+            <div>
+                <h1 class="kcursive">Monthly Sales</h1>
+                <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
             </div>
         </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
             <table class="table">
                 <thead>
                     <tr>
@@ -177,24 +106,63 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                         <th scope="col">Total</th>
                     </tr>
                 </thead>
-                <!-- Populate this table with monthly sales data -->
                 <tbody>
                     @foreach ($product_month as $product_month)
-                        <tr>
-                            <td>{{$product_month->productsold}}</td>
-                            <td>{{$product_month->productname}}</td>
-                            <td>₱{{$product_month->price}}</td>
-                            <td>₱{{$product_month->total}}</td>
-                        </tr>
+                    <tr>
+                        <td>{{ $product_month->productsold }}</td>
+                        <td>{{ $product_month->productname }}</td>
+                        <td>₱{{ $product_month->price }}</td>
+                        <td>₱{{ $product_month->total }}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
         </li>
-        <li class="list-group-item align-items-end float-end">
-            <h3> Total Sale: ₱{{$monthly_sales}} </h3>
+        <li class="list-group-item align-items-end text-end" id="monthlysales">
+            <h3>Total Sale: ₱{{ $monthly_sales }}</h3>
         </li>
     </ol>
 </div>
+
+<div class="col-6 mt-4">
+    <ol class="list-group list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
+            <div>
+                <h1 class="kcursive">Monthly Sales</h1>
+                <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
+            </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($product_month as $product_month)
+                    <tr>
+                        <td>{{ $product_month->productsold }}</td>
+                        <td>{{ $product_month->productname }}</td>
+                        <td>₱{{ $product_month->price }}</td>
+                        <td>₱{{ $product_month->total }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </li>
+        <li class="list-group-item align-items-end text-end" id="monthlysales">
+            <h3>Total Sale: ₱{{ $monthly_sales }}</h3>
+        </li>
+    </ol>
+</div>
+
+
+        </div>
+    </div>
 
 
     <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">

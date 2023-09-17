@@ -159,17 +159,17 @@ class mainController extends Controller
         ->limit(3) // Limit the result to the top 3 products
         ->get();
 
-    return view('vhome', [
-        "product_week" => $productlist_week,
-        "product_month" => $productlist_month,
-        "product" => $productlist,
-        'today_sales' => $todaySales,
-        'weekly_sales' => $weeklySales,
-        'monthly_sales' => $monthlySales,
-        'yearly_sales' => $yearlySales,
-        'best_sellers' => $bestSellers, // Pass the best sellers to the view
-    ]);
-}
+        return view('vhome', [
+            "product_week" => $productlist_week,
+            "product_month" => $productlist_month,
+            "product" => $productlist,
+            'today_sales' => $todaySales,
+            'weekly_sales' => $weeklySales,
+            'monthly_sales' => $monthlySales, // Pass monthly sales to the view
+            'yearly_sales' => $yearlySales,
+            'best_sellers' => $bestSellers,
+        ]);
+    }
 
 
     public function kitchenexpress()
@@ -777,68 +777,97 @@ class mainController extends Controller
 
     public function aviewreports()
     {
-        // Get current date and time 
-        $now = Carbon::now();
-        // Get start and end of day 
-        $startOfDay = $now->copy()->startOfDay();
-        $endOfDay = $now->copy()->endOfDay();
-        // Get today's sales
-        $today = Carbon::today();
-        $todaySales = DB::table('order_product')
-            ->whereDate('created_at', $today)
-            ->sum('product_total');
-        // Get weekly sales
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-        $weeklySales = DB::table('order_product')
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->sum('product_total');
-        // Get monthly sales
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
-        $monthlySales = DB::table('order_product')
-            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-            ->sum('product_total');
-        // Get yearly sales
-        $startOfYear = Carbon::now()->startOfYear();
-        $endOfYear = Carbon::now()->endOfYear();
-        $yearlySales = DB::table('order_product')
-            ->whereBetween('created_at', [$startOfYear, $endOfYear]);
+    // Get current date and time 
+    $now = Carbon::now();
+    // Get start and end of day 
+    $startOfDay = $now->copy()->startOfDay();
+    $endOfDay = $now->copy()->endOfDay();
+    // Get today's sales
+    $today = Carbon::today();
+    $todaySales = DB::table('order_product')
+        ->whereDate('created_at', $today)
+        ->sum('product_total');
+    // Get weekly sales
+    $startOfWeek = Carbon::now()->startOfWeek();
+    $endOfWeek = Carbon::now()->endOfWeek();
+    $weeklySales = DB::table('order_product')
+        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+        ->sum('product_total');
+    // Get monthly sales
+    $startOfMonth = Carbon::now()->startOfMonth();
+    $endOfMonth = Carbon::now()->endOfMonth();
+    $monthlySales = DB::table('order_product')
+        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        ->sum('product_total');
+    // Get yearly sales
+    $startOfYear = Carbon::now()->startOfYear();
+    $endOfYear = Carbon::now()->endOfYear();
+    $yearlySales = DB::table('order_product')
+        ->whereBetween('created_at', [$startOfYear, $endOfYear]);
 
-        $productlist = DB::table('order_product')
-            ->join('product', 'product.id', '=', 'order_product.product_id')
-            ->select(
-                'productname',
-                'price',
-                DB::raw('count(*) as productsold'),
-                DB::raw('SUM(product_total * product_quantity) as total')
-            )
-            ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
-            ->groupBy('productname', 'price')
-            ->get();
+    $productlist = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->select(
+            'productname',
+            'price',
+            DB::raw('count(*) as productsold'),
+            DB::raw('SUM(product_total * product_quantity) as total')
+        )
+        ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
+        ->groupBy('productname', 'price')
+        ->get();
 
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-        $productlist_week = DB::table('order_product')
-            ->join('product', 'product.id', '=', 'order_product.product_id')
-            ->select(
-                'productname',
-                'price',
-                DB::raw('count(*) as productsold'),
-                DB::raw('SUM(product_total * product_quantity) as total')
-            )
-            ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
-            ->groupBy('productname', 'price')
-            ->get();
+    $startOfWeek = Carbon::now()->startOfWeek();
+    $endOfWeek = Carbon::now()->endOfWeek();
+    $productlist_week = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->select(
+            'productname',
+            'price',
+            DB::raw('count(*) as productsold'),
+            DB::raw('SUM(product_total * product_quantity) as total')
+        )
+        ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
+        ->groupBy('productname', 'price')
+        ->get();
 
-        return view('viewreports', [
-            "product_week" => $productlist_week,
-            "product" => $productlist,
-            'today_sales' => $todaySales,
-            'weekly_sales' => $weeklySales,
-            'monthly_sales' => $monthlySales,
-            'yearly_sales' => $yearlySales
-        ]);
+
+    $productlist_month = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->select(
+            'productname',
+            'price',
+            DB::raw('count(*) as productsold'),
+            DB::raw('SUM(product_total * product_quantity) as total')
+        )
+        ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
+        ->groupBy('productname', 'price')
+        ->get();
+
+    // Get the top 3 best-selling products
+    $bestSellers = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->select(
+            'productname',
+            'price',
+            DB::raw('count(*) as productsold'),
+            DB::raw('SUM(product_total * product_quantity) as total')
+        )
+        ->groupBy('productname', 'price')
+        ->orderByDesc('productsold')
+        ->limit(3) // Limit the result to the top 3 products
+        ->get();
+
+    return view('viewreports', [
+        "product_week" => $productlist_week,
+        "product_month" => $productlist_month,
+        "product" => $productlist,
+        'today_sales' => $todaySales,
+        'weekly_sales' => $weeklySales,
+        'monthly_sales' => $monthlySales,
+        'yearly_sales' => $yearlySales,
+        'best_sellers' => $bestSellers, // Pass the best sellers to the view
+    ]);
     }
 
     public function aeditvendor()

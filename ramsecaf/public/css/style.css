@@ -154,16 +154,36 @@ a:focus {
   background-color: #E3D6D8;
 }
 
+#bestsellerscroll {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
 #dailysales {
   background-color: #E3D6D8;
+}
+
+#dailysalesscroll {
+  max-height: 400px;
+  overflow-y: scroll;
 }
 
 #weeklysales {
   background-color:#E3D6D8;
 }
 
+#weeklysalesscroll {
+  max-height: 350px;
+  overflow-y: scroll;
+}
+
 #monthlysales {
   background-color: #E3D6D8;
+}
+
+#monthlysalesscroll {
+  max-height: 350px;
+  overflow-y: scroll;
 }
 
 .col-12{

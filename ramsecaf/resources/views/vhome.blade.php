@@ -59,7 +59,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                 <img src="images/kitchenexpress.png" width="100" height="100" >
                 <a class="navbar-brand" href="/vendorhome">
                     <span>
-                        <p class="kcursive">Kitchen Xpress</p>
+                        <p class="kcursive">Kitchen Express</p>
                     </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -99,14 +99,14 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         <div class="row">
 
         <div class="col-6">
-    <ol class="list-group" id="bestseller">
+    <ol class="list-group" id="bestsellerscroll">
         <li class="list-group-item d-flex justify-content-between align-items-start " id="bestseller">
             <div id="bestseller">
                 <h1 class="kcursive">Best Sellers</h1>
                 <p class="fs-5 small">(As of {{ \Carbon\Carbon::now()->format('F, Y') }})</p>
             </div>
         </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start" id="bestseller">
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="bestseller" id="bestsellerscroll">
             <table class="table">
                 <thead>
                     <tr>
@@ -136,9 +136,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 </div>
 
 
-            <div class="col-6">
-                <ol class="list-group" id="dailysales">
-                    <li class="list-group-item d-flex justify-content-between align-items-start" id="dailysales">
+            <div class="col-6" id="dailysalesscroll">
+                <ol class="list-group" id="dailysales" >
+                    <li class="list-group-item d-flex justify-content-between align-items-start" id="dailysales" >
                         <div class="">
                             <h1 class="kcursive">Daily Sales</h1>
                             <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
@@ -175,7 +175,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                 </ol>
             </div>
 
-            <div class="col-6 mt-4">
+            <div class="col-6 mt-4" id="weeklysalesscroll">
                 <ol class="list-group list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-start" id="weeklysales">
                         <div class="">
@@ -216,30 +216,41 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
             </div>
 
             <div class="col-6 mt-4">
-                <ol class="list-group list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
-                        <div class="">
-                            <h1 class="kcursive">Monthly Sales</h1>
-                            <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
-                        </div>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
-                        
-                        <table class="table">
-                        <thead>
-                            <tr>
-                            <th scope="col">Qty</th>
-                            <th scope="col">Item</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Total</th>
-                            </tr>
-                        </thead>
-                        
-                        <tbody>
-                 
-
-                </ol>
+    <ol class="list-group list-group" id="monthlysalesscroll">
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales" >
+            <div>
+                <h1 class="kcursive">Monthly Sales</h1>
+                <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
             </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales" >
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($product_month as $product_month)
+                    <tr>
+                        <td>{{ $product_month->productsold }}</td>
+                        <td>{{ $product_month->productname }}</td>
+                        <td>₱{{ $product_month->price }}</td>
+                        <td>₱{{ $product_month->total }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </li>
+        <li class="list-group-item align-items-end text-end" id="monthlysales">
+            <h3>Total Sale: ₱{{ $monthly_sales }}</h3>
+        </li>
+    </ol>
+</div>
+
 
         </div>
     </div>
