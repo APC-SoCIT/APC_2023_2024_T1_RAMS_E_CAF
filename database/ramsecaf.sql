@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 18, 2023 at 07:11 AM
--- Server version: 10.4.25-MariaDB
--- PHP Version: 8.1.10
+-- Generation Time: Sep 18, 2023 at 06:45 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,12 +30,12 @@ SET time_zone = "+00:00";
 CREATE TABLE `cart` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `cart_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cart_status` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `item_total` int(10) DEFAULT NULL,
   `price_total` decimal(10,0) DEFAULT NULL,
-  `store` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `store` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -43,13 +43,10 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `user_id`, `cart_status`, `created_at`, `updated_at`, `item_total`, `price_total`, `store`) VALUES
-(80, 4, 'claimed', '2023-09-11 03:58:43', '2023-09-13 23:16:12', NULL, NULL, 'Kitchen Express'),
-(81, 4, 'claimed', '2023-09-11 17:59:22', '2023-09-11 17:59:45', NULL, NULL, 'Kitchen Express'),
-(99, 4, 'claimed', '2023-09-16 03:53:43', '2023-09-17 02:35:45', NULL, NULL, 'Kitchen Express'),
-(100, 4, 'paid', '2023-09-16 05:48:40', '2023-09-17 06:21:15', NULL, NULL, 'Kitchen Express'),
-(101, 4, 'paid', '2023-09-17 07:03:05', '2023-09-17 07:03:18', NULL, NULL, 'Kitchen Express'),
-(102, 4, 'paid', '2023-09-17 07:03:37', '2023-09-17 07:03:47', NULL, NULL, 'La Mudras Corner'),
-(103, 4, 'pending', '2023-09-17 19:58:34', '2023-09-17 19:58:34', NULL, NULL, 'Kitchen Express');
+(107, 4, 'claimed', '2023-09-18 07:18:08', '2023-09-18 07:33:01', NULL, NULL, 'Kitchen Express'),
+(108, 4, 'paid', '2023-09-18 07:19:01', '2023-09-18 07:19:18', NULL, NULL, 'Kitchen Express'),
+(109, 4, 'paid', '2023-09-18 07:20:26', '2023-09-18 07:22:49', NULL, NULL, 'Kitchen Express'),
+(110, 12, 'paid', '2023-09-18 07:22:16', '2023-09-18 07:23:14', NULL, NULL, 'La Mudras Corner');
 
 -- --------------------------------------------------------
 
@@ -59,11 +56,11 @@ INSERT INTO `cart` (`id`, `user_id`, `cart_status`, `created_at`, `updated_at`, 
 
 CREATE TABLE `failed_jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -83,7 +80,7 @@ CREATE TABLE `feedback` (
   `cart_id` int(10) NOT NULL,
   `sentiment_1` varchar(255) DEFAULT NULL,
   `sentiment_2` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `feedback`
@@ -92,7 +89,9 @@ CREATE TABLE `feedback` (
 INSERT INTO `feedback` (`id`, `comment_1`, `comment_2`, `user_id`, `created_at`, `updated_at`, `cart_id`, `sentiment_1`, `sentiment_2`) VALUES
 (27, 'Bad', 'nice', 4, '2023-09-13 23:53:21', '2023-09-13 23:53:21', 80, 'Negative', 'Positive'),
 (28, 'Good', 'slow', 4, '2023-09-14 06:19:09', '2023-09-14 06:19:09', 81, 'Positive', 'Negative'),
-(29, 'okay', 'good', 4, '2023-09-17 08:37:27', '2023-09-17 08:37:27', 99, 'Positive', 'Positive');
+(29, 'okay', 'good', 4, '2023-09-17 08:37:27', '2023-09-17 08:37:27', 99, 'Positive', 'Positive'),
+(30, 'bad', 'good', 12, '2023-09-18 04:38:37', '2023-09-18 04:38:37', 104, 'Negative', 'Positive'),
+(31, 'bad', 'bad', 4, '2023-09-18 04:40:27', '2023-09-18 04:40:27', 100, 'Negative', 'Negative');
 
 -- --------------------------------------------------------
 
@@ -102,7 +101,7 @@ INSERT INTO `feedback` (`id`, `comment_1`, `comment_2`, `user_id`, `created_at`,
 
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -142,70 +141,14 @@ CREATE TABLE `order_product` (
 --
 
 INSERT INTO `order_product` (`id`, `cart_id`, `product_id`, `product_quantity`, `created_at`, `updated_at`, `product_total`) VALUES
-(141, 69, 3, 1, '2023-03-05 19:51:20', '2023-03-05 19:51:20', '100'),
-(142, 69, 10, 1, '2023-03-05 19:51:22', '2023-03-05 19:51:22', '40'),
-(145, 71, 9, 1, '2023-03-05 23:17:34', '2023-03-05 23:18:00', '50'),
-(146, 71, 11, 1, '2023-03-05 23:17:36', '2023-03-05 23:18:02', '20'),
-(147, 72, 4, 1, '2023-03-05 23:18:53', '2023-03-05 23:18:53', '100'),
-(148, 72, 8, 1, '2023-03-05 23:18:56', '2023-03-05 23:18:56', '50'),
-(149, 73, 4, 1, '2023-03-05 23:44:12', '2023-03-05 23:44:34', '100'),
-(150, 73, 8, 1, '2023-03-05 23:44:14', '2023-03-05 23:44:14', '50'),
-(151, 73, 1, 1, '2023-03-05 23:44:16', '2023-03-05 23:44:16', '100'),
-(152, 74, 3, 1, '2023-03-09 10:52:54', '2023-03-09 10:52:54', '100'),
-(153, 74, 10, 1, '2023-03-09 10:52:56', '2023-03-09 10:52:56', '40'),
-(154, 74, 7, 1, '2023-03-09 10:52:57', '2023-03-09 10:52:57', '100'),
-(155, 75, 7, 1, '2023-03-10 00:57:34', '2023-03-10 00:57:34', '100'),
-(156, 75, 4, 1, '2023-03-10 00:57:37', '2023-03-10 00:57:37', '100'),
-(157, 75, 10, 1, '2023-03-10 00:57:40', '2023-03-10 00:57:40', '40'),
-(158, 76, 7, 1, '2023-03-15 18:04:16', '2023-03-15 18:04:28', '100'),
-(159, 76, 9, 1, '2023-03-15 18:04:19', '2023-03-15 18:04:19', '50'),
-(160, 76, 3, 2, '2023-03-15 18:04:20', '2023-03-15 18:04:42', '200'),
-(161, 77, 3, 1, '2023-06-22 23:38:25', '2023-06-22 23:38:25', '100'),
-(162, 77, 4, 1, '2023-06-22 23:38:29', '2023-06-22 23:38:29', '100'),
-(163, 77, 1, 1, '2023-09-09 04:29:36', '2023-09-09 04:29:36', '100'),
-(164, 78, 1, 1, '2023-09-09 06:16:45', '2023-09-09 06:16:45', '100'),
-(165, 78, 3, 1, '2023-09-09 06:16:46', '2023-09-09 06:16:46', '100'),
-(166, 78, 8, 1, '2023-09-09 06:18:19', '2023-09-09 06:18:19', '50'),
-(167, 78, 4, 1, '2023-09-09 06:18:21', '2023-09-09 06:18:21', '100'),
-(168, 78, 5, 1, '2023-09-09 06:18:23', '2023-09-09 06:18:23', '100'),
-(169, 79, 14, 1, '2023-09-11 03:41:15', '2023-09-11 03:41:15', '75'),
-(170, 79, 15, 1, '2023-09-11 03:41:17', '2023-09-11 03:41:17', '75'),
-(171, 80, 4, 1, '2023-09-11 03:58:43', '2023-09-11 03:58:43', '100'),
-(172, 80, 10, 1, '2023-09-11 03:58:47', '2023-09-11 03:58:47', '40'),
-(173, 81, 11, 1, '2023-09-11 17:59:22', '2023-09-11 17:59:22', '20'),
-(174, 81, 1, 1, '2023-09-11 17:59:24', '2023-09-11 17:59:24', '100'),
-(175, 82, 1, 1, '2023-09-11 18:16:19', '2023-09-11 18:16:19', '100'),
-(176, 82, 4, 1, '2023-09-11 18:16:20', '2023-09-11 18:16:20', '100'),
-(177, 83, 5, 1, '2023-09-11 18:26:31', '2023-09-11 18:26:31', '100'),
-(178, 83, 8, 1, '2023-09-11 18:26:33', '2023-09-11 18:26:33', '50'),
-(179, 84, 3, 3, '2023-09-11 18:39:06', '2023-09-11 18:39:43', '300'),
-(180, 84, 11, 1, '2023-09-11 18:39:10', '2023-09-11 18:39:10', '20'),
-(181, 84, 9, 1, '2023-09-11 18:39:50', '2023-09-11 18:39:50', '50'),
-(182, 85, 1, 1, '2023-09-12 16:23:49', '2023-09-12 16:23:49', '100'),
-(183, 85, 10, 1, '2023-09-12 16:23:50', '2023-09-12 16:23:50', '40'),
-(184, 86, 1, 1, '2023-09-13 23:33:01', '2023-09-13 23:33:01', '100'),
-(185, 86, 10, 1, '2023-09-13 23:33:04', '2023-09-13 23:33:04', '40'),
-(186, 86, 2, 1, '2023-09-13 23:33:07', '2023-09-13 23:33:07', '100'),
-(187, 87, 2, 1, '2023-09-13 23:39:03', '2023-09-13 23:39:03', '100'),
-(188, 87, 7, 1, '2023-09-13 23:39:05', '2023-09-13 23:39:05', '100'),
-(189, 87, 3, 1, '2023-09-14 00:03:46', '2023-09-14 00:03:46', '100'),
-(190, 87, 6, 1, '2023-09-14 00:03:48', '2023-09-14 00:03:48', '100'),
-(208, 94, 2, 2, '2023-09-14 19:42:16', '2023-09-14 19:49:34', '200'),
-(209, 94, 5, 2, '2023-09-14 19:49:23', '2023-09-14 19:49:37', '200'),
-(210, 95, 4, 1, '2023-09-15 16:23:27', '2023-09-15 16:23:27', '100'),
-(211, 95, 8, 1, '2023-09-15 16:23:29', '2023-09-15 16:23:29', '50'),
-(220, 99, 1, 1, '2023-09-16 03:53:43', '2023-09-16 03:53:43', '100'),
-(221, 99, 4, 1, '2023-09-16 03:53:43', '2023-09-16 03:53:43', '100'),
-(222, 100, 4, 2, '2023-09-16 05:48:40', '2023-09-16 05:48:45', '200'),
-(223, 100, 10, 1, '2023-09-16 05:48:40', '2023-09-16 05:48:40', '40'),
-(224, 100, 2, 1, '2023-09-17 06:20:59', '2023-09-17 06:20:59', '100'),
-(225, 100, 6, 1, '2023-09-17 06:21:01', '2023-09-17 06:21:01', '100'),
-(226, 101, 3, 1, '2023-09-17 07:03:05', '2023-09-17 07:03:05', '100'),
-(227, 101, 8, 1, '2023-09-17 07:03:07', '2023-09-17 07:03:07', '50'),
-(228, 102, 15, 1, '2023-09-17 07:03:37', '2023-09-17 07:03:37', '75'),
-(229, 102, 16, 1, '2023-09-17 07:03:38', '2023-09-17 07:03:38', '75'),
-(230, 103, 3, 1, '2023-09-17 19:58:34', '2023-09-17 19:58:34', '100'),
-(231, 103, 11, 1, '2023-09-17 19:58:35', '2023-09-17 19:58:35', '20');
+(239, 107, 2, 1, '2023-09-18 07:18:08', '2023-09-18 07:18:08', 100),
+(240, 107, 6, 1, '2023-09-18 07:18:10', '2023-09-18 07:18:10', 100),
+(241, 108, 2, 1, '2023-09-18 07:19:01', '2023-09-18 07:19:01', 100),
+(242, 108, 11, 1, '2023-09-18 07:19:03', '2023-09-18 07:19:03', 20),
+(243, 109, 1, 1, '2023-09-18 07:20:26', '2023-09-18 07:20:26', 100),
+(244, 109, 2, 1, '2023-09-18 07:20:28', '2023-09-18 07:20:28', 100),
+(245, 110, 14, 1, '2023-09-18 07:22:16', '2023-09-18 07:22:16', 75),
+(246, 110, 17, 1, '2023-09-18 07:22:18', '2023-09-18 07:22:18', 75);
 
 -- --------------------------------------------------------
 
@@ -214,8 +157,8 @@ INSERT INTO `order_product` (`id`, `cart_id`, `product_id`, `product_quantity`, 
 --
 
 CREATE TABLE `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -227,11 +170,11 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `personal_access_tokens` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
   `tokenable_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -474,7 +417,27 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (229, 'App\\Models\\User', 4, 'API TOKEN', 'fb18f67caa147317c2397e7d7b6b2b67126d23cfe44920338df4437d1681e451', '[\"*\"]', NULL, NULL, '2023-09-17 21:02:49', '2023-09-17 21:02:49'),
 (230, 'App\\Models\\User', 12, 'API TOKEN', 'cd0e402c1ca365cfef741a636d1c490e1e37f97d1dd53130bd85c8c8f5dd46a4', '[\"*\"]', NULL, NULL, '2023-09-17 21:04:52', '2023-09-17 21:04:52'),
 (231, 'App\\Models\\User', 12, 'API TOKEN', '3891b40bed1d1403ab36d482e61e416fea7223c14f9285aa72f86c5e05387b01', '[\"*\"]', NULL, NULL, '2023-09-17 21:07:39', '2023-09-17 21:07:39'),
-(232, 'App\\Models\\User', 4, 'API TOKEN', '4f8901d5fb7bda0454f05ff32bab944ebb8460751fcf3652cbe4ccd04829f995', '[\"*\"]', NULL, NULL, '2023-09-17 21:07:55', '2023-09-17 21:07:55');
+(232, 'App\\Models\\User', 4, 'API TOKEN', '4f8901d5fb7bda0454f05ff32bab944ebb8460751fcf3652cbe4ccd04829f995', '[\"*\"]', NULL, NULL, '2023-09-17 21:07:55', '2023-09-17 21:07:55'),
+(233, 'App\\Models\\User', 4, 'API TOKEN', '18779282d646d85cdba69ef84262e11b08adf65de73d446b14f6f35cf48a2cc2', '[\"*\"]', NULL, NULL, '2023-09-18 04:33:26', '2023-09-18 04:33:26'),
+(234, 'App\\Models\\User', 5, 'API TOKEN', '8eb790d4b8a8685821195e143901ed7c625442caecd5768aad58a0d7e4a96406', '[\"*\"]', NULL, NULL, '2023-09-18 04:34:37', '2023-09-18 04:34:37'),
+(235, 'App\\Models\\User', 12, 'API TOKEN', '85efea8cb2fc231eabc24ecd9429369a48d41d0589a73c2ff83633e480cdca61', '[\"*\"]', NULL, NULL, '2023-09-18 04:36:03', '2023-09-18 04:36:03'),
+(236, 'App\\Models\\User', 4, 'API TOKEN', '39cdb8c9d3f012e994ddb18e3f342f2e9fcbb7bd2eac2c0964deb9cb95c01dc8', '[\"*\"]', NULL, NULL, '2023-09-18 04:39:16', '2023-09-18 04:39:16'),
+(237, 'App\\Models\\User', 7, 'API TOKEN', '6081b24b87494966806c8758f96997d811b48c1904c8b657182da8437b76bad6', '[\"*\"]', NULL, NULL, '2023-09-18 04:39:48', '2023-09-18 04:39:48'),
+(238, 'App\\Models\\User', 5, 'API TOKEN', 'b3b282cd61f9fcb5ecfbedb442bf79467439504ac4f4c1b0749e23df89e36377', '[\"*\"]', NULL, NULL, '2023-09-18 04:40:15', '2023-09-18 04:40:15'),
+(239, 'App\\Models\\User', 5, 'API TOKEN', '57c2ed6461bc0ae3d1fc76009fb8b6e604ed89cf45fba879d0ec97f29ae0a16f', '[\"*\"]', NULL, NULL, '2023-09-18 06:33:27', '2023-09-18 06:33:27'),
+(240, 'App\\Models\\User', 7, 'API TOKEN', 'c4583a0f809827f1ae5466acd2427a361583e759075a4290a58729ae35f8c67f', '[\"*\"]', NULL, NULL, '2023-09-18 06:35:31', '2023-09-18 06:35:31'),
+(241, 'App\\Models\\User', 5, 'API TOKEN', 'b40975ed80ea1e5afadcec550c68fdc367ce5ee9f465be5e6fa518e72da951bb', '[\"*\"]', NULL, NULL, '2023-09-18 06:50:45', '2023-09-18 06:50:45'),
+(242, 'App\\Models\\User', 5, 'API TOKEN', 'f856064fbf6b6e64b187c08a0a7d5dacf7663e6438b1cbc7dc810ccc149d9c1c', '[\"*\"]', NULL, NULL, '2023-09-18 06:54:13', '2023-09-18 06:54:13'),
+(243, 'App\\Models\\User', 5, 'API TOKEN', '19ffdfb6b5c9c7f39b5409cb91e26b3ae82577762d3cca78925cddeab4d675ae', '[\"*\"]', NULL, NULL, '2023-09-18 06:54:24', '2023-09-18 06:54:24'),
+(244, 'App\\Models\\User', 7, 'API TOKEN', '4bf181f12d4d90d69ad746ac6007a35f2e035a46f268ff1eb043eeff9231ff29', '[\"*\"]', NULL, NULL, '2023-09-18 06:59:13', '2023-09-18 06:59:13'),
+(245, 'App\\Models\\User', 5, 'API TOKEN', '515d9320da49d15397107c7cc370a3d7013a62d97cea80666ddcc4f21385d016', '[\"*\"]', NULL, NULL, '2023-09-18 07:01:31', '2023-09-18 07:01:31'),
+(246, 'App\\Models\\User', 4, 'API TOKEN', '1c194a648242f61b4b92c329f7a50b5b0ae18ef4ef2e1a10f5eac38ae0e2f90a', '[\"*\"]', NULL, NULL, '2023-09-18 07:15:56', '2023-09-18 07:15:56'),
+(247, 'App\\Models\\User', 12, 'API TOKEN', 'cb10e82f986470a342d68cd4f8e9db86081d90628ad1191f7401efb09a0144d7', '[\"*\"]', NULL, NULL, '2023-09-18 07:20:38', '2023-09-18 07:20:38'),
+(248, 'App\\Models\\User', 8, 'API TOKEN', '3352ee8c5389b58b1b4bbc47f9da4bf3cb2ccb59dddb055070b31ce829c4d3c6', '[\"*\"]', NULL, NULL, '2023-09-18 07:40:26', '2023-09-18 07:40:26'),
+(249, 'App\\Models\\User', 4, 'API TOKEN', 'a65ba7ca72ef8685aaf2895f85181c31d91cad941509f873f3d12394e0adf99b', '[\"*\"]', NULL, NULL, '2023-09-18 07:53:50', '2023-09-18 07:53:50'),
+(250, 'App\\Models\\User', 8, 'API TOKEN', '956a888a9c362fa8d17b8611cdf4810c357cb7b85f07084786a81274c2504b3f', '[\"*\"]', NULL, NULL, '2023-09-18 08:03:13', '2023-09-18 08:03:13'),
+(251, 'App\\Models\\User', 4, 'API TOKEN', '21e6332bf55f805ff8b18063d4f0dcd0675729e2b261c2b9bf42b9a1eea8a138', '[\"*\"]', NULL, NULL, '2023-09-18 08:05:39', '2023-09-18 08:05:39'),
+(252, 'App\\Models\\User', 5, 'API TOKEN', 'd3d2b87f6a6b4f8506879a5b05df3a04b998b638cf3043184db54e2f6094e678', '[\"*\"]', NULL, NULL, '2023-09-18 08:06:09', '2023-09-18 08:06:09');
 
 -- --------------------------------------------------------
 
@@ -484,13 +447,13 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 
 CREATE TABLE `product` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `productname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productname` varchar(255) NOT NULL,
   `price` double(8,2) NOT NULL,
-  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `store_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `store_name` varchar(255) NOT NULL,
   `stocks` int(10) NOT NULL,
   `isactive` int(10) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -500,21 +463,21 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `productname`, `price`, `category`, `image`, `created_at`, `updated_at`, `store_name`, `stocks`, `isactive`) VALUES
-(1, 'Katsudon', 100.00, 'ricemeals', 'Katsudon_2023-03-05-16-31-30.png', NULL, '2023-09-17 02:57:11', 'Kitchen Express', 40, 1),
-(2, 'Chicken Curry', 100.00, 'ricemeals', 'Chicken Curry_2023-03-05-15-23-23.png', NULL, '2023-09-17 06:21:15', 'Kitchen Express', 42, 1),
+(1, 'Katsudon', 100.00, 'ricemeals', 'Katsudon_2023-03-05-16-31-30.png', NULL, '2023-09-18 07:22:49', 'Kitchen Express', 39, 1),
+(2, 'Chicken Curry', 100.00, 'ricemeals', 'Chicken Curry_2023-03-05-15-23-23.png', NULL, '2023-09-18 07:22:49', 'Kitchen Express', 37, 1),
 (3, 'Lechon Paksiw', 100.00, 'ricemeals', 'Lechon Paksiw_2023-03-05-15-23-37.png', NULL, '2023-09-17 07:03:18', 'Kitchen Express', 32, 1),
 (4, '2pc Barbeque', 100.00, 'ricemeals', '2pc%20BBQ.png', NULL, '2023-09-17 06:21:15', 'Kitchen Express', 35, 1),
 (5, 'Salisbury Steak', 100.00, 'ricemeals', 'Salisbury%20Steak.png', NULL, '2023-09-14 19:51:04', 'Kitchen Express', 45, 1),
-(6, 'Pork Tapa', 100.00, 'ricemeals', 'Pork%20Tapa.png', NULL, '2023-09-17 06:21:15', 'Kitchen Express', 47, 1),
+(6, 'Pork Tapa', 100.00, 'ricemeals', 'Pork%20Tapa.png', NULL, '2023-09-18 07:18:54', 'Kitchen Express', 45, 1),
 (7, 'Cheesy Spaghetti', 100.00, 'pasta', 'Cheesy%20Spaghetti.png', NULL, '2023-09-14 00:14:49', 'Kitchen Express', 41, 1),
 (8, 'Brewed Calamansi', 50.00, 'beverages', 'Brewed%20Calamansi%20Drink.png', NULL, '2023-09-17 07:03:18', 'Kitchen Express', 44, 1),
 (9, 'Calamansi Drink', 50.00, 'beverages', 'Calamansi%20Drink.png', NULL, '2023-09-11 18:41:15', 'Kitchen Express', 47, 1),
 (10, 'C2', 40.00, 'beverages', 'C2.png', NULL, '2023-09-17 06:21:15', 'Kitchen Express', 42, 1),
-(11, 'Water', 20.00, 'beverages', 'Water.png', NULL, '2023-09-11 18:41:15', 'Kitchen Express', 43, 1),
-(14, 'Burgersilog', 75.00, 'ricemeals', 'Burgersilog_2023-03-05-17-00-05.png', '2023-03-05 09:00:05', '2023-09-11 03:41:47', 'La Mudras Corner', 46, 1),
-(15, 'Hotsilog', 75.00, 'ricemeals', 'Hotsilog_2023-03-05-17-00-29.png', '2023-03-05 09:00:29', '2023-09-17 07:03:47', 'La Mudras Corner', 47, 1),
+(11, 'Water', 20.00, 'beverages', 'Water.png', NULL, '2023-09-18 07:19:18', 'Kitchen Express', 41, 1),
+(14, 'Burgersilog', 75.00, 'ricemeals', 'Burgersilog_2023-03-05-17-00-05.png', '2023-03-05 09:00:05', '2023-09-18 07:23:21', 'La Mudras Corner', 43, 1),
+(15, 'Hotsilog', 75.00, 'ricemeals', 'Hotsilog_2023-03-05-17-00-29.png', '2023-03-05 09:00:29', '2023-09-18 06:50:03', 'La Mudras Corner', 45, 1),
 (16, 'Pork Teriyaki', 75.00, 'ricemeals', 'Pork Teriyaki_2023-03-05-17-00-56.png', '2023-03-05 09:00:56', '2023-09-17 07:03:47', 'La Mudras Corner', 47, 1),
-(17, 'Sisig', 75.00, 'ricemeals', 'Sisig_2023-03-05-17-01-57.png', '2023-03-05 09:01:57', '2023-03-05 16:57:32', 'La Mudras Corner', 48, 1);
+(17, 'Sisig', 75.00, 'ricemeals', 'Sisig_2023-03-05-17-01-57.png', '2023-03-05 09:01:57', '2023-09-18 07:23:21', 'La Mudras Corner', 45, 1);
 
 -- --------------------------------------------------------
 
@@ -524,14 +487,14 @@ INSERT INTO `product` (`id`, `productname`, `price`, `category`, `image`, `creat
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` varchar(255) NOT NULL,
   `vendor` int(10) NOT NULL DEFAULT 1,
   `isactive` int(10) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -546,11 +509,11 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 (6, 'Red Brew', 'rbrew@gmail.com', NULL, '$2y$10$PDgn3HNTJI0IpALiR6HNfejX6OvIGd7QcwOaiMYIqig1YvAf8hqva', NULL, '2023-03-04 00:34:38', '2023-03-05 20:43:14', 'vendor-rb', 1, 1),
 (7, 'La Mudras Corner', 'lmudras@gmail.com', NULL, '$2y$10$DwnzXJ2ADl.WbQR4IP13fuI.GH8GqE5TtbuVihp57k.Ma0BWWrQyC', NULL, '2023-03-04 00:34:38', '2023-03-04 00:34:38', 'vendor-lm', 1, 1),
 (8, 'Admin', 'admin@apc.edu.ph', NULL, '$2y$10$hXP.7.umEI4bh8QFPycth.bhLWmRti1yCMRGBJA7ZODqPL8bSNRTm', NULL, '2023-03-04 00:34:38', '2023-03-04 00:34:38', 'admin', 0, 1),
-(12, 'Corneliani Jon Melo', 'cgmelo@student.apc.edu.ph', NULL, '$2y$10$qio81Y5dDGcdN8qm8ckF5.mWdE2SAS96/0.eco6STzBqfgGiGUV7i', NULL, '2023-09-17 20:58:29', '2023-09-17 20:58:29', 'customer', 1, 1),
-(13, 'Kurt Jordan Cadenas', 'kvcadenas@student.apc.edu.ph', NULL, '$2y$10$yHElPb6eTr97E9bHE8eOmej.7I93v344vxhC0SuqkGk0JiDfajllC', NULL, '2023-09-17 21:10:47', '2023-09-17 21:10:47', 'customer', 1, 1),
-(14, 'Nathan Allen Sinaguinan', 'nbsinaguinan@student.apc.edu.ph', NULL, '$2y$10$3awar6t5g/2N1sZ2Vz77H.fR3yxaUVKkHJqT7O3TEdq7bYn/dgLiW', NULL, '2023-09-17 21:10:47', '2023-09-17 21:10:47', 'customer', 1, 1),
-(15, 'Isaiah Jade Tutor', 'imtutor@student.apc.edu.ph', NULL, '$2y$10$FbMGAwTQnidOSYN/nqn57.eWtgGRxKtmk29dr.mhfgMhYMmiiCfhC', NULL, '2023-09-17 21:10:47', '2023-09-17 21:10:47', 'customer', 1, 1),
-(16, 'Stephano Franco Binay', 'ssjbinay@student.apc.edu.ph', NULL, '$2y$10$ZwKRA9O49wT00iWVGXa/f.gMGvbs3BPIjMtfBvWVj7wyHPGLvXT6G', NULL, '2023-09-17 21:10:47', '2023-09-17 21:10:47', 'customer', 1, 1);
+(12, 'Corneliani Jon Melo', 'cgmelo@student.apc.edu.ph', NULL, '$2y$10$qio81Y5dDGcdN8qm8ckF5.mWdE2SAS96/0.eco6STzBqfgGiGUV7i', NULL, '2023-09-17 20:58:29', '2023-09-17 20:58:29', 'customer', 0, 1),
+(13, 'Kurt Jordan Cadenas', 'kvcadenas@student.apc.edu.ph', NULL, '$2y$10$yHElPb6eTr97E9bHE8eOmej.7I93v344vxhC0SuqkGk0JiDfajllC', NULL, '2023-09-17 21:10:47', '2023-09-17 21:10:47', 'customer', 0, 1),
+(14, 'Nathan Allen Sinaguinan', 'nbsinaguinan@student.apc.edu.ph', NULL, '$2y$10$3awar6t5g/2N1sZ2Vz77H.fR3yxaUVKkHJqT7O3TEdq7bYn/dgLiW', NULL, '2023-09-17 21:10:47', '2023-09-17 21:10:47', 'customer', 0, 1),
+(15, 'Isaiah Jade Tutor', 'imtutor@student.apc.edu.ph', NULL, '$2y$10$FbMGAwTQnidOSYN/nqn57.eWtgGRxKtmk29dr.mhfgMhYMmiiCfhC', NULL, '2023-09-17 21:10:47', '2023-09-17 21:10:47', 'customer', 0, 1),
+(16, 'Stephano Franco Binay', 'ssjbinay@student.apc.edu.ph', NULL, '$2y$10$ZwKRA9O49wT00iWVGXa/f.gMGvbs3BPIjMtfBvWVj7wyHPGLvXT6G', NULL, '2023-09-17 21:10:47', '2023-09-17 21:10:47', 'customer', 0, 1);
 
 --
 -- Indexes for dumped tables
@@ -622,7 +585,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -634,7 +597,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -646,13 +609,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `order_product`
 --
 ALTER TABLE `order_product`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=232;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=253;
 
 --
 -- AUTO_INCREMENT for table `product`
