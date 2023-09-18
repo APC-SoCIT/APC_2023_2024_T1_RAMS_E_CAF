@@ -40,7 +40,7 @@ Route::get('/profile', [mainController::class, 'profile'])->name('profile');
 
 Route::get('/complete', [mainController::class, 'complete'])->name('complete');
 
-Route::get('/order-summarry/{cartid}', [mainController::class, 'order_summary'])->name('order_summary');
+Route::get('/order_summary/{cartid}', [mainController::class, 'order_summary'])->name('order_summary');
 
 Route::get('/confirm-order', [mainController::class, 'order_confirm'])->name('order_confirm');
 

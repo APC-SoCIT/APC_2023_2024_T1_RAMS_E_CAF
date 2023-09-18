@@ -95,44 +95,165 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     <!-- end header section -->
 
     <div class="container">
-    <div class="row">
-        <div class="col-6" id="dailysalesscroll">
-            <ol class="list-group" id="dailysales">
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div>
-                        <h1 class="kcursive">Daily Sales</h1>
-                        <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <table class="table">
+
+        <div class="row">
+
+        <div class="col-6">
+    <ol class="list-group" id="bestsellerscroll">
+        <li class="list-group-item d-flex justify-content-between align-items-start " id="bestseller">
+            <div id="bestseller">
+                <h1 class="kcursive">Best Sellers</h1>
+                <p class="fs-5 small">(As of {{ \Carbon\Carbon::now()->format('F, Y') }})</p>
+            </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="bestseller" id="bestsellerscroll">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Food item</th>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Sales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($best_sellers as $best_seller)
+                        <tr>
+                            <td>
+                                <p class="fs-5 small">{{ $best_seller->productname }}</p>
+                            </td>
+                            <td>
+                                <p class="fs-5 small">{{ $best_seller->productsold }}</p>
+                            </td>
+                            <td>
+                                <p class="fs-5 small">₱{{ number_format($best_seller->total, 2) }}</p>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </li>
+    </ol>
+</div>
+
+
+            <div class="col-6" id="dailysalesscroll">
+                <ol class="list-group" id="dailysales" >
+                    <li class="list-group-item d-flex justify-content-between align-items-start" id="dailysales" >
+                        <div class="">
+                            <h1 class="kcursive">Daily Sales</h1>
+                            <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start"id="dailysales">
+                        
+                        <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Qty</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Total</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Total</th>
                             </tr>
                         </thead>
+                        
                         <tbody>
-                            @foreach ($product as $productItem)
+                        @foreach ($product as $product)
                             <tr>
-                                <td>{{ $productItem->productsold }}</td>
-                                <td>{{ $productItem->productname }}</td>
-                                <td>₱{{ $productItem->price }}</td>
-                                <td>₱{{ $productItem->total }}</td>
+                            <td>{{$product->productsold}}</td>
+                            <td>{{$product->productname}}</td>
+                            <td>₱{{$product->price}}</td>
+                            <td>₱{{$product->total}}</td>
                             </tr>
                             @endforeach
                         </tbody>
-                    </table>
-                </li>
-                <li class="list-group-item align-items-end text-end">
-                    <h3>Total Sale: ₱{{ $today_sales }}</h3>
-                </li>
-            </ol>
+                        </table>
+                        
+                        </li>
+                        <li class="list-group-item align-items-end text-end" id="dailysales">
+                        <h3> Total Sale: ₱{{$today_sales}} </h3>
+                        </li>
+                </ol>
+            </div>
+
+            <div class="col-6 mt-4" id="weeklysalesscroll">
+                <ol class="list-group list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-start" id="weeklysales">
+                        <div class="">
+                        <h1 class="kcursive">Weekly Sales</h1>
+                        <p class="fs-5 small">Week {{ ceil(now()->day / 7) }} of {{ now()->format('F, Y') }}</p>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start" id="weeklysales">
+                        
+                        <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                        @foreach ($product_week as $product_week)
+                            <tr>
+                            <td>{{$product_week->productsold}}</td>
+                            <td>{{$product_week->productname}}</td>
+                            <td>₱{{$product_week->price}}</td>
+                            <td>₱{{$product_week->total}}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        </table>
+                        
+                        </li>
+                        <li class="list-group-item align-items-end text-end" id="weeklysales">
+                        <h3> Total Sale: ₱{{$weekly_sales}} </h3>
+                        </li>
+
+                </ol>
+            </div>
+
+            <div class="col-6 mt-4">
+    <ol class="list-group list-group" id="monthlysalesscroll">
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales" >
+            <div>
+                <h1 class="kcursive">Monthly Sales</h1>
+                <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
+            </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales" >
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($product_month as $product_month)
+                    <tr>
+                        <td>{{ $product_month->productsold }}</td>
+                        <td>{{ $product_month->productname }}</td>
+                        <td>₱{{ $product_month->price }}</td>
+                        <td>₱{{ $product_month->total }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </li>
+        <li class="list-group-item align-items-end text-end" id="monthlysales">
+            <h3>Total Sale: ₱{{ $monthly_sales }}</h3>
+        </li>
+    </ol>
+</div>
+
+
         </div>
     </div>
-</div>
 
 
 

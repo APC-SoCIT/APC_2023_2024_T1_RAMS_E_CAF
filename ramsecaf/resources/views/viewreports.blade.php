@@ -2,6 +2,7 @@
 <html>
 
 <head>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
@@ -92,7 +93,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     <ol class="list-group list-group">
         <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
             <div>
-                <h1 class="kcursive">Monthly Sales</h1>
+                <h1 class="kcursive">Kitchen Express</h1>
                 <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
             </div>
         </li>
@@ -107,19 +108,19 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($product_month as $product_month)
+                    @foreach ($product_month_ke as $product_month_ke)
                     <tr>
-                        <td>{{ $product_month->productsold }}</td>
-                        <td>{{ $product_month->productname }}</td>
-                        <td>₱{{ $product_month->price }}</td>
-                        <td>₱{{ $product_month->total }}</td>
+                        <td>{{ $product_month_ke->productsold }}</td>
+                        <td>{{ $product_month_ke->productname }}</td>
+                        <td>₱{{ $product_month_ke->price }}</td>
+                        <td>₱{{ $product_month_ke->total }}</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </li>
         <li class="list-group-item align-items-end text-end" id="monthlysales">
-            <h3>Total Sale: ₱{{ $monthly_sales }}</h3>
+            <h3>Total Sale: ₱{{ $monthly_sales_ke }}</h3>
         </li>
     </ol>
 </div>
@@ -128,7 +129,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     <ol class="list-group list-group">
         <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
             <div>
-                <h1 class="kcursive">Monthly Sales</h1>
+                <h1 class="kcursive">La Mudra's Corner</h1>
                 <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
             </div>
         </li>
@@ -143,19 +144,19 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($product_month as $product_month)
+                    @foreach ($product_month_lm as $product_month_lm)
                     <tr>
-                        <td>{{ $product_month->productsold }}</td>
-                        <td>{{ $product_month->productname }}</td>
-                        <td>₱{{ $product_month->price }}</td>
-                        <td>₱{{ $product_month->total }}</td>
+                        <td>{{ $product_month_lm->productsold }}</td>
+                        <td>{{ $product_month_lm->productname }}</td>
+                        <td>₱{{ $product_month_lm->price }}</td>
+                        <td>₱{{ $product_month_lm->total }}</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </li>
         <li class="list-group-item align-items-end text-end" id="monthlysales">
-            <h3>Total Sale: ₱{{ $monthly_sales }}</h3>
+            <h3>Total Sale: ₱{{ $monthly_sales_lm }}</h3>
         </li>
     </ol>
 </div>

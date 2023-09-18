@@ -25,8 +25,8 @@ class mainController extends Controller
     $userid = Auth::user()->get()->first()->id;
 
     // For Kitchen Express
-    $kitchen_Express = Cart::where('user_id', $userid)->where('store', 'Kitchen Express')->get()->last();
-    $kitchen_Express_list = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $kitchen_Express->id)->get();
+    // $kitchen_Express = Cart::where('user_id', $userid)->where('store', 'Kitchen Express')->get()->last();
+    // $kitchen_Express_list = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $kitchen_Express->id)->get();
 
     // For Red Brew (Assuming you have a similar database structure)
 
@@ -36,8 +36,8 @@ class mainController extends Controller
 
     return view("index", [
         'vendor' => $vendor,
-        "kitchen_express" => $kitchen_Express,
-        'kitchen_Express_list' => $kitchen_Express_list,
+        // "kitchen_express" => $kitchen_Express,
+        // 'kitchen_Express_list' => $kitchen_Express_list,
 
 
     ]);
@@ -85,34 +85,38 @@ class mainController extends Controller
         return redirect()->route('home')->with('error', 'Unauthorized access');
     }
 
-    $storeName = $user->store_name;
+    $storeName = $user->role;
+
+    if ($user->role == 'vendor-ke'){
+        $storeName = "Kitchen Express";
+    } elseif ($user->role == 'vendor-lm'){
+        $storeName ="La Mudras Corner";
+    } 
 
     $now = Carbon::now();
     $startOfDay = $now->copy()->startOfDay();
     $endOfDay = $now->copy()->endOfDay();
     $today = Carbon::today();
     $todaySales = DB::table('order_product')
-        ->whereDate('created_at', $today)
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->where('store_name', $storeName)
+        ->whereDate('order_product.created_at', $today)
         ->sum('product_total');
 
-
-    // Get today's sales
-
-    $today = Carbon::today();
-    $todaySales = DB::table('order_product')
-        ->whereDate('created_at', $today)
-        ->sum('product_total');
-    // Get weekly sales
     $startOfWeek = Carbon::now()->startOfWeek();
     $endOfWeek = Carbon::now()->endOfWeek();
     $weeklySales = DB::table('order_product')
-        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+         ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->where('store_name', $storeName)
+        ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
         ->sum('product_total');
     // Get monthly sales
     $startOfMonth = Carbon::now()->startOfMonth();
     $endOfMonth = Carbon::now()->endOfMonth();
     $monthlySales = DB::table('order_product')
-        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+         ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->where('store_name', $storeName)
+        ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
         ->sum('product_total');
 
     $productlist = DB::table('order_product')
@@ -124,9 +128,10 @@ class mainController extends Controller
             DB::raw('SUM(product_total * product_quantity) as total')
         )
         ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
+        ->where('store_name', $storeName)
         ->groupBy('productname', 'price')
         ->get();
-
+            
     $startOfWeek = Carbon::now()->startOfWeek();
     $endOfWeek = Carbon::now()->endOfWeek();
     $productlist_week = DB::table('order_product')
@@ -138,6 +143,7 @@ class mainController extends Controller
             DB::raw('SUM(product_total * product_quantity) as total')
         )
         ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
+        ->where('store_name', $storeName)
         ->groupBy('productname', 'price')
         ->get();
 
@@ -151,28 +157,29 @@ class mainController extends Controller
             DB::raw('SUM(product_total * product_quantity) as total')
         )
         ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
+        ->where('store_name', $storeName)
         ->groupBy('productname', 'price')
         ->get();
 
     // Get the top 3 best-selling products
     $bestSellers = DB::table('order_product')
-        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->join('product', 'product.id', '=', 'order_product.product_id')->where('store_name', $storeName)
         ->select(
             'productname',
             'price',
             DB::raw('count(*) as productsold'),
-            DB::raw('SUM(product_total * product_quantity) as total')
+            DB::raw('SUM(product_total) as total')
         )
+        
         ->groupBy('productname', 'price')
         ->orderByDesc('productsold')
         ->limit(3)
         ->get();
-
         return view('vhome', [
             'product' => $productlist,
             'product_week' => $productlist_week,
             'product_month' => $productlist_month,
-            'today_sales' => $todaySales, // Make sure $todaySales is defined
+            'today_sales' => $todaySales,
             'weekly_sales' => $weeklySales,
             'monthly_sales' => $monthlySales,
             'best_sellers' => $bestSellers,
@@ -183,7 +190,7 @@ class mainController extends Controller
     public function kitchenexpress()
     {
         
-        $userid = Auth::user()->get()->first()->id;
+        $userid = Auth::user()->get()->last()->id;
         if(Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'Kitchen Express'){
             $product = Product::where("store_name", "Kitchen Express")->get();
             return view("menu1", ["product" => $product]);
@@ -198,7 +205,7 @@ class mainController extends Controller
 
     public function lamudras()
     {
-        $userid = Auth::user()->get()->first()->id;
+        $userid = Auth::user()->get()->last()->id;
         if(Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'La Mudras Corner'){
             $product = Product::where("store_name", "La Mudras Corner")->get();
             return view("menu1", ["product" => $product]);
@@ -212,7 +219,7 @@ class mainController extends Controller
 
     public function redbrew()
     {
-        $userid = Auth::user()->get()->first()->id;
+        $userid = Auth::user()->get()->last()->id;
         if(Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'Red Brew'){
             $product = Product::where("store_name", "Red Brew")->get();
             return view("menu1", ["product" => $product]);
@@ -289,13 +296,12 @@ public function proceedtocart()
     $cart = Cart::where("user_id", $userid)->where("cart_status", "pending")->latest()->first();
     $cart_id = $cart->id;
 
-    // Calculate pickup time 20 minutes after cart creation time
     $created_at = $cart->created_at;
-    $pickup_time = $created_at->addMinutes(20);
+    $pickup_time = $created_at->addMinutes(500);
 
     $product = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cart_id)->get();
 
-    // Corrected array syntax
+    // Pass pickup_time instead of created_time
     return view("cart", [
         "product" => $product,
         "pickup_time" => $pickup_time->format('Y-m-d H:i:s') // Format pickup time
@@ -474,13 +480,20 @@ public function proceedtocart()
         $cartitem = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "paid")->get();
         $cart = Cart::where("cart_status", "paid")->get();
 
-        return view("myProfile", ["product" => $cartitem, "cart" => $cart]);
+        // $created_at = $cart->created_at;
+        // $pickup_time = $created_at->addMinutes(500);
+
+
+        return view("myProfile", ["product" => $cartitem, "cart" => $cart,
+                    // "pickup_time" => $pickup_time->format('Y-m-d H:i:s')
+                ]);
     }
+
     public function order_summary($cartid)
     {
         $cart = Cart::where("id", $cartid)->get()->last();
         $itemList = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cartid)->get();
-
+  
         return view("ordersummary", ["cart" => $cart, "item" => $itemList]);
     }
 
@@ -498,8 +511,11 @@ public function proceedtocart()
 
     // Retrieve all paid carts (not sure why you need this, but including it as requested)
     $cart = Cart::where('cart_status', 'paid')->get();
+    // $created_at = $cart->created_at;
+    // $pickup_time = $created_at->addMinutes(500);
 
-    return view('myProfile', ['product' => $cartItems, 'cart' => $cart]);
+    return view('myProfile', ['product' => $cartItems, 'cart' => $cart,
+                ]);
 }
 
     public function order_confirm(Request $request)
@@ -831,9 +847,20 @@ public function proceedtocart()
     // Get monthly sales
     $startOfMonth = Carbon::now()->startOfMonth();
     $endOfMonth = Carbon::now()->endOfMonth();
-    $monthlySales = DB::table('order_product')
-        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+
+    $monthlySales_ke = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->where('store_name', 'Kitchen Express')
+        ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
         ->sum('product_total');
+        
+    $monthlySales_lm = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->where('store_name', 'La Mudras Corner')
+        ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
+        ->sum('product_total');
+
+
     // Get yearly sales
     $startOfYear = Carbon::now()->startOfYear();
     $endOfYear = Carbon::now()->endOfYear();
@@ -867,7 +894,7 @@ public function proceedtocart()
         ->get();
 
 
-    $productlist_month = DB::table('order_product')
+        $productlist_month_ke = DB::table('order_product')
         ->join('product', 'product.id', '=', 'order_product.product_id')
         ->select(
             'productname',
@@ -876,6 +903,20 @@ public function proceedtocart()
             DB::raw('SUM(product_total * product_quantity) as total')
         )
         ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
+        ->where('store_name', 'Kitchen Express')
+        ->groupBy('productname', 'price')
+        ->get();
+
+        $productlist_month_lm = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
+        ->select(
+            'productname',
+            'price',
+            DB::raw('count(*) as productsold'),
+            DB::raw('SUM(product_total * product_quantity) as total')
+        )
+        ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
+        ->where('store_name', 'La Mudras Corner')
         ->groupBy('productname', 'price')
         ->get();
 
@@ -895,11 +936,13 @@ public function proceedtocart()
 
     return view('viewreports', [
         "product_week" => $productlist_week,
-        "product_month" => $productlist_month,
+        "product_month_ke" => $productlist_month_ke,
+        "product_month_lm" => $productlist_month_lm,
         "product" => $productlist,
         'today_sales' => $todaySales,
         'weekly_sales' => $weeklySales,
-        'monthly_sales' => $monthlySales,
+        'monthly_sales_ke' => $monthlySales_ke,
+        'monthly_sales_lm' => $monthlySales_lm,
         'yearly_sales' => $yearlySales,
         'best_sellers' => $bestSellers, // Pass the best sellers to the view
     ]);

@@ -95,13 +95,13 @@
 
                     @foreach($product as $item)
                         @if($item->cart_id == $cartItem->id)
-                            <a href="/order-summary/{{ $item->id }}" class="text-dark">
+                            <a href="/order_summary/{{ $item->id }}" class="text-dark">
                                 <h6 class="m-0 mx-3">{{ $item->product_quantity . 'x ' . $item->productname }}</h6>
                             </a>
                         @endif
                     @endforeach
 
-                    <p style="font-style: italic; color: gray;">Expected pick up time: {{ $new_time = date('H:i:s', strtotime('+20 minutes', strtotime(date('H:i:s')))) }}</p>
+                    <p style="font-style: italic; color: gray;">Expected pick up time: {{date('h:i A', strtotime($cartItem->created_at->addMinutes(500)))}}</p>
                 </div>
             </li>
         @endif

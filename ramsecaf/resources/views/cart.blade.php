@@ -151,13 +151,11 @@
             </div>
 
             <div class="card mb-4">
-    <div class="card-body">
-        <p><strong>Pickup time starts:</strong></p>
-        <?php
-        $pickup_time = date('H:i:s', strtotime('+20 minutes', strtotime(date('H:i:s'))));
-        ?>
-        <p class="mb-0">Pickup Time: {{ $pickup_time }}</p>
-    </div>
+            <div class="card-body">
+    <p><strong>Pickup time:</strong></p>
+    <p class="mb-0">{{ date('h:i A', strtotime($pickup_time)) }}</p>
+</div>
+
 </div>
 
 

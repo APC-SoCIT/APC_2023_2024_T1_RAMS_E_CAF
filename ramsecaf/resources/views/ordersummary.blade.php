@@ -137,7 +137,7 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <p><strong>Please pick up your orders by:</strong></p>
-                                <p class="mb-0">12:15 pm</p>
+                                <p class="mb-0">{{date('h:i A', strtotime($cart->created_at->addMinutes(500)))}}</p>
                             </div>
                         </div>
 
