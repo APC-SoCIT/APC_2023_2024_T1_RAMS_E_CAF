@@ -76,37 +76,39 @@
 
   <ol class="list-group list-group m-5">
     <li class="list-group-item d-flex justify-content-between align-items-start">
-      <div class="text-center">
-        <h1>Pending Orders</h1>
-        <a href="/profile">
-          <button type="button" class="btn btn-outline-warning active">Current Orders</button>
-        </a>
-        <a href="/complete">
-          <button type="button" class="btn btn-outline-success">Completed Orders</button>
-        </a>
-      </div>
+        <div class="text-center">
+            <h1>Pending Orders</h1>
+            <a href="/profile">
+                <button type="button" class="btn btn-outline-warning active">Current Orders</button>
+            </a>
+            <a href="/complete">
+                <button type="button" class="btn btn-outline-success">Completed Orders</button>
+            </a>
+        </div>
     </li>
-    @forEach($cart as $cart)
 
-    <li class="list-group-item d-flex justify-content-between align-items-start">
-      <div class="ms-2">
-      <h5 class="" class="row"><strong class="h3 fw-bold">{{$cart->store}} <span class="badge rounded-pill bg-warning"> Order # {{$cart->id}}</span></strong></h5>
+    @foreach($cart as $cartItem)
+        @if($cartItem->user_id == Auth::id())
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2">
+                    <h5 class="row"><strong class="h3 fw-bold">{{ $cartItem->store }} <span class="badge rounded-pill bg-warning"> Order # {{ $cartItem->id }}</span></strong></h5>
 
-         @forEach($product as $items)
-         
-         @if($items->cart_id == $cart->id)
-        <a href="/order-summarry/{{$items->id}}" class="text-dark">
-       
-          <h6 class="m-0 mx-3">{{$items->product_quantity."x ". $items->productname}}</h6>
-        
-        </a>
+                    @foreach($product as $item)
+                        @if($item->cart_id == $cartItem->id)
+                            <a href="/order-summary/{{ $item->id }}" class="text-dark">
+                                <h6 class="m-0 mx-3">{{ $item->product_quantity . 'x ' . $item->productname }}</h6>
+                            </a>
+                        @endif
+                    @endforeach
+
+                    <p style="font-style: italic; color: gray;">Expected pick up time: {{ $new_time = date('H:i:s', strtotime('+20 minutes', strtotime(date('H:i:s')))) }}</p>
+                </div>
+            </li>
         @endif
-        @endforEach
-        <p style="font-style: italic; color: gray;">Expected pick up time: {{$new_time = date('H:i:s', strtotime('+20 minutes', strtotime(date('H:i:s'))))}}</p>
-      </div>
-    </li>
-    @endforEach
-  </ol>
+    @endforeach
+</ol>
+
+
 
   <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">
     <div class="modal-dialog">

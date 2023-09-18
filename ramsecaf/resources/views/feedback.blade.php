@@ -78,7 +78,7 @@
           <div class="col-md-8">
             <div class="card mb-4">
               <div class="card-header py-3">
-                <h5 class="mb-0"><strong>Feedback</strong></h5>
+                <h5 class="mb-0"><strong>Feedback (Avoid using languages other than english)</strong></h5>
               </div>
 
               <div class="card-body">
@@ -88,7 +88,7 @@
                   </div>
                   <div class="">
 
-                    <p>Please provide your honest feedback for the food stall you ordered from.</p>
+                    <p>Please provide your honest feedback for the food you ordered.</p>
                     <form novalidate class="needs-validation" method="post" enctype="multipart/form-data" action="{{url('feedback')}}">
 				            @csrf
                       <input type="hidden" value="{{$cartid}}" name="cart_id">
@@ -96,7 +96,7 @@
                       <div class="mb-3">
                       <textarea class="form-control" name="comment_1" id="exampleFormControlTextarea1" rows="3" required></textarea>
                       </div>
-                      <p>Please provide your honest feedback for the food.</p>
+                      <p>Please provide your honest feedback for the service.</p>
                       <div class="mb-3">
                       <textarea class="form-control" name="comment_2" id="exampleFormControlTextarea1" rows="3" required></textarea>
                       </div>

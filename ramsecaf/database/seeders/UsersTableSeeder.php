@@ -17,8 +17,29 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'Jamir Sia', 
-            'email' => 'jzsia@student.apc.edu.ph', 
+            'name' => 'Kurt Jordan Cadenas', 
+            'email' => 'kvcadenas@student.apc.edu.ph', 
+            'password' => Hash::make('123456'),
+            'role' => 'customer'
+        ]);
+
+        User::create([
+            'name' => 'Nathan Allen Sinaguinan', 
+            'email' => 'nbsinaguinan@student.apc.edu.ph', 
+            'password' => Hash::make('123456'),
+            'role' => 'customer'
+        ]);
+
+        User::create([
+            'name' => 'Isaiah Jade Tutor', 
+            'email' => 'imtutor@student.apc.edu.ph', 
+            'password' => Hash::make('123456'),
+            'role' => 'customer'
+        ]);
+
+        User::create([
+            'name' => 'Stephano Franco Binay', 
+            'email' => 'ssjbinay@student.apc.edu.ph', 
             'password' => Hash::make('123456'),
             'role' => 'customer'
         ]);

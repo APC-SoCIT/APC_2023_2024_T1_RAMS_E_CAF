@@ -472,12 +472,22 @@ class mainController extends Controller
     }
 
     public function profile()
-    {
-        $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "paid")->get();
-        $cart = Cart::where("cart_status", "paid")->get();
+{
+    // Get the authenticated user's ID
+    $userId = Auth::id();
 
-        return view("myProfile", ["product" => $cartitems, "cart" => $cart]);
-    }
+    // Retrieve orders for the authenticated user
+    $cartItems = Order_product::join('product', 'product.id', '=', 'order_product.product_id')
+        ->join('cart', 'cart.id', '=', 'order_product.cart_id')
+        ->where('cart.user_id', $userId)  // Only show orders for the authenticated user
+        ->where('cart.cart_status', 'paid')
+        ->get();
+
+    // Retrieve all paid carts (not sure why you need this, but including it as requested)
+    $cart = Cart::where('cart_status', 'paid')->get();
+
+    return view('myProfile', ['product' => $cartItems, 'cart' => $cart]);
+}
 
     public function order_confirm(Request $request)
     {
