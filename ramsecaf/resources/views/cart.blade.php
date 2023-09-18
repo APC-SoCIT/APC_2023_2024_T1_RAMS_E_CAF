@@ -156,7 +156,7 @@
         <?php
         $pickup_time = date('H:i:s', strtotime('+20 minutes', strtotime(date('H:i:s'))));
         ?>
-        <p class="mb-0">{{$pickup_time}}</p>
+        <p class="mb-0">Pickup Time: {{ $pickup_time }}</p>
     </div>
 </div>
 

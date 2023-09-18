@@ -80,26 +80,28 @@
       </a>
     </div>
   </li>
-  @forEach($cart as $cart)
-  <a href="/receipt/{{$cart->id}}" style="color:black">
-    <li class="list-group-item d-flex justify-content-between align-items-start">
-      <div class="ms-2">
-        <h5 class="row"><strong class="h3 fw-bold">{{$cart->store}} <span class="badge rounded-pill bg-success"> Order # {{$cart->id}}</span></strong></h5>
-        @forEach($product as $items)
-        @if($items->cart_id == $cart->id)
-        <h6 class="m-0 mx-3">{{$items->product_quantity."x ". $items->productname}}</h6>
-        @endif
-        @endforEach
-      </div>
-      <div class="d-flex">
-        @if(!$feedback->contains('cart_id',$cart->id))
-        <a href="/feedbackview/{{$cart->id}}" class="btn btn-primary mb-3 mx-2" type="submit">Provide Feedback</a>
-        @endif 
-        <a href="/orderagain/{{$cart->id}}" class="btn btn-warning mb-3 mx-2" type="">Order Again</a>
-      </div>
-    </li>
-  </a>
-  @endforEach
+  @foreach($cart as $cart)
+  @if($cart->user_id == Auth::id())
+    <a href="/receipt/{{$cart->id}}" style="color:black">
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2">
+          <h5 class="row"><strong class="h3 fw-bold">{{$cart->store}} <span class="badge rounded-pill bg-success"> Order # {{$cart->id}}</span></strong></h5>
+          @foreach($product as $item)
+            @if($item->cart_id == $cart->id)
+              <h6 class="m-0 mx-3">{{$item->product_quantity."x ". $item->productname}}</h6>
+            @endif
+          @endforeach
+        </div>
+        <div class="d-flex">
+          @if(!$feedback->contains('cart_id', $cart->id))
+            <a href="/feedbackview/{{$cart->id}}" class="btn btn-primary mb-3 mx-2" type="submit">Provide Feedback</a>
+          @endif 
+          <a href="/orderagain/{{$cart->id}}" class="btn btn-warning mb-3 mx-2" type="">Order Again</a>
+        </div>
+      </li>
+    </a>
+    @endif
+  @endforeach
 </ol>
 
 

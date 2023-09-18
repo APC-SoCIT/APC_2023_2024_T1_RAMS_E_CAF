@@ -78,12 +78,26 @@ class mainController extends Controller
 
     public function vendorhome()
 {
-    // Get current date and time 
+    $user = Auth::user();
+
+    // Ensure the user is a vendor
+    if ($user->vendor !== 1) {
+        return redirect()->route('home')->with('error', 'Unauthorized access');
+    }
+
+    $storeName = $user->store_name;
+
     $now = Carbon::now();
-    // Get start and end of day 
     $startOfDay = $now->copy()->startOfDay();
     $endOfDay = $now->copy()->endOfDay();
+    $today = Carbon::today();
+    $todaySales = DB::table('order_product')
+        ->whereDate('created_at', $today)
+        ->sum('product_total');
+
+
     // Get today's sales
+
     $today = Carbon::today();
     $todaySales = DB::table('order_product')
         ->whereDate('created_at', $today)
@@ -100,11 +114,6 @@ class mainController extends Controller
     $monthlySales = DB::table('order_product')
         ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
         ->sum('product_total');
-    // Get yearly sales
-    $startOfYear = Carbon::now()->startOfYear();
-    $endOfYear = Carbon::now()->endOfYear();
-    $yearlySales = DB::table('order_product')
-        ->whereBetween('created_at', [$startOfYear, $endOfYear]);
 
     $productlist = DB::table('order_product')
         ->join('product', 'product.id', '=', 'order_product.product_id')
@@ -156,17 +165,16 @@ class mainController extends Controller
         )
         ->groupBy('productname', 'price')
         ->orderByDesc('productsold')
-        ->limit(3) // Limit the result to the top 3 products
+        ->limit(3)
         ->get();
 
         return view('vhome', [
-            "product_week" => $productlist_week,
-            "product_month" => $productlist_month,
-            "product" => $productlist,
-            'today_sales' => $todaySales,
+            'product' => $productlist,
+            'product_week' => $productlist_week,
+            'product_month' => $productlist_month,
+            'today_sales' => $todaySales, // Make sure $todaySales is defined
             'weekly_sales' => $weeklySales,
-            'monthly_sales' => $monthlySales, // Pass monthly sales to the view
-            'yearly_sales' => $yearlySales,
+            'monthly_sales' => $monthlySales,
             'best_sellers' => $bestSellers,
         ]);
     }
@@ -217,64 +225,83 @@ class mainController extends Controller
     }
 
     public function addtocart($product_id)
-    {
-        $userid = Auth::user()->get()->first()->id;
-        $store = Product::where('id', $product_id)->get()->first()->store_name;
-        $cart_count = Cart::where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "pending")->count();
-        if ($cart_count == 0) {
-            Cart::create([
-                "user_id" => $userid,
-                "cart_status" => "pending",
-                "store" => $store
-            ]);
-        }
-        $cart_id = Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->last()->id;
+{
+    $userid = Auth::user()->id; // Use the currently authenticated user's ID
+    $store = Product::where('id', $product_id)->value('store_name');
+    $cart_count = Cart::where("user_id", $userid)->where("cart_status", "pending")->count();
 
-        $product_count = Order_product::where("cart_id", $cart_id)->where("product_id", $product_id)->count();
-        $product_price = Product::where("id", $product_id)->get()->first()->price;
-        if ($product_count == 0) {
-            Order_product::create([
-                "cart_id" => $cart_id,
-                "product_id" => $product_id,
-                "product_quantity" => 1,
-                "product_total" => $product_price,
-
-            ]);
-        } else {
-            $current_quantity = Order_product::where("cart_id", $cart_id)->where("product_id", $product_id)->get()->first()->product_quantity;
-            Order_product::where("cart_id", $cart_id)->where("product_id", $product_id)->update([
-                "product_quantity" => $current_quantity + 1,
-                "product_total" => $product_price * ($current_quantity + 1)
-            ]);
-        }
-        toast('Item added to cart', 'success');
-        if ($store == 'Kitchen Express') {
-            $product = Product::where("store_name", "Kitchen Express")->get();
-            return redirect()->route("kitchenexpress", ["product" => $product]);
-        }
-        if ($store == 'La Mudras Corner') {
-            $product = Product::where("store_name", "La Mudras Corner")->get();
-            return redirect()->route("lamudras", ["product" => $product]);
-        }
-        if ($store == 'Red Brew') {
-            $product = Product::where("store_name", "Red Brew")->get();
-            return redirect()->route("redbrew", ["product" => $product]);
-        }
+    if ($cart_count == 0) {
+        Cart::create([
+            "user_id" => $userid,
+            "cart_status" => "pending",
+            "store" => $store
+        ]);
     }
 
-    public function proceedtocart()
-    {
-        $userid = Auth::user()->get()->first()->id;
-        if (Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0) {
-            Alert::warning('No item was added to cart', '')->showConfirmButton('Confirm', '#FCAE28');
-            return back();
-        }
+    $cart = Cart::where("user_id", $userid)->where("cart_status", "pending")->first();
+    $cart_id = $cart->id;
 
+    $product_count = Order_product::where("cart_id", $cart_id)->where("product_id", $product_id)->count();
+    $product_price = Product::where("id", $product_id)->value('price');
 
-        $cart_id = Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->last()->id;
-        $product = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cart_id)->get();
-        return view("cart", ["product" => $product]);
+    if ($product_count == 0) {
+        Order_product::create([
+            "cart_id" => $cart_id,
+            "product_id" => $product_id,
+            "product_quantity" => 1,
+            "product_total" => $product_price
+        ]);
+    } else {
+        $current_quantity = Order_product::where("cart_id", $cart_id)->where("product_id", $product_id)->value('product_quantity');
+        Order_product::where("cart_id", $cart_id)->where("product_id", $product_id)->update([
+            "product_quantity" => $current_quantity + 1,
+            "product_total" => $product_price * ($current_quantity + 1)
+        ]);
     }
+
+    toast('Item added to cart', 'success');
+
+    // Redirect based on the store
+    if ($store == 'Kitchen Express') {
+        $products = Product::where("store_name", "Kitchen Express")->get();
+        return redirect()->route("kitchenexpress", ["product" => $products]);
+    } elseif ($store == 'La Mudras Corner') {
+        $products = Product::where("store_name", "La Mudras Corner")->get();
+        return redirect()->route("lamudras", ["product" => $products]);
+    } elseif ($store == 'Red Brew') {
+        $products = Product::where("store_name", "Red Brew")->get();
+        return redirect()->route("redbrew", ["product" => $products]);
+    }
+
+    return redirect()->back(); // Add a default redirect if the store is not matched
+}
+
+
+public function proceedtocart()
+{
+    $userid = Auth::user()->id;
+
+    if (Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0) {
+        Alert::warning('No item was added to cart', '')->showConfirmButton('Confirm', '#FCAE28');
+        return back();
+    }
+
+    $cart = Cart::where("user_id", $userid)->where("cart_status", "pending")->latest()->first();
+    $cart_id = $cart->id;
+
+    // Calculate pickup time 20 minutes after cart creation time
+    $created_at = $cart->created_at;
+    $pickup_time = $created_at->addMinutes(20);
+
+    $product = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cart_id)->get();
+
+    // Corrected array syntax
+    return view("cart", [
+        "product" => $product,
+        "pickup_time" => $pickup_time->format('Y-m-d H:i:s') // Format pickup time
+    ]);
+}
+
 
     public function orderAgain($cartid)
 {
@@ -428,20 +455,6 @@ class mainController extends Controller
 
         return redirect($checkoutUrl);
 
-        // $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cartid)->get();
-        // $pendingorders = Cart::where("id", $cartid)->get();
-        // $pendingorders->first()->update(["cart_status" => "paid"]);
-        // $orderproduct = Order_product::where('cart_id', $cartid)->get();
-        // foreach ($orderproduct as $prod) {
-        //     Product::where('id', $prod->product_id)->first()->update([
-        //         "stocks" => (Product::where('id', $prod->product_id)->first()->stocks) - $prod->product_quantity
-        //     ]);
-        // }
-        // $user = User::where("id", Cart::where("id", $cartid)->first()->user_id)->get()->first();
-        // $cartitem = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "paid")->get();
-        // $cart = Cart::where("cart_status", "paid")->get();
-
-        // return view("myProfile", ["product" => $cartitem, "cart" => $cart]);
     }
 
 
@@ -503,16 +516,28 @@ class mainController extends Controller
     }
 
     public function complete()
-    {
-        $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")
-            ->join("cart", "cart.id", "=", "order_product.cart_id")->where("user_id", Auth::user()->get()->first()->id)
-            ->where("cart_status", "claimed")->get();
-        $cart = Cart::where("cart_status", "claimed")->get();
+{
+    $userId = Auth::id();
+    $user = Auth::user();
 
-        $feedback = Feedback::where("user_id", Auth::user()->get()->first()->id)->get();
+    // Retrieve completed orders for the authenticated user
+    $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")
+        ->join("cart", "cart.id", "=", "order_product.cart_id")
+        ->where("user_id", $userId)
+        ->where("cart_status", "claimed")
+        ->get();
 
-        return view("orderhistory", ["product" => $cartitems, "cart" => $cart, 'feedback' => $feedback]);
-    }
+    // Retrieve carts with "claimed" status for the authenticated user
+    $cart = Cart::where("user_id", $userId)
+        ->where("cart_status", "claimed")
+        ->get();
+
+    // Retrieve feedback for the authenticated user
+    $feedback = Feedback::where("user_id", $userId)->get();
+
+    return view("orderhistory", ["product" => $cartitems, "cart" => $cart, 'feedback' => $feedback]);
+}
+
 
     public function feedback(Request $request)
     {

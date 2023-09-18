@@ -55,9 +55,9 @@
             <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
             <img src="images/kitchenexpress.png" width="100" height="100" >
                 <a class="navbar-brand" href="/vendorhome">
-                    <span>
-                        <p class="kcursive">Kitchen Xpress</p>
-                    </span>
+                <span>
+                    <p class="kcursive">{{ Auth::user()->name }}</p>
+                </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
