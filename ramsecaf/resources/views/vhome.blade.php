@@ -49,18 +49,18 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         <img> </igm>
     </div>
     <!-- header section -->
-    <div class="bg-box">
-        <img src="images/kexpresscaf.png" id="kexpresscafimg">
+    <div class="bg-box" id="vendorbgcolor">
+        <img src="{{$bg}}" id="kexpresscafimg">
     </div>
     <!-- header section -->
     <header class="header_section" id="knavbg">
         <div class="container-fluid" >
-            <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
-                <img src="images/kitchenexpress.png" width="100" height="100" >
+            <nav class="navbar navbar-expand-lg custom_nav-container" id="vendorheadcolor">
+                <img src="{{$logo}}" width="100" height="100" > 
                 <a class="navbar-brand" href="/vendorhome">
-                <span>
-                    <p class="kcursive">{{ Auth::user()->name }}</p>
-                </span>
+                    <span>
+                        <p class="kcursive">{{$storename}}</p>
+                    </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -125,7 +125,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                                 <p class="fs-5 small">{{ $best_seller->productsold }}</p>
                             </td>
                             <td>
-                                <p class="fs-5 small">₱{{ number_format($best_seller->total, 2) }}</p>
+                                
+                                <p class="fs-5 small">₱{{ $best_seller->productsold * $best_seller->price}}</p>
+                                
                             </td>
                         </tr>
                     @endforeach
@@ -155,22 +157,29 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                             <th scope="col">Total</th>
                             </tr>
                         </thead>
-                        
+                        @php
+                        $daily_sale = 0;
+                        @endphp
                         <tbody>
                         @foreach ($product as $product)
                             <tr>
                             <td>{{$product->productsold}}</td>
                             <td>{{$product->productname}}</td>
                             <td>₱{{$product->price}}</td>
-                            <td>₱{{$product->total}}</td>
+                            <td>₱{{$product->productsold * $product->price }}</td>
+
                             </tr>
+                            @php
+                            $daily_sale += $product->productsold * $product->price;
+                            @endphp
                             @endforeach
                         </tbody>
                         </table>
                         
                         </li>
                         <li class="list-group-item align-items-end text-end" id="dailysales">
-                        <h3> Total Sale: ₱{{$today_sales}} </h3>
+                            
+                        <h3>Total Sale: ₱{{ $daily_sale }}</h3>
                         </li>
                 </ol>
             </div>
@@ -194,22 +203,28 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                             <th scope="col">Total</th>
                             </tr>
                         </thead>
-                        
+                        @php
+                        $weekly_sale = 0;
+                        @endphp
                         <tbody>
                         @foreach ($product_week as $product_week)
                             <tr>
                             <td>{{$product_week->productsold}}</td>
                             <td>{{$product_week->productname}}</td>
                             <td>₱{{$product_week->price}}</td>
-                            <td>₱{{$product_week->total}}</td>
+                            <td>₱{{$product_week->productsold * $product_week->price }}</td>
                             </tr>
+                            @php
+                            $weekly_sale += $product_week->productsold * $product_week->price;
+                            @endphp
                             @endforeach
                         </tbody>
                         </table>
+
                         
                         </li>
                         <li class="list-group-item align-items-end text-end" id="weeklysales">
-                        <h3> Total Sale: ₱{{$weekly_sales}} </h3>
+                        <h3>Total Sale: ₱{{ $weekly_sale }}</h3>
                         </li>
 
                 </ol>
@@ -234,19 +249,25 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $monthly_sale = 0;
+                    @endphp
                     @foreach ($product_month as $product_month)
                     <tr>
                         <td>{{ $product_month->productsold }}</td>
                         <td>{{ $product_month->productname }}</td>
                         <td>₱{{ $product_month->price }}</td>
-                        <td>₱{{ $product_month->total }}</td>
+                        <td>₱{{$product_month->productsold * $product_month->price }}</td>
+                        @php
+                        $monthly_sale += $product_month->productsold * $product_month->price;
+                        @endphp
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </li>
         <li class="list-group-item align-items-end text-end" id="monthlysales">
-            <h3>Total Sale: ₱{{ $monthly_sales }}</h3>
+        <h3>Total Sale: ₱{{ $monthly_sale }}</h3>
         </li>
     </ol>
 </div>

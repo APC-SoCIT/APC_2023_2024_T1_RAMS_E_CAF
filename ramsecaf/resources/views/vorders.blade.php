@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<meta http-equiv="refresh" content="5">
+<meta http-equiv="refresh" content="10">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
@@ -46,18 +46,18 @@
 
 <body>
 @include('sweetalert::alert')
-<div class="bg-box">
-<img src="images/kexpresscaf.png" id="kexpresscafimg">
+<div class="bg-box" id="vendorbgcolor">
+        <img src="images/kexpresscaf.png" id="kexpresscafimg">
     </div>
     <!-- header section -->
     <header class="header_section" id="knavbg">
         <div class="container-fluid" >
-            <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
-            <img src="images/kitchenexpress.png" width="100" height="100" >
+            <nav class="navbar navbar-expand-lg custom_nav-container" id="vendorheadcolor">
+                <img src="{{$logo}}" width="100" height="100" > 
                 <a class="navbar-brand" href="/vendorhome">
-                <span>
-                    <p class="kcursive">{{ Auth::user()->name }}</p>
-                </span>
+                    <span>
+                        <p class="kcursive">{{$storename}}</p>
+                    </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

@@ -34,6 +34,10 @@
     <link href="css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="css/responsive.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -42,18 +46,18 @@
 
 <body>
 
-    <div class="bg-box">
-        <img src="images/ramsbgprofile.jpg" alt="">
-    </div>
-    <!-- header section -->
-    <header class="header_section">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg custom_nav-container">
-                <img src="images/ramslogo.png">
-                <a class="navbar-brand" href="/vendorhome">
-                    <span>
-                        <p>Rams E-Caf</p>
-                    </span>
+        <div class="bg-box" id="customerbg">
+            <img src="images/apccaf.jpg" " alt="" id="apccafbg">
+        </div>
+        <!-- header section -->
+        <header class="header_section">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
+                <img src="{{asset('images/ramslogo.png')}}" width="50" height="100">
+                <a class="navbar-brand" href="/aviewreports">
+                <span>
+                    <p id="customercursive">Rams E-Caf</p>
+                </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

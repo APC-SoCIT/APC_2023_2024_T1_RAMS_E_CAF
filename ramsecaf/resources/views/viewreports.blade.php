@@ -38,23 +38,27 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     <link href="css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="css/responsive.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+
 
 </head>
 
 <body>
 
-    <div class="bg-box">
-        <img src="images/ramsbgprofile.jpg" alt="">
-    </div>
-    <!-- header section -->
-    <header class="header_section">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg custom_nav-container">
-                <img src="images/ramslogo.png">
-                <a class="navbar-brand" href="/vendorhome">
-                    <span>
-                        <p>Rams E-Caf</p>
-                    </span>
+<div class="bg-box" id="customerbg">
+    <img src="images/apccaf.jpg"  alt="" id="apccafbg">
+  </div>
+  <!-- header section -->
+  <header class="header_section">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
+        <img src="{{asset('images/ramslogo.png')}}" width="50" height="100">
+        <a class="navbar-brand" href="/aviewreports">
+          <span>
+            <p id="customercursive">Rams E-Caf</p>
+          </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -95,9 +99,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
             <div>
                 <h1 class="kcursive">Kitchen Express</h1>
                 <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
-            </div>
+                </div>
         </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales" >
             <table class="table">
                 <thead>
                     <tr>
@@ -108,19 +112,25 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $monthly_sales_ke = 0;
+                    @endphp
                     @foreach ($product_month_ke as $product_month_ke)
                     <tr>
                         <td>{{ $product_month_ke->productsold }}</td>
                         <td>{{ $product_month_ke->productname }}</td>
                         <td>₱{{ $product_month_ke->price }}</td>
-                        <td>₱{{ $product_month_ke->total }}</td>
+                        <td>₱{{$product_month_ke->productsold * $product_month_ke->price }}</td>
+                        @php
+                        $monthly_sales_ke += $product_month_ke->productsold * $product_month_ke->price;
+                        @endphp
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </li>
         <li class="list-group-item align-items-end text-end" id="monthlysales">
-            <h3>Total Sale: ₱{{ $monthly_sales_ke }}</h3>
+        <h3>Total Sale: ₱{{ $monthly_sales_ke }}</h3>
         </li>
     </ol>
 </div>
@@ -131,9 +141,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
             <div>
                 <h1 class="kcursive">La Mudra's Corner</h1>
                 <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
-            </div>
+                </div>
         </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales" >
             <table class="table">
                 <thead>
                     <tr>
@@ -144,19 +154,25 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $monthly_sales_lm = 0;
+                    @endphp
                     @foreach ($product_month_lm as $product_month_lm)
                     <tr>
                         <td>{{ $product_month_lm->productsold }}</td>
                         <td>{{ $product_month_lm->productname }}</td>
                         <td>₱{{ $product_month_lm->price }}</td>
-                        <td>₱{{ $product_month_lm->total }}</td>
+                        <td>₱{{$product_month_lm->productsold * $product_month_lm->price }}</td>
+                        @php
+                        $monthly_sales_lm += $product_month_lm->productsold * $product_month_lm->price;
+                        @endphp
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </li>
         <li class="list-group-item align-items-end text-end" id="monthlysales">
-            <h3>Total Sale: ₱{{ $monthly_sales_lm }}</h3>
+        <h3>Total Sale: ₱{{ $monthly_sales_lm }}</h3>
         </li>
     </ol>
 </div>

@@ -107,8 +107,22 @@ a:focus {
           
 }
 
+#loginbg {
+  background-image: url(images/loginbg.png);
+}
+
+#loginbox {
+  
+  background-color: rgba(4,4,158, 0.70) ;
+  border-radius: 1rem;
+}
+
+#loginbutton {
+  background-color: rgba(222,172,72,0.50);
+}
+
 #headcolor {
-  background-color:rgba(00,00,0, 0.50);
+  background-color:rgba(4,4,158, 0.70);
   width: 100%;
   margin: auto;
   align-self: center;
@@ -116,18 +130,68 @@ a:focus {
   padding-left: 15%;
 }
 
+#loginfontcolor {
+  color: white;
+}
+
+#vendorheadcolor {
+  background-color:rgba(0,0,0,0.70);
+  width: 100%;
+  margin: auto;
+  align-self: center;
+  padding-right: 15%;
+  padding-left: 15%;
+}
+
+#profileorders{
+  padding-left: 15%;
+  padding-right: 15%;
+  max-height: 700px;
+  overflow-y: scroll;
+  margin-bottom: 0%;
+  padding-bottom: 0%;
+}
+
 .bg-box {
   position: absolute;
   top: 0;
   left: 0;
+  width: auto;
+  height: auto;
+  margin-bottom: 15%;
+}
+
+#customerbg {
+  background-color: rgb(54,66,140);
+  height: auto;
+  width: fit-content;
+}
+
+#apccafbg {
+  height: auto;
   width: 100%;
-  height: 100%;
-  background-color: #8C2E3F;
-  background-repeat: repeat;
+  opacity: 50%;
+}
+
+#customercursive {
+  font-family: 'Courgette', cursive;
+}
+
+#admincursive {
+  font-family: 'Courgette', cursive;
+}
+
+#vendorbgcolor {
+  background-color: rgb(140,46,63);
+  height: auto;
+  max-height: max-content;
 }
 
 #kexpresscafimg {
   opacity: 0.10;
+  height:auto;
+  width: auto;
+  margin-bottom: auto;
 }
 
 #kfeedback{
@@ -152,6 +216,7 @@ a:focus {
 
 #bestseller {
   background-color: #E3D6D8;
+
 }
 
 #bestsellerscroll {
@@ -184,6 +249,12 @@ a:focus {
 #monthlysalesscroll {
   max-height: 350px;
   overflow-y: scroll;
+}
+
+#kexpressprofile {
+  width: 100px;
+  height: 100px;
+
 }
 
 .col-12{
@@ -219,7 +290,6 @@ a:focus {
 .header_section .container-fluid {
   padding-right: 0%;
   padding-left: 0%;
-  background-image: url(../public/images/woodtexture.jpg);
 }
 
 .navbar-brand {
@@ -228,6 +298,7 @@ a:focus {
 }
 
 .navbar-brand span {
+  font-family: 'Courgette', cursive;
   font-weight: bold;
   font-size: 32px;
   color: #ffffff;
@@ -565,12 +636,20 @@ a:focus {
           justify-content: center;
   list-style-type: none;
   margin: 45px 0 20px 0;
+
+}
+
+.food_section {
+  background-color: rgba(222,172,72,0.40);
+  min-height: 850px;
+  padding-bottom: 10%;
 }
 
 .food_section .filters_menu li {
   padding: 7px 25px;
   cursor: pointer;
   border-radius: 25px;
+  
 }
 
 .food_section .filters_menu li.active {

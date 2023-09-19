@@ -45,18 +45,18 @@
 
 <body>
 
-<div class="bg-box">
-<img src="images/kexpresscaf.png" id="kexpresscafimg">
+<div class="bg-box" id="vendorbgcolor">
+        <img src="images/kexpresscaf.png" id="kexpresscafimg">
     </div>
     <!-- header section -->
     <header class="header_section" id="knavbg">
         <div class="container-fluid" >
-            <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
-            <img src="images/kitchenexpress.png" width="100" height="100" >
+            <nav class="navbar navbar-expand-lg custom_nav-container" id="vendorheadcolor">
+                <img src="{{$logo}}" width="100" height="100" > 
                 <a class="navbar-brand" href="/vendorhome">
-                <span>
-                    <p class="kcursive">{{ Auth::user()->name }}</p>
-                </span>
+                    <span>
+                        <p class="kcursive">{{$storename}}</p>
+                    </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

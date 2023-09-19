@@ -17,12 +17,13 @@ use Sentiment\Analyzer;
 
 
 
+
 class mainController extends Controller
 {
     public function Home()
 {
     $vendor = User::where('vendor', 1)->get();
-    $userid = Auth::user()->get()->first()->id;
+    $userid = Auth::user()->id;
 
     // For Kitchen Express
     // $kitchen_Express = Cart::where('user_id', $userid)->where('store', 'Kitchen Express')->get()->last();
@@ -87,37 +88,40 @@ class mainController extends Controller
 
     $storeName = $user->role;
 
+
     if ($user->role == 'vendor-ke'){
         $storeName = "Kitchen Express";
+        $bg = "images/kexpresscaf.png";
+        $logo = "images/kitchenexpress.png";
     } elseif ($user->role == 'vendor-lm'){
         $storeName ="La Mudras Corner";
+        $bg = "images/lmbg.png";
+        $logo = "images/La Mudras Corner.png";
     } 
+    
 
     $now = Carbon::now();
     $startOfDay = $now->copy()->startOfDay();
     $endOfDay = $now->copy()->endOfDay();
     $today = Carbon::today();
-    $todaySales = DB::table('order_product')
-        ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->where('store_name', $storeName)
-        ->whereDate('order_product.created_at', $today)
-        ->sum('product_total');
-
     $startOfWeek = Carbon::now()->startOfWeek();
     $endOfWeek = Carbon::now()->endOfWeek();
-    $weeklySales = DB::table('order_product')
-         ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->where('store_name', $storeName)
-        ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
-        ->sum('product_total');
-    // Get monthly sales
     $startOfMonth = Carbon::now()->startOfMonth();
     $endOfMonth = Carbon::now()->endOfMonth();
-    $monthlySales = DB::table('order_product')
-         ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->where('store_name', $storeName)
+    $dailySales = Order_product::whereBetween('created_at', [$startOfDay, $endOfDay])
+    ->sum(DB::raw('product_quantity * product_total'));
+
+// Calculate weekly sales
+$weeklySales = Order_product::whereBetween('created_at', [$startOfWeek, $endOfWeek])
+    ->sum(DB::raw('product_quantity * product_total'));
+
+// Calculate monthly sales
+$monthlySales = DB::table('order_product')
+        ->join('product', 'product.id', '=', 'order_product.product_id')
         ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
         ->sum('product_total');
+
+// Rest of your controller logic
 
     $productlist = DB::table('order_product')
         ->join('product', 'product.id', '=', 'order_product.product_id')
@@ -175,22 +179,29 @@ class mainController extends Controller
         ->orderByDesc('productsold')
         ->limit(3)
         ->get();
+
         return view('vhome', [
             'product' => $productlist,
             'product_week' => $productlist_week,
             'product_month' => $productlist_month,
-            'today_sales' => $todaySales,
-            'weekly_sales' => $weeklySales,
-            'monthly_sales' => $monthlySales,
             'best_sellers' => $bestSellers,
+            'dailySales' => $dailySales,
+            'weeklySales' => $weeklySales,
+            'monthlySales' => $monthlySales,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+
+
         ]);
+        
     }
 
 
     public function kitchenexpress()
     {
         
-        $userid = Auth::user()->get()->last()->id;
+        $userid = Auth::user()->id;
         if(Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'Kitchen Express'){
             $product = Product::where("store_name", "Kitchen Express")->get();
             return view("menu1", ["product" => $product]);
@@ -205,7 +216,8 @@ class mainController extends Controller
 
     public function lamudras()
     {
-        $userid = Auth::user()->get()->last()->id;
+        
+        $userid = Auth::user()->id;
         if(Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'La Mudras Corner'){
             $product = Product::where("store_name", "La Mudras Corner")->get();
             return view("menu1", ["product" => $product]);
@@ -219,7 +231,7 @@ class mainController extends Controller
 
     public function redbrew()
     {
-        $userid = Auth::user()->get()->last()->id;
+        $userid = Auth::user()->id;
         if(Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'Red Brew'){
             $product = Product::where("store_name", "Red Brew")->get();
             return view("menu1", ["product" => $product]);
@@ -311,8 +323,9 @@ public function proceedtocart()
 
     public function orderAgain($cartid)
 {
-    $userid = Auth::user()->get()->first()->id;
-
+    $userid = Auth::user()->id;
+    $pending = Cart::where('user_id',$userid)->where('cart_status', 'pending')->get()->count();
+    if($pending == 0){
         // Retrieve the products from the specified cart
         $products = Order_product::where('cart_id', $cartid)->get();
 
@@ -336,12 +349,16 @@ public function proceedtocart()
     
         // Redirect the user to their cart or any other appropriate page
         return redirect()->route('proceedtocart');
+    }
+     Alert::warning('You have pending items from '.Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store , '')->showConfirmButton('Confirm', '#FCAE28');
+        return redirect()->back();
 }
 
 
 
     public function addquantity($productid, $cartid)
     {
+        $userid = Auth::user()->id;
         $cart_id = Order_product::where("product_id", $productid)->where("cart_id", $cartid)->get()->first();
         $updatedquantity = $cart_id->product_quantity + 1;
         $price = Product::where('id', $productid)->get()->first()->price;
@@ -349,13 +366,14 @@ public function proceedtocart()
             "product_quantity" => $updatedquantity,
             "product_total" => $updatedquantity * $price
         ]);
-        $cart_id = Cart::where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "pending")->get()->last()->id;
+        $cart_id = Cart::where("user_id", Auth::user()->id)->where("cart_status", "pending")->get()->last()->id;
         $product = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cart_id)->get();
         return redirect()->route("proceedtocart", ["product" => $product]);
     }
 
     public function subtractquantity($productid, $cartid)
     {
+        $userid = Auth::user()->id;
         $cart_id = Order_product::where("product_id", $productid)->where("cart_id", $cartid)->get()->first();
         if ($cart_id->product_quantity == 1) {
             $store = Cart::where('id', $cartid)->get()->first()->store;
@@ -382,7 +400,7 @@ public function proceedtocart()
                 "product_quantity" => $updatedquantity,
                 "product_total" => $updatedquantity * $price
             ]);
-            $cart_id = Cart::where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "pending")->get()->last()->id;
+            $cart_id = Cart::where("user_id", Auth::user()->id)->where("cart_status", "pending")->get()->last()->id;
         }
 
         $product = Order_product::join("product", "product.id", "=", "order_product.product_id")->where("cart_id", $cart_id)->get();
@@ -477,7 +495,7 @@ public function proceedtocart()
             ]);
         }
         $user = User::where("id", Cart::where("id", $cartid)->first()->user_id)->get()->first();
-        $cartitem = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "paid")->get();
+        $cartitem = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("user_id", Auth::user()->id)->where("cart_status", "paid")->get();
         $cart = Cart::where("cart_status", "paid")->get();
 
         // $created_at = $cart->created_at;
@@ -560,7 +578,7 @@ public function proceedtocart()
         $analyzer = new Analyzer();
         // Include your sentiment analysis library or implement one if not available
         // Example: require_once('sentiment.php');
-
+        $analyzer_2 = new Analyzer();
         // Define new food-related words and their sentiment scores
         $newWords = [
             'delicious' => '2.0',
@@ -568,6 +586,7 @@ public function proceedtocart()
             'yummy' => '1.5',
             'exquisite' => '2.0',
             'bland' => '-1.5',
+            'slow' => '-1.5',
             'unappetizing' => '-2.0',
             'disgusting' => '-2.5',
             'satisfying' => '1.0',
@@ -594,9 +613,10 @@ public function proceedtocart()
         ];
 
         $analyzer->updateLexicon($newWords);
+        $analyzer_2->updateLexicon($newWords);
 
         $output_text_comment1 = $analyzer->getSentiment(str_replace("very", "", $request->comment_1));
-        $output_text_comment2 = $analyzer->getSentiment(str_replace("very", "", $request->comment_2));
+        $output_text_comment2 = $analyzer_2->getSentiment(str_replace("very", "", $request->comment_2));
         $mood        = '';
 
         if ($output_text_comment1['neg'] > 0 && $output_text_comment1['neg'] < 0.49) {
@@ -622,6 +642,7 @@ public function proceedtocart()
         } elseif ($output_text_comment2['pos'] > 0.49) {
             $mood_comment2 = 'Positive';
         }
+        
 
         Feedback::create([
             "user_id" => $request->user_id,
@@ -645,6 +666,28 @@ public function proceedtocart()
 
     public function vieworders()
     {
+        
+        $user = Auth::user();
+
+    // Ensure the user is a vendor
+    if ($user->vendor !== 1) {
+        return redirect()->route('home')->with('error', 'Unauthorized access');
+    }
+
+    $storeName = $user->role;
+
+
+    if ($user->role == 'vendor-ke'){
+        $storeName = "Kitchen Express";
+        $bg = "images/kexpresscaf.png";
+        $logo = "images/kitchenexpress.png";
+    } elseif ($user->role == 'vendor-lm'){
+        $storeName ="La Mudras Corner";
+        $bg = "images/lmbg.png";
+        $logo = "images/La Mudras Corner.png";
+    } 
+
+
         $user = Auth::user()->role;
         if ($user == "vendor-ke") {
             $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "paid")->where("store", "Kitchen Express")->get();
@@ -654,7 +697,13 @@ public function proceedtocart()
             $cart_claimed = Cart::where("cart_status", "claimed")->where("store", "Kitchen Express")->get();
 
             $productlist = Product::where("store_name", "Kitchen Express")->where('isactive', 1)->get();
-            return view("vorders", ["product_list" => $productlist, "product" => $cartitems, "cart" => $cart, "product_claimed" => $cartitems_claimed, "cart_claimed" => $cart_claimed]);
+            return view("vorders", ["product_list" => $productlist, "product" => $cartitems, "cart" => $cart, "product_claimed" => $cartitems_claimed, 
+            "cart_claimed" => $cart_claimed,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+
+        ]);
         }
         if ($user == "vendor-rb") {
             $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "paid")->where("store", "Red Brew")->get();
@@ -664,7 +713,13 @@ public function proceedtocart()
             $cart_claimed = Cart::where("cart_status", "claimed")->where("store", "Red Brew")->get();
 
             $productlist = Product::where("store_name", "Red Brew")->where('isactive', 1)->get();
-            return view("vorders", ["product_list" => $productlist, "product" => $cartitems, "cart" => $cart, "product_claimed" => $cartitems_claimed, "cart_claimed" => $cart_claimed]);
+            return view("vorders", ["product_list" => $productlist, "product" => $cartitems, "cart" => $cart, "product_claimed" => $cartitems_claimed, 
+            "cart_claimed" => $cart_claimed,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+
+        ]);
         }
         if ($user == "vendor-lm") {
             $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("cart_status", "paid")->where("store", "La Mudras Corner")->get();
@@ -674,13 +729,19 @@ public function proceedtocart()
             $cart_claimed = Cart::where("cart_status", "claimed")->where("store", "La Mudras Corner")->get();
 
             $productlist = Product::where("store_name", "La Mudras Corner")->where('isactive', 1)->get();
-            return view("vorders", ["product_list" => $productlist, "product" => $cartitems, "cart" => $cart, "product_claimed" => $cartitems_claimed, "cart_claimed" => $cart_claimed]);
+            return view("vorders", ["product_list" => $productlist, "product" => $cartitems, "cart" => $cart, "product_claimed" => $cartitems_claimed, 
+            "cart_claimed" => $cart_claimed,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+
+        ]);
         }
     }
 
     public function completeorder()
     {
-        $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("user_id", Auth::user()->get()->first()->id)->where("cart_status", "claimed")->get();
+        $cartitems = Order_product::join("product", "product.id", "=", "order_product.product_id")->join("cart", "cart.id", "=", "order_product.cart_id")->where("user_id", Auth::user()->id)->where("cart_status", "claimed")->get();
         $cart = Cart::where("cart_status", "claimed")->get();
 
         return view("vorders", ["product" => $cartitems, "cart" => $cart]);
@@ -709,18 +770,50 @@ public function proceedtocart()
 
     public function editmenu()
     {
+        $user = Auth::user();
+
+    // Ensure the user is a vendor
+    if ($user->vendor !== 1) {
+        return redirect()->route('home')->with('error', 'Unauthorized access');
+    }
+
+    $storeName = $user->role;
+
+
+    if ($user->role == 'vendor-ke'){
+        $storeName = "Kitchen Express";
+        $bg = "images/kexpresscaf.png";
+        $logo = "images/kitchenexpress.png";
+    } elseif ($user->role == 'vendor-lm'){
+        $storeName ="La Mudras Corner";
+        $bg = "images/lmbg.png";
+        $logo = "images/La Mudras Corner.png";
+    } 
+
         $user = Auth::user()->role;
         if ($user == "vendor-ke") {
             $productlist = Product::where("store_name", "Kitchen Express")->get();
-            return view("veditmenu", ["product_list" => $productlist,]);
+            return view("veditmenu", ["product_list" => $productlist,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+]);
         }
         if ($user == "vendor-lm") {
             $productlist = Product::where("store_name", "La Mudras Corner")->get();
-            return view("veditmenu", ["product_list" => $productlist,]);
+            return view("veditmenu", ["product_list" => $productlist,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+]);
         }
         if ($user == "vendor-rb") {
             $productlist = Product::where("store_name", "Red Brew")->get();
-            return view("veditmenu", ["product_list" => $productlist,]);
+            return view("veditmenu", ["product_list" => $productlist,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+]);
         }
     }
 
@@ -731,22 +824,55 @@ public function proceedtocart()
 
     public function vendorfeedbacks()
     {
+        $user = Auth::user();
+
+    // Ensure the user is a vendor
+    if ($user->vendor !== 1) {
+        return redirect()->route('home')->with('error', 'Unauthorized access');
+    }
+
+    $storeName = $user->role;
+
+
+    if ($user->role == 'vendor-ke'){
+        $storeName = "Kitchen Express";
+        $bg = "images/kexpresscaf.png";
+        $logo = "images/kitchenexpress.png";
+    } elseif ($user->role == 'vendor-lm'){
+        $storeName ="La Mudras Corner";
+        $bg = "images/lmbg.png";
+        $logo = "images/La Mudras Corner.png";
+    } 
+
         $user = Auth::user()->role;
         if ($user == "vendor-ke") {
             $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->select('feedback.*', 'cart.store')->where('store', 'Kitchen Express')->get();
-            return view("vviewfeedback", ["feedbacklist" => $feedbacklist,]);
+            return view("vviewfeedback", ["feedbacklist" => $feedbacklist,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+]);
         }
         if ($user == "vendor-rb") {
             $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->select('feedback.*', 'cart.store')->where('store', 'Red Brew')->get();
-            return view("vviewfeedback", ["feedbacklist" => $feedbacklist,]);
+            return view("vviewfeedback", ["feedbacklist" => $feedbacklist,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+]);
         }
         if ($user == "vendor-lm") {
             $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->select('feedback.*', 'cart.store')->where('store', 'La Mudras Corner')->get();
-            return view("vviewfeedback", ["feedbacklist" => $feedbacklist,]);
+            return view("vviewfeedback", ["feedbacklist" => $feedbacklist,
+            "storename" =>  $storeName, 
+            "bg" => $bg,
+            "logo" => $logo
+]);
         }
         if ($user == "admin") {
             $feedbacklist = Feedback::join('cart', 'cart.id', '=', 'feedback.cart_id')->select('feedback.*', 'cart.store')->get();
-            return view("viewfeedbacks", ["feedbacklist" => $feedbacklist,]);
+            return view("viewfeedbacks", ["feedbacklist" => $feedbacklist,
+]);
         }
     }
 
@@ -835,37 +961,19 @@ public function proceedtocart()
     $endOfDay = $now->copy()->endOfDay();
     // Get today's sales
     $today = Carbon::today();
-    $todaySales = DB::table('order_product')
-        ->whereDate('created_at', $today)
-        ->sum('product_total');
-    // Get weekly sales
-    $startOfWeek = Carbon::now()->startOfWeek();
-    $endOfWeek = Carbon::now()->endOfWeek();
-    $weeklySales = DB::table('order_product')
-        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-        ->sum('product_total');
     // Get monthly sales
     $startOfMonth = Carbon::now()->startOfMonth();
     $endOfMonth = Carbon::now()->endOfMonth();
 
     $monthlySales_ke = DB::table('order_product')
         ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->where('store_name', 'Kitchen Express')
         ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
         ->sum('product_total');
-        
+
     $monthlySales_lm = DB::table('order_product')
         ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->where('store_name', 'La Mudras Corner')
         ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
         ->sum('product_total');
-
-
-    // Get yearly sales
-    $startOfYear = Carbon::now()->startOfYear();
-    $endOfYear = Carbon::now()->endOfYear();
-    $yearlySales = DB::table('order_product')
-        ->whereBetween('created_at', [$startOfYear, $endOfYear]);
 
     $productlist = DB::table('order_product')
         ->join('product', 'product.id', '=', 'order_product.product_id')
@@ -881,18 +989,6 @@ public function proceedtocart()
 
     $startOfWeek = Carbon::now()->startOfWeek();
     $endOfWeek = Carbon::now()->endOfWeek();
-    $productlist_week = DB::table('order_product')
-        ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->select(
-            'productname',
-            'price',
-            DB::raw('count(*) as productsold'),
-            DB::raw('SUM(product_total * product_quantity) as total')
-        )
-        ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
-        ->groupBy('productname', 'price')
-        ->get();
-
 
         $productlist_month_ke = DB::table('order_product')
         ->join('product', 'product.id', '=', 'order_product.product_id')
@@ -920,31 +1016,12 @@ public function proceedtocart()
         ->groupBy('productname', 'price')
         ->get();
 
-    // Get the top 3 best-selling products
-    $bestSellers = DB::table('order_product')
-        ->join('product', 'product.id', '=', 'order_product.product_id')
-        ->select(
-            'productname',
-            'price',
-            DB::raw('count(*) as productsold'),
-            DB::raw('SUM(product_total * product_quantity) as total')
-        )
-        ->groupBy('productname', 'price')
-        ->orderByDesc('productsold')
-        ->limit(3) // Limit the result to the top 3 products
-        ->get();
-
     return view('viewreports', [
-        "product_week" => $productlist_week,
         "product_month_ke" => $productlist_month_ke,
         "product_month_lm" => $productlist_month_lm,
         "product" => $productlist,
-        'today_sales' => $todaySales,
-        'weekly_sales' => $weeklySales,
         'monthly_sales_ke' => $monthlySales_ke,
         'monthly_sales_lm' => $monthlySales_lm,
-        'yearly_sales' => $yearlySales,
-        'best_sellers' => $bestSellers, // Pass the best sellers to the view
     ]);
     }
 

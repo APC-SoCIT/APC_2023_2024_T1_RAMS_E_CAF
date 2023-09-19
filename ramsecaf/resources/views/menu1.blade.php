@@ -37,23 +37,28 @@
     <link href="css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="css/responsive.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+
     
 </head>
 
 <body class="sub_page">
 @include('sweetalert::alert')
-    <div class="hero_area">
-        <div class="bg-box">
-            <img src="images/ramsbg.jpg" alt="">
-        </div>
-        <!-- header section -->
-        <header class="header_section">
-    <div class="container">
-      <nav class="navbar navbar-expand-lg custom_nav-container">
-        <img src="images/ramslogo.png">
+<div class="hero_area">
+  <div class="bg-box" id="customerbg">
+    <img src=""  alt="" id="apccafbg">
+  </div>
+  <!-- header section -->
+  <header class="header_section">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
+        <img src="{{asset('images/ramslogo.png')}}" width="50" height="100">
         <a class="navbar-brand" href="/home">
           <span>
-            <p>Rams E-Caf</p>
+            <p id="customercursive">Rams E-Caf</p>
           </span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
