@@ -37,20 +37,20 @@
 
 <body>
 
-    <div class="hero_area">
-    <div class="bg-box">
-    <img src="{{asset('images/ramsbgprofile.jpg')}}" alt="">
+<div class="hero_area" style="background-image: url('/images/apccaf.jpg');" height="100" width="100">
+  <div class="bg-box">
+    
   </div>
-        <!-- header section -->
-        <header class="header_section">
-            <div class="container">
-                <nav class="navbar navbar-expand-lg custom_nav-container">
-                <img src="{{asset('images/ramslogo.png')}}">
-                <a class="navbar-brand" href="/home">
-                        <span>
-                            <p>Rams E-Caf</p>
-                        </span>
-                    </a>
+  <!-- header section -->
+  <header class="header_section">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
+        <img src="{{asset('images/ramslogo.png')}}" width="50" height="100">
+        <a class="navbar-brand" href="/home">
+          <span>
+            <p id="customercursive">Rams E-Caf</p>
+          </span>
+        </a>
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -125,7 +125,7 @@
                             <div class="card-header py-3">
                                 <h5 class="mb-0"><strong>Order Total:</strong></h5>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" id="adminrtotal">
                                 <ul class="list-group list-group-flush">
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">

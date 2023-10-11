@@ -37,20 +37,21 @@
 
 <body>
 
-    <div class="hero_area">
-    <div class="bg-box">
-    <img src="{{asset('images/ramsbgprofile.jpg')}}" alt="">
+    
+<div class="hero_area" style="background-image: url('/images/apccaf.jpg');" height="100" width="100">
+  <div class="bg-box">
+    
   </div>
-        <!-- header section -->
-        <header class="header_section">
-            <div class="container">
-                <nav class="navbar navbar-expand-lg custom_nav-container">
-                <img src="{{asset('images/ramslogo.png')}}">
-                <a class="navbar-brand" href="/home">
-                        <span>
-                            <p>Rams E-Caf</p>
-                        </span>
-                    </a>
+  <!-- header section -->
+  <header class="header_section">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
+        <img src="{{asset('images/ramslogo.png')}}" width="50" height="100">
+        <a class="navbar-brand" href="/home">
+          <span>
+            <p id="customercursive">Rams E-Caf</p>
+          </span>
+        </a>
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -71,7 +72,6 @@
             </div>
         </header>
         <!-- end header section -->
-
         <p style="display:none" type="hidden">{{$total = 0}}</p>
         <section class="h-100 gradient-custom">
             <div class="container py-3">
@@ -103,11 +103,7 @@
                                         <!-- Data -->
                                         <p><strong>{{$item->product_quantity }} x {{$item->productname }} (₱{{$item->price}})</strong></p>
                                         <p class="h5 mx-4">₱{{$item->product_total}}</p>
-                                       
-                                        <!-- <button type="button" class="btn btn-danger btn-sm mb-2"
-                                            data-mdb-toggle="tooltip" title="Move to the wish list"> ♡
-                                        </button> -->
-                                        <!-- Data -->
+                            
                                     </div>
                                 </div>
                             </div>
@@ -140,15 +136,6 @@
                                 <p class="mb-0">{{date('h:i A', strtotime($cart->created_at->addMinutes(500)))}}</p>
                             </div>
                         </div>
-
-                        <!-- <div class="card mb-4">
-                            <div class="card-body mx-auto">
-                                <a href="#addtocart" data-bs-toggle="modal" data-bs-target="#addtocart" tabindex="-1">
-                                    <button type="button" class="btn btn-warning">Order
-                                        Claimed</button>
-                                </a>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
 

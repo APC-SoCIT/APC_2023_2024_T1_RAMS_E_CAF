@@ -173,6 +173,11 @@ a:focus {
   opacity: 50%;
 }
 
+#ordersummarybg {
+  height: 800px;
+  width: max-content;
+}
+
 #customercursive {
   font-family: 'Courgette', cursive;
 }
@@ -208,6 +213,11 @@ a:focus {
   -o-object-fit: cover;
      object-fit: cover;
  
+}
+
+.list-group-flush {
+  background-color: #000000;
+  color: #000000;
 }
 
 .list-group-item {
@@ -337,6 +347,10 @@ a:focus {
 
 .custom_nav-container .nav_search-btn:hover {
   color: #ffbe33;
+}
+
+#adminrtotal {
+  background-color: #ffffff;
 }
 
 .user_option {
