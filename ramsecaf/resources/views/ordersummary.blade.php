@@ -33,14 +33,19 @@
   <link href="{{asset('css/style.css')}}" rel="stylesheet" />
   <!-- responsive style -->
   <link href="{{asset('css/responsive.css')}}" rel="stylesheet" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
 
-    
-<div class="hero_area" style="background-image: url('/images/apccaf.jpg');" height="100" width="100">
-  <div class="bg-box">
-    
+    <div class="hero_area">
+    <div class="bg-box" id="customerbg">
+    <img src="images/apccaf.jpg" " alt="" id="apccafbg">
   </div>
   <!-- header section -->
   <header class="header_section">
@@ -72,6 +77,7 @@
             </div>
         </header>
         <!-- end header section -->
+
         <p style="display:none" type="hidden">{{$total = 0}}</p>
         <section class="h-100 gradient-custom">
             <div class="container py-3">
@@ -103,7 +109,11 @@
                                         <!-- Data -->
                                         <p><strong>{{$item->product_quantity }} x {{$item->productname }} (₱{{$item->price}})</strong></p>
                                         <p class="h5 mx-4">₱{{$item->product_total}}</p>
-                            
+                                       
+                                        <!-- <button type="button" class="btn btn-danger btn-sm mb-2"
+                                            data-mdb-toggle="tooltip" title="Move to the wish list"> ♡
+                                        </button> -->
+                                        <!-- Data -->
                                     </div>
                                 </div>
                             </div>
@@ -136,6 +146,15 @@
                                 <p class="mb-0">{{date('h:i A', strtotime($cart->created_at->addMinutes(500)))}}</p>
                             </div>
                         </div>
+
+                        <!-- <div class="card mb-4">
+                            <div class="card-body mx-auto">
+                                <a href="#addtocart" data-bs-toggle="modal" data-bs-target="#addtocart" tabindex="-1">
+                                    <button type="button" class="btn btn-warning">Order
+                                        Claimed</button>
+                                </a>
+                            </div>
+                        </div> -->
                     </div>
                 </div>
 

@@ -33,13 +33,19 @@
   <link href="{{asset('css/style.css')}}" rel="stylesheet" />
   <!-- responsive style -->
   <link href="{{asset('css/responsive.css')}}" rel="stylesheet" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
-
-<div class="hero_area" style="background-image: url('/images/apccaf.jpg');" height="100" width="100">
-  <div class="bg-box">
-    
+@include('sweetalert::alert')
+  <div class="hero_area">
+  <div class="bg-box" id="customerbg">
+    <img src="images/apccaf.jpg" " alt="" id="apccafbg">
   </div>
   <!-- header section -->
   <header class="header_section">
@@ -125,7 +131,7 @@
                             <div class="card-header py-3">
                                 <h5 class="mb-0"><strong>Order Total:</strong></h5>
                             </div>
-                            <div class="card-body" id="adminrtotal">
+                            <div class="card-body">
                                 <ul class="list-group list-group-flush">
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">

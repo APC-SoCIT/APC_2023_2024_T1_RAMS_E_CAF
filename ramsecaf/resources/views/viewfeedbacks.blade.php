@@ -47,7 +47,7 @@
 <body>
 
         <div class="bg-box" id="customerbg">
-            <img src="images/apccaf.jpg" alt="" id="apccafbg">
+            <img src="images/apccaf.jpg" " alt="" id="apccafbg">
         </div>
         <!-- header section -->
         <header class="header_section">
@@ -71,7 +71,7 @@
                         <a href="/aviewreports" class="user_link">
                             View Reports
                         </a>
-                        <a href="/vendorfeedbacks" class="user_link">
+                        <a href="/afeedbackview" class="user_link">
                             View Feedback
                         </a>
                         <a href="/aeditvendor" class="user_link">

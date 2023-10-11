@@ -35,10 +35,6 @@ h2 {
   font-family: 'Dancing Script', cursive;
 }
 
-.container {
-  width: relative;
-}
-
 .heading_container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -95,8 +91,6 @@ a:focus {
 
 /*header section*/
 .hero_area {
-  position: relative;
-  min-height: 100vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -104,7 +98,9 @@ a:focus {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-          
+  width: 100%;
+  height: 100%;        
+
 }
 
 #loginbg {
@@ -156,26 +152,23 @@ a:focus {
   position: absolute;
   top: 0;
   left: 0;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   margin-bottom: 15%;
 }
 
 #customerbg {
   background-color: rgb(54,66,140);
-  height: auto;
-  width: fit-content;
+  height: 100%;
+  width: 100%;
+  position: fixed;
 }
 
 #apccafbg {
-  height: auto;
+  position: fixed;
+  height: 100%;
   width: 100%;
   opacity: 50%;
-}
-
-#ordersummarybg {
-  height: 800px;
-  width: max-content;
 }
 
 #customercursive {
@@ -213,11 +206,6 @@ a:focus {
   -o-object-fit: cover;
      object-fit: cover;
  
-}
-
-.list-group-flush {
-  background-color: #000000;
-  color: #000000;
 }
 
 .list-group-item {
@@ -273,7 +261,9 @@ a:focus {
 }
 
 .sub_page .hero_area {
-  min-height: auto;
+  background-color: #000000;
+  height: 100%;
+  width: 100%;
 }
 
 .sub_page .hero_area .bg-box {
@@ -347,10 +337,6 @@ a:focus {
 
 .custom_nav-container .nav_search-btn:hover {
   color: #ffbe33;
-}
-
-#adminrtotal {
-  background-color: #ffffff;
 }
 
 .user_option {
@@ -638,6 +624,44 @@ a:focus {
           transform: scale(1.1);
 }
 
+#menucontainer {
+  display: flex;
+  justify-content: center; /* Center the items horizontally */
+  align-items: center; /* Center the items vertically */
+  width: auto;
+  margin: 0 auto;
+}
+
+#foodcontainer {
+  width: 100vw;
+}
+
+#foodbox{
+  height: 40vh;
+  width: 20vh;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically within each foodbox */
+  justify-content: center; /* Center the content vertically within each foodbox */
+  align-items: center;
+}
+
+#fooddetails {
+  height: 45vh;
+  font-size: 12px;
+}
+
+#fooddetails h5{
+  font-size: 1.5em;
+}
+
+#fooddetails h6{
+  font-size: 1em;
+}
+
+#foodimg {
+  height: 40vh;
+}
+
 .food_section .filters_menu {
   padding: 0;
   display: -webkit-box;
@@ -653,22 +677,18 @@ a:focus {
 
 }
 
-.food_section {
-  background-color: rgba(222,172,72,0.40);
-  min-height: 850px;
-  padding-bottom: 10%;
-}
-
 .food_section .filters_menu li {
   padding: 7px 25px;
   cursor: pointer;
   border-radius: 25px;
+  position: relative;
   
 }
 
 .food_section .filters_menu li.active {
   background-color: #fcae28;
   color: #ffffff;
+  position: relative;
 }
 
 .food_section .box {
@@ -693,7 +713,7 @@ a:focus {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  height: 215px;
+  height: 15vh;
   border-radius: 0 0 0 45px;
   margin: -1px;
   padding: 25px;
@@ -766,6 +786,7 @@ a:focus {
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 45px;
+  position: relative;
 }
 
 .food_section .btn-box a {
