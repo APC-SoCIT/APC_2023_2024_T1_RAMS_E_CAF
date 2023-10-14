@@ -42,154 +42,154 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 </head>
 
 <body class="sub_page">
-  @include('sweetalert::alert')
-  <div class="hero_area">
-    <div class="bg-box" id="customerbg">
-      <img src="images/apccaf.jpg"  alt="" id="apccafbg">
-    </div>
-      <!-- header section -->
-      <header class="header_section">
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
-            <img src="{{asset('images/ramslogo.png')}}" width="50" height="100">
-            <a class="navbar-brand" href="/home">
-              <span>
-                <p id="customercursive">Rams E-Caf</p>
-              </span>
+@include('sweetalert::alert')
+<div class="hero_area">
+  <div class="bg-box" id="customerbg">
+    <img src=""  alt="" id="apccafbg">
+  </div>
+  <!-- header section -->
+  <header class="header_section">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container" id="headcolor">
+        <img src="{{asset('images/ramslogo.png')}}" width="50" height="100">
+        <a class="navbar-brand" href="/home">
+          <span>
+            <p id="customercursive">Rams E-Caf</p>
+          </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class=""> </span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav  mx-auto ">
+          </ul>
+          <div class="user_option">
+            <a href="/profile" class="user_link">
+              <i class="fa fa-user" aria-hidden="true"></i>
+              Profile
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class=""> </span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav  mx-auto ">
-              </ul>
-              <div class="user_option">
-                <a href="/profile" class="user_link">
-                  <i class="fa fa-user" aria-hidden="true"></i>
-                  Profile
-                </a>
-                <a href="#logout" data-bs-toggle="modal" data-bs-target="#logout" tabindex="-1">
-                  <button type="button" class="btn btn-warning">Log Out</button>
-                </a>
-              </div>
-            </div>
-          </nav>
+            <a href="#logout" data-bs-toggle="modal" data-bs-target="#logout" tabindex="-1">
+              <button type="button" class="btn btn-warning">Log Out</button>
+            </a>
+          </div>
         </div>
-      </header>
-      <!-- end header section -->
+      </nav>
     </div>
-      <!-- food section -->
+  </header>
+    <!-- end header section -->
+    </div>
+    <!-- food section -->
 
-      <section class="food_section layout_padding" style="background-color: rgb(54,66,140);">
-          <div class="container" id="foodcontainer">
-              <div class="heading_container heading_center">
-                  <h2>
-                    {{$product[0]->store_name}}
-                  </h2>
-              </div>
+    <section class="food_section layout_padding">
+        <div class="container">
+            <div class="heading_container heading_center">
+                <h2>
+                  {{$product[0]->store_name}}
+                </h2>
+            </div>
 
-              <ul class="filters_menu">
-                  <li class="active" data-filter=".all">All</li>
-                  <li data-filter=".ricemeals">Best Sellers</li>
-                  <li data-filter=".ricemeals">Rice Meals</li>
-                  <li data-filter=".pasta">Pasta</li>
-                  <li data-filter=".beverages">Beverages
-              </ul>
+            <ul class="filters_menu">
+                <li class="active" data-filter=".all">All</li>
+                <li data-filter=".ricemeals">Best Sellers</li>
+                <li data-filter=".ricemeals">Rice Meals</li>
+                <li data-filter=".pasta">Pasta</li>
+                <li data-filter=".beverages">Beverages
+            </ul>
 
-              <div class="filters-content" id="fooditems">
-                  <div class="row grid" id="menucontainer">
-                  @forEach($product as $product)
-                  @if ($product->isactive == 1)
-                      <div class="col-sm-5 col-lg-3 all {{$product->category}}" id="foodbox">
-                          <div class="box" id="foodimg">
-                              <div>
-                                      <div class="img-box">
-                                          <img src="{{url('images/'.$product->image)}}" alt="">
-                                      </div>
-                                  
-                                  <div class="detail-box" id="fooddetails">
-                                      <h5>
-                                          {{$product->productname}}
-                                      </h5>
-                                      <div class="options">
-                                          <h6>
-                                          ₱ {{$product->price}}
-                                          </h6>
-                                          <h6>
-                                          Stocks: {{$product->stocks}}
-                                          </h6>
-                                      </div>
-                                      @if ($product->stocks != 0)
-                                      <a href="/addtocart/{{$product->id}}" class="btn btn-warning float-end mb-3" type="submit"><i class="bi bi-plus-circle-fill"></i>  Add to Cart</a>
-                                      @else 
-                                      <button href="" class="btn btn-warning float-end mb-3" type="submit" disabled>Out of Stock</button>
-                                      @endif
+            <div class="filters-content">
+                <div class="row grid">
+                @forEach($product as $product)
+                @if ($product->isactive == 1)
+                    <div class="col-sm-6 col-lg-3 all {{$product->category}}">
+                        <div class="box">
+                            <div>
+                                    <div class="img-box">
+                                        <img src="{{url('images/'.$product->image)}}" alt="">
                                     </div>
-                              </div>
-                          </div>
-                      </div>
-                      @endif
-                  @endforEach
-                  </div>
-              </div>
-              <div class="btn-box">
-                  <a href="/proceedtocart">
-                      Proceed to cart
-                  </a>
-              </div>
-          </div>
-      </section>
-      <!-- end food section -->
-
-      <!-- Modal -->
-      <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Log Out</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                Are you sure you want to log out?
-              </div>
-              <div class="modal-footer">
-              <a href="{{url('/signout')}}">
-                  <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Yes</button>
+                                
+                                <div class="detail-box">
+                                    <h5>
+                                        {{$product->productname}}
+                                    </h5>
+                                    <div class="options">
+                                        <h6>
+                                        ₱ {{$product->price}}
+                                        </h6>
+                                        <h6>
+                                        Stocks: {{$product->stocks}}
+                                        </h6>
+                                    </div>
+                                    @if ($product->stocks != 0)
+                                    <a href="/addtocart/{{$product->id}}" class="btn btn-warning float-end mb-3" type="submit"><i class="bi bi-plus-circle-fill"></i>  Add to Cart</a>
+                                    @else 
+                                    <button href="" class="btn btn-warning float-end mb-3" type="submit" disabled>Out of Stock</button>
+                                    @endif
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                @endforEach
+                </div>
+            </div>
+            <div class="btn-box">
+                <a href="/proceedtocart">
+                    Proceed to cart
                 </a>
-                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
-              </div>
+            </div>
+        </div>
+    </section>
+    <!-- end food section -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Log Out</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to log out?
+            </div>
+            <div class="modal-footer">
+            <a href="{{url('/signout')}}">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Yes</button>
+              </a>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
             </div>
           </div>
         </div>
+      </div>
 
-      <span id="displayYear" style="display:none"></span>
+    <span id="displayYear" style="display:none"></span>
 
-      <!-- jQery -->
-      <script src="js/jquery-3.4.1.min.js"></script>
-      <!-- popper js -->
-      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-          integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-          </script>
-      <!-- bootstrap js -->
-      <script src="js/bootstrap.js"></script>
-      <!-- owl slider -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
-      </script>
-      <!-- isotope js -->
-      <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
-      <!-- nice select -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
-      <!-- custom js -->
-      <script src="js/custom.js"></script>
-      <!-- Google Map -->
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
-      </script>
-      <!-- End Google Map -->
+    <!-- jQery -->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <!-- popper js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+        </script>
+    <!-- bootstrap js -->
+    <script src="js/bootstrap.js"></script>
+    <!-- owl slider -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+    </script>
+    <!-- isotope js -->
+    <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+    <!-- nice select -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+    <!-- custom js -->
+    <script src="js/custom.js"></script>
+    <!-- Google Map -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+    </script>
+    <!-- End Google Map -->
 
 </body>
 
