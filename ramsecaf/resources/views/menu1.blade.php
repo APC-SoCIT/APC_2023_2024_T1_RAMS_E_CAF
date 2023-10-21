@@ -167,6 +167,24 @@
         </div>
       </div>
 
+      <script>
+  // Get all the category menu items
+  const categoryItems = document.querySelectorAll('.filters_menu li[data-filter]');
+
+  // Loop through each category item
+  categoryItems.forEach(categoryItem => {
+    const category = categoryItem.getAttribute('data-filter').replace('.', ''); // Get category name without the dot
+
+    // Check if there are no items with this category
+    const items = document.querySelectorAll(`.filters-content .${category}`);
+    if (items.length === 0) {
+      // Hide the category item
+      categoryItem.style.display = 'none';
+    }
+  });
+</script>
+
+
     <span id="displayYear" style="display:none"></span>
 
     <!-- jQery -->
