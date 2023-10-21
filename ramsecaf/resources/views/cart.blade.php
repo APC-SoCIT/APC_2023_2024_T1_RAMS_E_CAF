@@ -146,6 +146,7 @@
                     <h6 class="display-6 text-center">₱ {{$product->product_total}}</h6>
 
                   </div>
+                  
                 </div>
                 <hr>
                 <p style="display:none" type="hidden">{{$total = $total + $product->product_total}}</p>

@@ -7,6 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <!-- Basic -->
     <meta charset="utf-8" />
@@ -297,35 +299,56 @@
 </script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $(".yourForm").submit(function(event) {
-    event.preventDefault(); // prevent default form submission behavior
-    var formData = $(this).serialize(); // get form data as serialized string
-    Swal.fire({
-        
-        title: 'Are you sure?', 
-        text: "Do you want to mark this order as claimed?", 
-        icon: 'warning', 
-        showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33',
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(".yourForm").submit(function(event) {
+        event.preventDefault(); // prevent default form submission behavior
+        var formData = $(this).serialize(); // get form data as serialized string
 
-    })
-    .then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: "{{url('confirm-order')}}?" + formData, // append form data to the URL
-                type: "GET",
-            });
-            window.location.href = "/vieworders";
-        } else {
-            swal("Cancelled", "Form submission cancelled", "info");
-        }
+        // Get the food item name from the form
+        var foodItemName = $(this).find('input[name="food_item_name"]').val();
+
+        // Check if the food item already exists
+        $.ajax({
+            url: "{{url('check-food-exists')}}" + "?food_item_name=" + foodItemName,
+            type: "GET",
+            success: function(data) {
+                if (data.exists) {
+                    // Food item already exists, show an error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Food item already exists',
+                        text: 'This food item already exists in the database.',
+                    });
+                } else {
+                    // Food item doesn't exist, proceed with the submission
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'Do you want to mark this order as claimed?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Continue with the form submission
+                            $.ajax({
+                                url: "{{url('confirm-order')}}?" + formData, // append form data to the URL
+                                type: "GET",
+                            });
+                            window.location.href = "/vieworders";
+                        } else {
+                            Swal.fire("Cancelled", "Form submission cancelled", "info");
+                        }
+                    });
+                }
+            }
+        });
     });
-});
+</script>
 
-    </script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
     integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
     crossorigin="anonymous"></script>

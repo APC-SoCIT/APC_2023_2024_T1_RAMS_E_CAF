@@ -292,7 +292,7 @@ $monthlySales = DB::table('order_product')
         return redirect()->route("redbrew", ["product" => $products]);
     }
 
-    return redirect()->back(); // Add a default redirect if the store is not matched
+    return redirect()->back();
 }
 
 
@@ -748,25 +748,32 @@ public function proceedtocart()
     }
 
     public function updatestock($adj, $id)
-    {
-        if ($adj == "+") {
-            $stock = Product::where("id", $id)->get()->first()->stocks;
-            Product::where("id", $id)->get()->first()->update([
-                "stocks" => $stock + 1     
-            ]);
-            toast('Added item successfully', 'success');
-        }
-        
-         else {
-            $stock = Product::where("id", $id)->get()->first()->stocks;
-            Product::where("id", $id)->get()->first()->update([
-                "stocks" => $stock - 1
-            ]);
-            toast('Deducted item successfully', 'success');
-        }
-        
+{
+    $product = Product::find($id);
+
+    if (!$product) {
+        toast('Product not found', 'error');
         return redirect()->route("vieworders");
     }
+
+    $stock = $product->stocks;
+
+    if ($adj == "+" && $stock >= 0) {
+        $product->update([
+            "stocks" => $stock + 1
+        ]);
+        toast('Added item successfully', 'success');
+    } elseif ($adj == "-" && $stock > 0) {
+        $product->update([
+            "stocks" => $stock - 1
+        ]);
+        toast('Deducted item successfully', 'success');
+    } else {
+        toast('Out of stock', 'error');
+    }
+
+    return redirect()->route("vieworders");
+}
 
     public function editmenu()
     {

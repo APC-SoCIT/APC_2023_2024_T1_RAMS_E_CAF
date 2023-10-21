@@ -168,10 +168,6 @@
 
     
 
-    <a href="#policy" data-bs-toggle="modal" data-bs-target="#policy" tabindex="-1">
-                            <button type="button" class="btn btn-warning">Log Out</button>
-    </a>
-
 
     <!-- Modal -->
     <div class="modal fade" id="addtocart" tabindex="-1" aria-labelledby="addtocartLabel" aria-hidden="true">

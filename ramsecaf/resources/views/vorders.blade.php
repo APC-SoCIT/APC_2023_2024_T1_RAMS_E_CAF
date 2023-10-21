@@ -195,7 +195,9 @@
                         @foreach($product_list as $prod)
                             <tr>
                             <td>{{$prod->productname}}</td>
+                       
                             <td><a class="btn btn-warning px-2 ms-2" href="/updatestock/{{'-'}}/{{$prod->id}}"> - </a>
+                          
                             {{$prod->stocks}}
                                 <a class="btn btn-warning px-2 ms-2" href="/updatestock/{{'+'}}/{{$prod->id}}"> + </a></td>
                             </tr>

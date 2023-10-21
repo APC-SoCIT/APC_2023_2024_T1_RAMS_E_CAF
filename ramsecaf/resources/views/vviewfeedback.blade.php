@@ -92,15 +92,34 @@
 <body>
 
 <div class="container">
+<div class="row">
+
+    <div class="col-12 my-4"> <!-- Added the "my-4" class for vertical margin -->
+        <ol class="list-group list-group">
+            <li class="list-group-item text-center">
+                <div>
+                    <h1 class="kcursive">Food Feedback</h1>
+                </div>
+            </li>
+        </ol>
+    </div>
+
+
     <div class="row">
         <div class="col-6">
             <ol class="list-group list-group">
                 <li class="list-group-item text-center">
+
                 <div>
                     <h1 class="kcursive">Food Feedback</h1>
-                    <button class="btn btn-outline-success active m-2" id="positiveButton" onclick="filterFeedback('food', 'Positive'); highlightButton('positiveButton', 'negativeButton')">Positive Feedback</button>
-                    <button class="btn btn-outline-danger active m-2" id="negativeButton" onclick="filterFeedback('food', 'Negative'); highlightButton('negativeButton', 'positiveButton')">Negative Feedback</button>
+                    <div class="input-group mb-3">
+                        <input type="date" id="startDate" class="form-control" oninput="filterByDate()">
+                        <input type="date" id="endDate" class="form-control" oninput="filterByDate()">
+                    </div>
+                    <button class="btn btn-outline-success active m-2" onclick="filterFeedback('food', 'Positive')">Positive Feedback</button>
+                    <button class="btn btn-outline-danger active m-2" onclick="filterFeedback('food', 'Negative')">Negative Feedback</button>
                 </div>
+
                 </li>
                 <div class="comment_1">
                     @if (!$feedbacklist->isEmpty())
@@ -113,14 +132,16 @@
                                     <h5 class="card-title">{{$feedbacklists->comment_1}}</h5>
                                 </div>
                                 <div class="card-footer text-muted">
-                                    {{$feedbacklists->created_at}}
+                                    {{ $feedbacklists->created_at->addMinutes(500)->format('F j, Y g:i A') }}
                                 </div>
+
                             </div>
                         @endforEach
                     @endif
                 </div>
             </ol>
         </div>
+
         <div class="col-6">
             <ol class="list-group list-group">
                 <li class="list-group-item text-center">
@@ -141,7 +162,7 @@
                                     <h5 class="card-title">{{$feedbacklist->comment_2}}</h5>
                                 </div>
                                 <div class="card-footer text-muted">
-                                    {{$feedbacklist->created_at}}
+                                {{ $feedbacklists->created_at->addMinutes(500)->format('F j, Y g:i A') }}
                                 </div>
                             </div>
                         @endforEach
@@ -156,7 +177,31 @@
     function filterFeedback(type, sentiment) {
         const feedbackItems = document.querySelectorAll(`.${type}`);
         feedbackItems.forEach(item => {
-            if (sentiment === 'All' || item.classList.contains(sentiment)) {
+            const isSentimentMatch = sentiment === 'All' || item.classList.contains(sentiment);
+            const isDateMatch = isDateWithinRange(item);
+            if (isSentimentMatch && isDateMatch) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    function isDateWithinRange(item) {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const itemDate = item.querySelector('.card-footer').textContent;
+        const feedbackDate = new Date(itemDate);
+
+        return feedbackDate >= new Date(startDate) && feedbackDate <= new Date(endDate);
+    }
+
+    function filterByDate() {
+        const feedbackItems = document.querySelectorAll('.food');
+        feedbackItems.forEach(item => {
+            const isSentimentMatch = document.getElementById('sentimentFilter').value === 'All' || item.classList.contains(document.getElementById('sentimentFilter').value);
+            const isDateMatch = isDateWithinRange(item);
+            if (isSentimentMatch && isDateMatch) {
                 item.style.display = 'block';
             } else {
                 item.style.display = 'none';
@@ -165,18 +210,9 @@
     }
 </script>
 
-<script>
-    function highlightButton(selectedButton, otherButton) {
-        const selectedBtn = document.getElementById(selectedButton);
-        const otherBtn = document.getElementById(otherButton);
 
-        selectedBtn.classList.remove('');
-        selectedBtn.classList.add('btn-outline-success');
 
-        otherBtn.classList.remove('active');
-        otherBtn.classList.add('');
-    }
-</script>
+
 
 <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">
         <div class="modal-dialog">
