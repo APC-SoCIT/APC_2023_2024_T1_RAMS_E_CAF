@@ -109,10 +109,11 @@ a:focus {
 
 #loginbg {
   background-image: url(images/loginbg.png);
+  width: 100%;
+  height: 100%;
 }
 
 #loginbox {
-  
   background-color: rgba(4,4,158, 0.70) ;
   border-radius: 1rem;
 }
@@ -163,12 +164,14 @@ a:focus {
 
 #customerbg {
   background-color: rgb(54,66,140);
-  height: auto;
-  width: fit-content;
+  height: 100%;
+  width: 100%;
+  position: fixed;
 }
 
 #apccafbg {
-  height: auto;
+  position: fixed;
+  height: 100%;
   width: 100%;
   opacity: 50%;
 }
@@ -220,7 +223,7 @@ a:focus {
 }
 
 #bestsellerscroll {
-  max-height: 400px;
+  max-height: 50vh;
   overflow-y: scroll;
 }
 
@@ -229,7 +232,7 @@ a:focus {
 }
 
 #dailysalesscroll {
-  max-height: 400px;
+  max-height: 50vh;
   overflow-y: scroll;
 }
 
@@ -238,7 +241,7 @@ a:focus {
 }
 
 #weeklysalesscroll {
-  max-height: 350px;
+  max-height: 50vh;
   overflow-y: scroll;
 }
 
@@ -247,7 +250,7 @@ a:focus {
 }
 
 #monthlysalesscroll {
-  max-height: 350px;
+  max-height: 50vh;
   overflow-y: scroll;
 }
 
@@ -639,22 +642,18 @@ a:focus {
 
 }
 
-.food_section {
-  background-color: rgba(222,172,72,0.40);
-  min-height: 850px;
-  padding-bottom: 10%;
-}
-
 .food_section .filters_menu li {
   padding: 7px 25px;
   cursor: pointer;
   border-radius: 25px;
+  position: relative;
   
 }
 
 .food_section .filters_menu li.active {
   background-color: #fcae28;
   color: #ffffff;
+  position: relative;
 }
 
 .food_section .box {
@@ -740,8 +739,8 @@ a:focus {
 }
 
 .food_section .box:hover .img-box img {
-  -webkit-transform: scale(1.1);
-          transform: scale(1.1);
+  -webkit-transform: scale(1.6);
+          transform: scale(1.6);
 }
 
 .food_section .btn-box {
@@ -752,6 +751,7 @@ a:focus {
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 45px;
+  position: relative;
 }
 
 .food_section .btn-box a {
