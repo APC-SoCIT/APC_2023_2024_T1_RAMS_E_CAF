@@ -97,7 +97,7 @@
             @endif
           @endforeach
         </div>
-        <div class="d-flex">
+        <div class="">
           @if(!$feedback->contains('cart_id', $cart->id))
             <a href="/feedbackview/{{$cart->id}}" class="btn btn-primary mb-3 mx-2" type="submit">Provide Feedback</a>
           @endif 
