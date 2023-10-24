@@ -139,7 +139,11 @@
                         
                       </div>
 
+                      @if($product->stocks <= 1) 
+                      <button href = "/addquantity/{{$product->product_id}}/{{$product->cart_id}}"class="btn btn-warning px-3 ms-2" disabled> + </button>
+                      @else
                       <a href = "/addquantity/{{$product->product_id}}/{{$product->cart_id}}"class="btn btn-warning px-3 ms-2"> + </a>
+                      @endif
                     </div>
                     <p class="text-center mt-0">Quantity</label></p>
                     <!-- Quantity -->

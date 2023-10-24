@@ -46,7 +46,7 @@
 </head>
 
 <body>
-
+@include('sweetalert::alert')
 <div class="bg-box" id="vendorbgcolor">
         <img src="images/kexpresscaf.png" id="kexpresscafimg">
     </div>

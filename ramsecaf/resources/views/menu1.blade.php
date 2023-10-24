@@ -95,7 +95,7 @@
 
               <ul class="filters_menu">
                   <li class="active" data-filter=".all">All</li>
-                  <li data-filter=".ricemeals">Best Sellers</li>
+                  <li data-filter=".bestseller">Best Sellers</li>
                   <li data-filter=".ricemeals">Rice Meals</li>
                   <li data-filter=".pasta">Pasta</li>
                   <li data-filter=".beverages">Beverages
@@ -103,6 +103,40 @@
 
               <div class="filters-content" id="fooditems">
                   <div class="row grid" id="menucontainer">
+
+                  @forEach($bestseller as $bestseller)
+                @if ($bestseller->isactive == 1)
+                
+                    <div class="col-sm-6 col-lg-3 all {{$bestseller->category}} bestseller">
+                        <div class="box">
+                            <div>
+                                    <div class="img-box">
+                                        <img src="{{url('images/'.$bestseller->image)}}" alt="">
+                                    </div>
+                                
+                                <div class="detail-box">
+                                    <h5>
+                                        {{$bestseller->productname}}
+                                    </h5>
+                                    <div class="options">
+                                        <h6>
+                                        ₱ {{$bestseller->price}}
+                                        </h6>
+                                        <h6>
+                                        Stocks: {{$bestseller->stocks}}
+                                        </h6>
+                                    </div>
+                                    @if ($bestseller->stocks != 0)
+                                    <a href="/addtocart/{{$bestseller->id}}" class="btn btn-warning float-end mb-3" type="submit"><i class="bi bi-plus-circle-fill"></i>  Add to Cart</a>
+                                    @else 
+                                    <button href="" class="btn btn-warning float-end mb-3" type="submit" disabled>Out of Stock</button>
+                                    @endif
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                @endforEach
                   @forEach($product as $product)
                   @if ($product->isactive == 1)
                       <div class="col-sm-5 col-lg-3 all {{$product->category}}" id="foodbox">
@@ -166,6 +200,22 @@
             </div>
           </div>
         </div>
+        <script>
+  // Get all the category menu items
+  const categoryItems = document.querySelectorAll('.filters_menu li[data-filter]');
+
+  // Loop through each category item
+  categoryItems.forEach(categoryItem => {
+    const category = categoryItem.getAttribute('data-filter').replace('.', ''); // Get category name without the dot
+
+    // Check if there are no items with this category
+    const items = document.querySelectorAll(`.filters-content .${category}`);
+    if (items.length === 0) {
+      // Hide the category item
+      categoryItem.style.display = 'none';
+    }
+  });
+</script>
 
       <span id="displayYear" style="display:none"></span>
 
