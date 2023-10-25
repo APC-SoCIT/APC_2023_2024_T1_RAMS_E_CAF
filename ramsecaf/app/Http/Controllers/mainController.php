@@ -890,7 +890,7 @@ class mainController extends Controller
         $user = Auth::user();
 
         // Ensure the user is a vendor
-        if ($user->vendor !== 1) {
+        if ($user->role == 'customer') {
             return redirect()->route('home')->with('error', 'Unauthorized access');
         }
 
@@ -985,39 +985,51 @@ class mainController extends Controller
             $filename = $request->productname . '_' . date("Y-m-d-H-i-s") . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('/images'), $filename);
         }
-        if(Product::where('productname',$request->productname)->exists()){
-            toast('This item already exists', 'error');
-            return redirect()->route("editmenu");
-        }
+        
         if ($user == "vendor-ke") {
-            Product::create([
-                'image' => $filename,
-                'productname' => $request->productname,
-                'category' => $request->category,
-                'stocks' => $request->stocks,
-                'price' => $request->price,
-                'store_name' => "Kitchen Express"
-            ]);
+            if(Product::where("store_name", "Kitchen Express")->where('productname',$request->productname)->exists()){
+                toast('This item already exists', 'error');
+                return redirect()->route("editmenu");
+            } else{
+                Product::create([
+                    'image' => $filename,
+                    'productname' => $request->productname,
+                    'category' => $request->category,
+                    'stocks' => $request->stocks,
+                    'price' => $request->price,
+                    'store_name' => "Kitchen Express"
+                ]);
+            }    
         }
         if ($user == "vendor-rb") {
-            Product::create([
-                'image' => $filename,
-                'productname' => $request->productname,
-                'category' => $request->category,
-                'stocks' => $request->stocks,
-                'price' => $request->price,
-                'store_name' => "Red Brew"
-            ]);
+            if(Product::where("store_name", "Red Brew")->where('productname',$request->productname)->exists()){
+                toast('This item already exists', 'error');
+                return redirect()->route("editmenu");
+            } else{
+                Product::create([
+                    'image' => $filename,
+                    'productname' => $request->productname,
+                    'category' => $request->category,
+                    'stocks' => $request->stocks,
+                    'price' => $request->price,
+                    'store_name' => "Red Brew"
+                ]);
+            }
         }
         if ($user == "vendor-lm") {
-            Product::create([
-                'image' => $filename,
-                'productname' => $request->productname,
-                'category' => $request->category,
-                'stocks' => $request->stocks,
-                'price' => $request->price,
-                'store_name' => "La Mudras Corner"
-            ]);
+            if(Product::where("store_name", "La Mudras Corner")->where('productname',$request->productname)->exists()){
+                toast('This item already exists', 'error');
+                return redirect()->route("editmenu");
+            } else{
+                Product::create([
+                    'image' => $filename,
+                    'productname' => $request->productname,
+                    'category' => $request->category,
+                    'stocks' => $request->stocks,
+                    'price' => $request->price,
+                    'store_name' => "La Mudras Corner"
+                ]);
+            }
         }
         return redirect()->route("editmenu");
     }

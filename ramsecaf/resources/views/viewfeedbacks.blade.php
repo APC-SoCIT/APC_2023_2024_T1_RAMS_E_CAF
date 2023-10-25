@@ -47,7 +47,7 @@
 <body>
 
         <div class="bg-box" id="customerbg">
-            <img src="images/apccaf.jpg" " alt="" id="apccafbg">
+            <img src="images/apccaf.jpg"  alt="" id="apccafbg">
         </div>
         <!-- header section -->
         <header class="header_section">
@@ -89,38 +89,173 @@
     <!-- end header section -->
 
     <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <ol class="list-group list-group">
-                    <li class="list-group-item text-center">
-                        <div class="">
-                            <h1>Feedback</h1>
-                        </div>
-                    </li>
-                   
-                    @forEach($feedbacklist as $feedbacklist)
-                    <div class="card m-3 text-center">
+    <div class="row">
+        <div class="col-4">
+            <ol class="list-group">
+                <li class="list-group-item text-center">
+                    <div class="">
+                        <h1>Kitchen Express</h1>
+                    </div>
+                    <button class="btn btn-outline-primary active m-2">Feedback 1</button>
+                    <button class="btn btn-outline-primary active m-2">Feedback 2</button>
+                </li>
+                </li>
+
+                @foreach($feedbacklist as $feedback)
+                @if ($feedback->store === "Kitchen Express")
+                <div class="card m-3 text-center">
                     <div class="card-header">
-                    <h5 class="" class="row"><strong class="h3 fw-bold fs-4">
-                    {{$feedbacklist->store}}
-                    <span
-                            class="badge rounded-pill bg-success"> Order #
-                            {{$feedbacklist->cart_id}}</span></strong></h5>
+                        <h5 class="row">
+                            <strong class="h3 fw-bold fs-5">
+                                {{$feedback->store}}
+                                <span class="badge rounded-pill bg-success"> Order # {{$feedback->cart_id}}</span>
+                            </strong>
+                        </h5>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{$feedbacklist->comment_1}}</h5>
+                        <h5 class="card-title">{{$feedback->comment_1}}</h5>
                     </div>
                     <div class="card-footer text-muted">
-                        {{$feedbacklist->created_at}}
+                        {{$feedback->created_at}}
                     </div>
-                    </div>
-                    @endforEach
-                </ol>
-            </div>
-            
+                </div>
+                @endif
+                @endforeach
 
+                @foreach($feedbacklist as $feedback)
+                @if ($feedback->store === "Kitchen Express")
+                <div class="card m-3 text-center">
+                    <div class="card-header">
+                        <h5 class="row">
+                            <strong class="h3 fw-bold fs-5">
+                                {{$feedback->store}}
+                                <span class="badge rounded-pill bg-success"> Order # {{$feedback->cart_id}}</span>
+                            </strong>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{$feedback->comment_2}}</h5>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{$feedback->created_at}}
+                    </div>
+                </div>
+                @endif
+                @endforeach
+            </ol>
+        </div>
+
+        <div class="col-4">
+            <ol class="list-group">
+                <li class="list-group-item text-center">
+                    <div class="">
+                        <h1>La Mudras Corner</h1>
+                    </div>
+                    <button class="btn btn-outline-primary active m-2">Feedback 1</button>
+                    <button class="btn btn-outline-primary active m-2">Feedback 2</button>
+                </li>
+
+                @foreach($feedbacklist as $feedback)
+                @if ($feedback->store === "La Mudras Corner")
+                <div class="card m-3 text-center">
+                    <div class="card-header">
+                        <h5 class="row">
+                            <strong class="h3 fw-bold fs-5">
+                                {{$feedback->store}}
+                                <span class="badge rounded-pill bg-success"> Order # {{$feedback->cart_id}}</span>
+                            </strong>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{$feedback->comment_1}}</h5>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{$feedback->created_at}}
+                    </div>
+                </div>
+                @endif
+                @endforeach
+
+                @foreach($feedbacklist as $feedback)
+                @if ($feedback->store === "La Mudras Corner")
+                <div class="card m-3 text-center">
+                    <div class="card-header">
+                        <h5 class="row">
+                            <strong class="h3 fw-bold fs-5">
+                                {{$feedback->store}}
+                                <span class="badge rounded-pill bg-success"> Order # {{$feedback->cart_id}}</span>
+                            </strong>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{$feedback->comment_2}}</h5>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{$feedback->created_at}}
+                    </div>
+                </div>
+                @endif
+                @endforeach
+            </ol>
+        </div>
+
+        <div class="col-4">
+            <ol class="list-group">
+                <li class="list-group-item text-center">
+                    <div class="">
+                        <h1>Red Brew</h1>
+                    </div>
+                    <button class="btn btn-outline-primary active m-2">Feedback 1</button>
+                    <button class="btn btn-outline-primary active m-2">Feedback 2</button>
+                </li>
+
+                @foreach($feedbacklist as $feedback)
+                @if ($feedback->store === "Red Brew")
+                <div class="card m-3 text-center">
+                    <div class="card-header">
+                        <h5 class="row">
+                            <strong class="h3 fw-bold fs-5">
+                                {{$feedback->store}}
+                                <span class="badge rounded-pill bg-success"> Order # {{$feedback->cart_id}}</span>
+                            </strong>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{$feedback->comment_1}}</h5>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{$feedback->created_at}}
+                    </div>
+                </div>
+                @endif
+                @endforeach
+
+                @foreach($feedbacklist as $feedback)
+                @if ($feedback->store === "Red Brew")
+                <div class="card m-3 text-center">
+                    <div class="card-header">
+                        <h5 class="row">
+                            <strong class="h3 fw-bold fs-5">
+                                {{$feedback->store}}
+                                <span class="badge rounded-pill bg-success"> Order # {{$feedback->cart_id}}</span>
+                            </strong>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{$feedback->comment_2}}</h5>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{$feedback->created_at}}
+                    </div>
+                </div>
+                @endif
+                @endforeach
+            </ol>
         </div>
     </div>
+</div>
+
+
 
     <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logout" aria-hidden="true">
         <div class="modal-dialog">
@@ -141,6 +276,9 @@
             </div>
         </div>
     </div>
+
+
+
 
     <!-- jQery -->
     <script src="js/jquery-3.4.1.min.js"></script>
