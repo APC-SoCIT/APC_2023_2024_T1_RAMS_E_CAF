@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -139,7 +138,7 @@
                         
                       </div>
 
-                      @if($product->stocks <= 1) 
+                      @if($product->stocks <= $product->product_quantity) 
                       <button href = "/addquantity/{{$product->product_id}}/{{$product->cart_id}}"class="btn btn-warning px-3 ms-2" disabled> + </button>
                       @else
                       <a href = "/addquantity/{{$product->product_id}}/{{$product->cart_id}}"class="btn btn-warning px-3 ms-2"> + </a>
