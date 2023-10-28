@@ -98,7 +98,11 @@
         <ol class="list-group list-group">
             <li class="list-group-item text-center">
                 <div>
-                    <h1 class="kcursive">Food Feedback</h1>
+                    <h1 class="kcursive">Feedback List</h1>
+                    <div class="input-group mb-3">
+                        <input type="date" id="startDate" class="form-control" oninput="filterByDate()">
+                        <input type="date" id="endDate" class="form-control" oninput="filterByDate()">
+                    </div>
                 </div>
             </li>
         </ol>
@@ -112,10 +116,6 @@
 
                 <div>
                     <h1 class="kcursive">Food Feedback</h1>
-                    <div class="input-group mb-3">
-                        <input type="date" id="startDate" class="form-control" oninput="filterByDate()">
-                        <input type="date" id="endDate" class="form-control" oninput="filterByDate()">
-                    </div>
                     <button class="btn btn-outline-success active m-2" onclick="filterFeedback('food', 'Positive')">Positive Feedback</button>
                     <button class="btn btn-outline-danger active m-2" onclick="filterFeedback('food', 'Negative')">Negative Feedback</button>
                 </div>
