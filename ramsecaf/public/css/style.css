@@ -261,7 +261,7 @@ a:focus {
 }
 
 .col-12{
-  overflow-y: scroll;
+  overflow-y: hidden;
   max-height: 835px;
 }
 
