@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 18, 2023 at 06:45 PM
+-- Generation Time: Oct 28, 2023 at 03:16 AM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -45,8 +45,11 @@ CREATE TABLE `cart` (
 INSERT INTO `cart` (`id`, `user_id`, `cart_status`, `created_at`, `updated_at`, `item_total`, `price_total`, `store`) VALUES
 (107, 4, 'claimed', '2023-09-18 07:18:08', '2023-09-18 07:33:01', NULL, NULL, 'Kitchen Express'),
 (108, 4, 'paid', '2023-09-18 07:19:01', '2023-09-18 07:19:18', NULL, NULL, 'Kitchen Express'),
-(109, 4, 'paid', '2023-09-18 07:20:26', '2023-09-18 07:22:49', NULL, NULL, 'Kitchen Express'),
-(110, 12, 'paid', '2023-09-18 07:22:16', '2023-09-18 07:23:14', NULL, NULL, 'La Mudras Corner');
+(109, 4, 'claimed', '2023-09-18 07:20:26', '2023-10-27 16:20:37', NULL, NULL, 'Kitchen Express'),
+(110, 12, 'paid', '2023-09-18 07:22:16', '2023-09-18 07:23:14', NULL, NULL, 'La Mudras Corner'),
+(111, 13, 'claimed', '2023-10-27 09:43:53', '2023-10-27 09:58:57', NULL, NULL, 'Kitchen Express'),
+(114, 13, 'paid', '2023-10-27 10:22:15', '2023-10-27 10:23:27', NULL, NULL, 'Kitchen Express'),
+(118, 13, 'claimed', '2023-10-27 16:20:54', '2023-10-27 16:21:26', NULL, NULL, 'Kitchen Express');
 
 -- --------------------------------------------------------
 
@@ -91,7 +94,8 @@ INSERT INTO `feedback` (`id`, `comment_1`, `comment_2`, `user_id`, `created_at`,
 (28, 'Good', 'slow', 4, '2023-09-14 06:19:09', '2023-09-14 06:19:09', 81, 'Positive', 'Negative'),
 (29, 'okay', 'good', 4, '2023-09-17 08:37:27', '2023-09-17 08:37:27', 99, 'Positive', 'Positive'),
 (30, 'bad', 'good', 12, '2023-09-18 04:38:37', '2023-09-18 04:38:37', 104, 'Negative', 'Positive'),
-(31, 'bad', 'bad', 4, '2023-09-18 04:40:27', '2023-09-18 04:40:27', 100, 'Negative', 'Negative');
+(31, 'bad', 'bad', 4, '2023-09-18 04:40:27', '2023-09-18 04:40:27', 100, 'Negative', 'Negative'),
+(32, 'It tastes like water', 'One of the best services I received when buying water', 13, '2023-10-27 10:00:38', '2023-10-27 10:00:38', 111, 'Positive ', 'Positive ');
 
 -- --------------------------------------------------------
 
@@ -148,7 +152,11 @@ INSERT INTO `order_product` (`id`, `cart_id`, `product_id`, `product_quantity`, 
 (243, 109, 1, 1, '2023-09-18 07:20:26', '2023-09-18 07:20:26', 100),
 (244, 109, 2, 1, '2023-09-18 07:20:28', '2023-09-18 07:20:28', 100),
 (245, 110, 14, 1, '2023-09-18 07:22:16', '2023-09-18 07:22:16', 75),
-(246, 110, 17, 1, '2023-09-18 07:22:18', '2023-09-18 07:22:18', 75);
+(246, 110, 17, 1, '2023-09-18 07:22:18', '2023-09-18 07:22:18', 75),
+(247, 111, 11, 6, '2023-10-27 09:43:53', '2023-10-27 09:44:39', 120),
+(250, 114, 11, 8, '2023-10-27 10:22:15', '2023-10-27 10:22:54', 160),
+(254, 118, 7, 1, '2023-10-27 16:20:54', '2023-10-27 16:20:54', 100),
+(255, 118, 1, 1, '2023-10-27 16:20:58', '2023-10-27 16:20:58', 100);
 
 -- --------------------------------------------------------
 
@@ -437,7 +445,46 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (249, 'App\\Models\\User', 4, 'API TOKEN', 'a65ba7ca72ef8685aaf2895f85181c31d91cad941509f873f3d12394e0adf99b', '[\"*\"]', NULL, NULL, '2023-09-18 07:53:50', '2023-09-18 07:53:50'),
 (250, 'App\\Models\\User', 8, 'API TOKEN', '956a888a9c362fa8d17b8611cdf4810c357cb7b85f07084786a81274c2504b3f', '[\"*\"]', NULL, NULL, '2023-09-18 08:03:13', '2023-09-18 08:03:13'),
 (251, 'App\\Models\\User', 4, 'API TOKEN', '21e6332bf55f805ff8b18063d4f0dcd0675729e2b261c2b9bf42b9a1eea8a138', '[\"*\"]', NULL, NULL, '2023-09-18 08:05:39', '2023-09-18 08:05:39'),
-(252, 'App\\Models\\User', 5, 'API TOKEN', 'd3d2b87f6a6b4f8506879a5b05df3a04b998b638cf3043184db54e2f6094e678', '[\"*\"]', NULL, NULL, '2023-09-18 08:06:09', '2023-09-18 08:06:09');
+(252, 'App\\Models\\User', 5, 'API TOKEN', 'd3d2b87f6a6b4f8506879a5b05df3a04b998b638cf3043184db54e2f6094e678', '[\"*\"]', NULL, NULL, '2023-09-18 08:06:09', '2023-09-18 08:06:09'),
+(253, 'App\\Models\\User', 13, 'API TOKEN', '162318c8fb9b7aa2017d516dbbd4823d5096ed3c4f4bd22795b5066658489ab6', '[\"*\"]', NULL, NULL, '2023-10-27 09:39:38', '2023-10-27 09:39:38'),
+(254, 'App\\Models\\User', 5, 'API TOKEN', '1624da85db007a010f834d69946b440dfa49639992d0825547d6e09f4da56cb6', '[\"*\"]', NULL, NULL, '2023-10-27 09:39:53', '2023-10-27 09:39:53'),
+(255, 'App\\Models\\User', 5, 'API TOKEN', '744f474a1e627f61739b76e0385a55f6dab38f9f0c7394757bb5a46b297876d5', '[\"*\"]', NULL, NULL, '2023-10-27 09:43:30', '2023-10-27 09:43:30'),
+(256, 'App\\Models\\User', 13, 'API TOKEN', '294a3c0b4465b7783299627e795973839d9e095dffb32c8d9027becd57c241af', '[\"*\"]', NULL, NULL, '2023-10-27 09:43:48', '2023-10-27 09:43:48'),
+(257, 'App\\Models\\User', 5, 'API TOKEN', 'af0c0ac5585e97a13d40ec02c1f7d4bb43f07f22f3007d33355eff5de1a5ff57', '[\"*\"]', NULL, NULL, '2023-10-27 09:46:08', '2023-10-27 09:46:08'),
+(258, 'App\\Models\\User', 13, 'API TOKEN', 'bc45c2272af7781c6e04024986a519b01b618343e485b6811e89bf13fe84215d', '[\"*\"]', NULL, NULL, '2023-10-27 09:46:46', '2023-10-27 09:46:46'),
+(259, 'App\\Models\\User', 5, 'API TOKEN', 'b861575fce0055d58bf61256be5df3128c475358f60e06a529fc1b49f30b1f51', '[\"*\"]', NULL, NULL, '2023-10-27 09:48:59', '2023-10-27 09:48:59'),
+(260, 'App\\Models\\User', 13, 'API TOKEN', '29c6ea333e34527afadfd78185dcdfadf2dd6d7b8410400df67e380251350d26', '[\"*\"]', NULL, NULL, '2023-10-27 09:49:34', '2023-10-27 09:49:34'),
+(261, 'App\\Models\\User', 5, 'API TOKEN', 'e8032a6cb0e81ceb3159bf9ac79abc2b63b78e1d8b07df08de0fb419e234e76d', '[\"*\"]', NULL, NULL, '2023-10-27 09:51:00', '2023-10-27 09:51:00'),
+(262, 'App\\Models\\User', 13, 'API TOKEN', '7eeef8201311978129904f0b0cec237ca9a882ae1f54113dc8a02c7c75a04e14', '[\"*\"]', NULL, NULL, '2023-10-27 09:56:28', '2023-10-27 09:56:28'),
+(263, 'App\\Models\\User', 8, 'API TOKEN', '6a4feeaf8111edbcf1a6dd8cd63ec5b4a5bfee61520f7681eee2fd7fadcc1c9b', '[\"*\"]', NULL, NULL, '2023-10-27 09:58:10', '2023-10-27 09:58:10'),
+(264, 'App\\Models\\User', 13, 'API TOKEN', '30b1d5b1b6455dc75b63e1d2935d9f2637d6655a1e5fe32664b182a0a12899f9', '[\"*\"]', NULL, NULL, '2023-10-27 09:58:28', '2023-10-27 09:58:28'),
+(265, 'App\\Models\\User', 5, 'API TOKEN', '4cc4ae849d89216bf64f0f7638dafb4a0d1d058c83bf3c75f2abc3d4c3130f5a', '[\"*\"]', NULL, NULL, '2023-10-27 09:58:46', '2023-10-27 09:58:46'),
+(266, 'App\\Models\\User', 13, 'API TOKEN', '85229fd810f265750691d06a9326b8c55a9b85ef9c6cd92dad389c6250adbe26', '[\"*\"]', NULL, NULL, '2023-10-27 09:59:07', '2023-10-27 09:59:07'),
+(267, 'App\\Models\\User', 5, 'API TOKEN', '8fb3c9ef1de5a0753526a8ac440943a0302933c45083b10e9b34cec152541a51', '[\"*\"]', NULL, NULL, '2023-10-27 10:01:14', '2023-10-27 10:01:14'),
+(268, 'App\\Models\\User', 5, 'API TOKEN', 'b242ede48680af4a4dc6e848dedcd446b47cfea858d0e0766f4f63c27db1f2ed', '[\"*\"]', NULL, NULL, '2023-10-27 10:21:43', '2023-10-27 10:21:43'),
+(269, 'App\\Models\\User', 13, 'API TOKEN', 'dd1582be36f766c42561532c9b513790ada04399f78e6b02aa9ba894779f8f81', '[\"*\"]', NULL, NULL, '2023-10-27 10:22:05', '2023-10-27 10:22:05'),
+(270, 'App\\Models\\User', 5, 'API TOKEN', '4b7b2548eb9443d3310822f1972e8e7dfae8f9afa94df12bef1b9896da7ed4d9', '[\"*\"]', NULL, NULL, '2023-10-27 10:28:13', '2023-10-27 10:28:13'),
+(271, 'App\\Models\\User', 13, 'API TOKEN', '478952eb7437595c100804911b34d4d3eac5e59d6b4ff99a02767403c9d8aa60', '[\"*\"]', NULL, NULL, '2023-10-27 10:28:29', '2023-10-27 10:28:29'),
+(272, 'App\\Models\\User', 5, 'API TOKEN', '3486a1c1aec17cd5713315437fbbaa72227f8d5ffc4b275c9db3b7c44a9a5a18', '[\"*\"]', NULL, NULL, '2023-10-27 15:40:00', '2023-10-27 15:40:00'),
+(273, 'App\\Models\\User', 7, 'API TOKEN', 'a7786c6fa741441b9e0c182ecb2880817f558a372174460f5b3c5f9e0ab7e125', '[\"*\"]', NULL, NULL, '2023-10-27 15:56:36', '2023-10-27 15:56:36'),
+(274, 'App\\Models\\User', 13, 'API TOKEN', '7ded2d11e52c62025f9cd4ce9e42a715de5f7c012b66fddb5a4497fa8ce1cd47', '[\"*\"]', NULL, NULL, '2023-10-27 16:10:26', '2023-10-27 16:10:26'),
+(275, 'App\\Models\\User', 13, 'API TOKEN', '5d7df7068b54af87a042b5ed781ae549997f1df6dec9331085bb9479f6e8990b', '[\"*\"]', NULL, NULL, '2023-10-27 16:15:18', '2023-10-27 16:15:18'),
+(276, 'App\\Models\\User', 5, 'API TOKEN', 'b166c0a4a37c582b4b393d3eb0bb67d0e4ba366088ed720d9cdea04ab92119a9', '[\"*\"]', NULL, NULL, '2023-10-27 16:15:55', '2023-10-27 16:15:55'),
+(277, 'App\\Models\\User', 13, 'API TOKEN', 'a85cf86b6ce5f1648c2c54a4ba64f57ad4976797fbfce4658d4debad80e64a0f', '[\"*\"]', NULL, NULL, '2023-10-27 16:16:15', '2023-10-27 16:16:15'),
+(278, 'App\\Models\\User', 5, 'API TOKEN', '1bc97a56a4a69450047a331fc6e2e3dd40aab09601aee328ad0c2355ec1f43c5', '[\"*\"]', NULL, NULL, '2023-10-27 16:19:45', '2023-10-27 16:19:45');
+INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
+(279, 'App\\Models\\User', 13, 'API TOKEN', '28d6190fb00265cd9accaeef1cd1cd88cb9b06522e358a9812972125ec1f66a6', '[\"*\"]', NULL, NULL, '2023-10-27 16:20:50', '2023-10-27 16:20:50'),
+(280, 'App\\Models\\User', 5, 'API TOKEN', 'db36f5cf802eda1ca02c376e803531c59d9358744043129f5d963253ffa885d8', '[\"*\"]', NULL, NULL, '2023-10-27 16:21:18', '2023-10-27 16:21:18'),
+(281, 'App\\Models\\User', 13, 'API TOKEN', '368fac969bede86759b3de36ee46d7aa348e0b05cf22f9ed0ee5105833ac7105', '[\"*\"]', NULL, NULL, '2023-10-27 16:21:50', '2023-10-27 16:21:50'),
+(282, 'App\\Models\\User', 5, 'API TOKEN', 'c6e41f8fbf9fb3cc76c4988cdf40071d31c8f73c17e3055fdacbc905a1019258', '[\"*\"]', NULL, NULL, '2023-10-27 16:23:46', '2023-10-27 16:23:46'),
+(283, 'App\\Models\\User', 13, 'API TOKEN', '2e692fbb61c6beb6fe0572eb6b0f150db7d746ab4d33d81a53c01f4cd4e75956', '[\"*\"]', NULL, NULL, '2023-10-27 16:24:41', '2023-10-27 16:24:41'),
+(284, 'App\\Models\\User', 5, 'API TOKEN', '85939a302b1c84838b4163bbdd5a6369ef7c03bd2f04529d24dcd781fb2385c1', '[\"*\"]', NULL, NULL, '2023-10-27 16:34:35', '2023-10-27 16:34:35'),
+(285, 'App\\Models\\User', 13, 'API TOKEN', 'a6a725d2bef2ee47632f7e837ef77a431202e5bd7b7648a0933e644bc6c1f25f', '[\"*\"]', NULL, NULL, '2023-10-27 16:36:27', '2023-10-27 16:36:27'),
+(286, 'App\\Models\\User', 5, 'API TOKEN', 'aa36486bbd15c19838356c556d709efbba4cb9ab3a0abdc1be2786a9063d8c89', '[\"*\"]', NULL, NULL, '2023-10-27 16:39:00', '2023-10-27 16:39:00'),
+(287, 'App\\Models\\User', 13, 'API TOKEN', 'e0f2c4338622922cd4a30354380f36d3588ccf3f23277058d0f612fc380a856d', '[\"*\"]', NULL, NULL, '2023-10-27 16:43:14', '2023-10-27 16:43:14'),
+(288, 'App\\Models\\User', 5, 'API TOKEN', '9180c27012f4721c38c3d7b09d1366a1e42012dd0dde5686b62144dc6434dab4', '[\"*\"]', NULL, NULL, '2023-10-27 16:43:58', '2023-10-27 16:43:58'),
+(289, 'App\\Models\\User', 13, 'API TOKEN', '3d3654363e46b3fe713af9ff96d4a1f32c2443623d8b012a43ffd924dda85fdb', '[\"*\"]', NULL, NULL, '2023-10-27 16:46:28', '2023-10-27 16:46:28'),
+(290, 'App\\Models\\User', 5, 'API TOKEN', '26963ad9be5e815b64094f84be6a79243242168a9416e3e12638532a720143ea', '[\"*\"]', NULL, NULL, '2023-10-27 17:00:20', '2023-10-27 17:00:20');
 
 -- --------------------------------------------------------
 
@@ -463,17 +510,17 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `productname`, `price`, `category`, `image`, `created_at`, `updated_at`, `store_name`, `stocks`, `isactive`) VALUES
-(1, 'Katsudon', 100.00, 'ricemeals', 'Katsudon_2023-03-05-16-31-30.png', NULL, '2023-09-18 07:22:49', 'Kitchen Express', 39, 1),
+(1, 'Katsudon', 100.00, 'ricemeals', 'Katsudon_2023-03-05-16-31-30.png', NULL, '2023-10-27 16:21:10', 'Kitchen Express', 38, 1),
 (2, 'Chicken Curry', 100.00, 'ricemeals', 'Chicken Curry_2023-03-05-15-23-23.png', NULL, '2023-09-18 07:22:49', 'Kitchen Express', 37, 1),
 (3, 'Lechon Paksiw', 100.00, 'ricemeals', 'Lechon Paksiw_2023-03-05-15-23-37.png', NULL, '2023-09-17 07:03:18', 'Kitchen Express', 32, 1),
 (4, '2pc Barbeque', 100.00, 'ricemeals', '2pc%20BBQ.png', NULL, '2023-09-17 06:21:15', 'Kitchen Express', 35, 1),
 (5, 'Salisbury Steak', 100.00, 'ricemeals', 'Salisbury%20Steak.png', NULL, '2023-09-14 19:51:04', 'Kitchen Express', 45, 1),
 (6, 'Pork Tapa', 100.00, 'ricemeals', 'Pork%20Tapa.png', NULL, '2023-09-18 07:18:54', 'Kitchen Express', 45, 1),
-(7, 'Cheesy Spaghetti', 100.00, 'pasta', 'Cheesy%20Spaghetti.png', NULL, '2023-09-14 00:14:49', 'Kitchen Express', 41, 1),
-(8, 'Brewed Calamansi', 50.00, 'beverages', 'Brewed%20Calamansi%20Drink.png', NULL, '2023-09-17 07:03:18', 'Kitchen Express', 44, 1),
-(9, 'Calamansi Drink', 50.00, 'beverages', 'Calamansi%20Drink.png', NULL, '2023-09-11 18:41:15', 'Kitchen Express', 47, 1),
-(10, 'C2', 40.00, 'beverages', 'C2.png', NULL, '2023-09-17 06:21:15', 'Kitchen Express', 42, 1),
-(11, 'Water', 20.00, 'beverages', 'Water.png', NULL, '2023-09-18 07:19:18', 'Kitchen Express', 41, 1),
+(7, 'Cheesy Spaghetti', 100.00, 'pasta', 'Cheesy%20Spaghetti.png', NULL, '2023-10-27 16:35:24', 'Kitchen Express', 40, 0),
+(8, 'Brewed Calamansi', 50.00, 'beverages', 'Brewed%20Calamansi%20Drink.png', NULL, '2023-10-27 09:51:39', 'Kitchen Express', 44, 1),
+(9, 'Calamansi Drink', 50.00, 'beverages', 'Calamansi%20Drink.png', NULL, '2023-10-27 09:51:41', 'Kitchen Express', 47, 1),
+(10, 'C2', 40.00, 'beverages', 'C2.png', NULL, '2023-10-27 09:51:55', 'Kitchen Express', 0, 1),
+(11, 'Water', 20.00, 'beverages', 'Water.png', NULL, '2023-10-27 16:45:55', 'Kitchen Express', 4, 1),
 (14, 'Burgersilog', 75.00, 'ricemeals', 'Burgersilog_2023-03-05-17-00-05.png', '2023-03-05 09:00:05', '2023-09-18 07:23:21', 'La Mudras Corner', 43, 1),
 (15, 'Hotsilog', 75.00, 'ricemeals', 'Hotsilog_2023-03-05-17-00-29.png', '2023-03-05 09:00:29', '2023-09-18 06:50:03', 'La Mudras Corner', 45, 1),
 (16, 'Pork Teriyaki', 75.00, 'ricemeals', 'Pork Teriyaki_2023-03-05-17-00-56.png', '2023-03-05 09:00:56', '2023-09-17 07:03:47', 'La Mudras Corner', 47, 1),
@@ -585,7 +632,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -597,7 +644,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -609,13 +656,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `order_product`
 --
 ALTER TABLE `order_product`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=256;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=253;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=291;
 
 --
 -- AUTO_INCREMENT for table `product`
