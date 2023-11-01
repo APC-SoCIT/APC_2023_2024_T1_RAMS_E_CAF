@@ -89,7 +89,7 @@
           <div class="container" id="foodcontainer">
               <div class="heading_container heading_center">
                   <h2>
-                    {{$product[0]->store_name}}
+                  {{$storename}}
                   </h2>
               </div>
 

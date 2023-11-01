@@ -93,11 +93,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 
         <div class="row">
 
-            <div class="col-6 mt-4">
+            <div class="col-4 mt-4">
     <ol class="list-group list-group">
         <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
             <div>
-                <h1 class="kcursive">Kitchen Express</h1>
+                <h2 class="kcursive">Kitchen Express</h2>
                 <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
                 </div>
         </li>
@@ -135,11 +135,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     </ol>
 </div>
 
-<div class="col-6 mt-4">
+<div class="col-4 mt-4">
     <ol class="list-group list-group">
         <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
             <div>
-                <h1 class="kcursive">La Mudra's Corner</h1>
+                <h2 class="kcursive">La Mudra's Corner</h2>
                 <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
                 </div>
         </li>
@@ -173,6 +173,48 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         </li>
         <li class="list-group-item align-items-end text-end" id="monthlysales">
         <h3>Total Sale: ₱{{ $monthly_sales_lm }}</h3>
+        </li>
+    </ol>
+</div>
+
+<div class="col-4 mt-4">
+    <ol class="list-group list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales">
+            <div>
+                <h2 class="kcursive">Red Brew</h2>
+                <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F, Y') }}</p>
+                </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-start" id="monthlysales" >
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $monthly_sales_rb = 0;
+                    @endphp
+                    @foreach ($product_month_rb as $product_month_rb)
+                    <tr>
+                        <td>{{ $product_month_rb->productsold }}</td>
+                        <td>{{ $product_month_rb->productname }}</td>
+                        <td>₱{{ $product_month_rb->price }}</td>
+                        <td>₱{{$product_month_rb->productsold * $product_month_rb->price }}</td>
+                        @php
+                        $monthly_sales_lm += $product_month_rb->productsold * $product_month_rb->price;
+                        @endphp
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </li>
+        <li class="list-group-item align-items-end text-end" id="monthlysales">
+        <h3>Total Sale: ₱{{ $monthly_sales_rb }}</h3>
         </li>
     </ol>
 </div>

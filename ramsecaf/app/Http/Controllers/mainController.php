@@ -97,6 +97,10 @@ class mainController extends Controller
             $storeName = "La Mudras Corner";
             $bg = "images/lmbg.png";
             $logo = "images/La Mudras Corner.png";
+        } elseif ($user->role == 'vendor-rb') {
+            $storeName = "Red Brew";
+            $bg = "images/lmbg.png";
+            $logo = "images/Red Brew.png";
         }
 
 
@@ -128,7 +132,7 @@ class mainController extends Controller
             ->select(
                 'productname',
                 'price',
-                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_quantity) as productsold'),
                 DB::raw('SUM(product_total * product_quantity) as total')
             )
             ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
@@ -143,7 +147,7 @@ class mainController extends Controller
             ->select(
                 'productname',
                 'price',
-                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_quantity) as productsold'),
                 DB::raw('SUM(product_total * product_quantity) as total')
             )
             ->whereBetween('order_product.created_at', [$startOfWeek, $endOfWeek])
@@ -157,7 +161,7 @@ class mainController extends Controller
             ->select(
                 'productname',
                 'price',
-                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_quantity) as productsold'),
                 DB::raw('SUM(product_total * product_quantity) as total')
             )
             ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
@@ -171,7 +175,7 @@ class mainController extends Controller
             ->select(
                 'productname',
                 'price',
-                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_quantity) as productsold'),
                 DB::raw('SUM(product_total) as total')
             )
 
@@ -203,6 +207,7 @@ class mainController extends Controller
     {
 
         $userid = Auth::user()->id;
+        $storeName = "Kitchen Express";
         if (Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'Kitchen Express') {
             
             $bestSellers = DB::table('order_product')
@@ -221,7 +226,7 @@ class mainController extends Controller
                 ->get();
             $bestproduct = Product::whereIn('productname', [$bestSellers[0]->productname, $bestSellers[1]->productname, $bestSellers[2]->productname])->get();
             $product = Product::where("store_name", "Kitchen Express")->whereNotIn('productname', [$bestSellers[0]->productname, $bestSellers[1]->productname, $bestSellers[2]->productname])->get();
-            return view("menu1", ["product" => $product, "bestseller" => $bestproduct]);
+            return view("menu1", ["product" => $product, "storename" => $storeName, "bestseller" => $bestproduct]);
         }
         if (Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store != 'Kitchen Express') {
             Alert::warning('You have pending items from ' . Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store, '')->showConfirmButton('Confirm', '#FCAE28');
@@ -235,6 +240,7 @@ class mainController extends Controller
     {
 
         $userid = Auth::user()->id;
+        $storeName = "La Mudra's Corner";
         if (Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'La Mudras Corner') {
             $bestSellers = DB::table('order_product')
                 ->join('product', 'product.id', '=', 'order_product.product_id')->where('store_name', "La Mudras Corner")
@@ -252,7 +258,7 @@ class mainController extends Controller
                 ->get();
             $bestproduct = Product::whereIn('productname', [$bestSellers[0]->productname, $bestSellers[1]->productname, $bestSellers[2]->productname])->get();
             $product = Product::where("store_name", "La Mudras Corner")->whereNotIn('productname', [$bestSellers[0]->productname, $bestSellers[1]->productname, $bestSellers[2]->productname])->get();
-            return view("menu1", ["product" => $product, "bestseller" => $bestproduct]);
+            return view("menu1", ["product" => $product, "storename" => $storeName, "bestseller" => $bestproduct]);
         }
         if (Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store != 'La Mudras Corner') {
             Alert::warning('You have pending items from ' . Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store, '')->showConfirmButton('Confirm', '#FCAE28');
@@ -264,9 +270,25 @@ class mainController extends Controller
     public function redbrew()
     {
         $userid = Auth::user()->id;
+        $storeName = "Red Brew";
         if (Cart::where("user_id", $userid)->where("cart_status", "pending")->count() == 0 || Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store == 'Red Brew') {
-            $product = Product::where("store_name", "Red Brew")->get();
-            return view("menu1", ["product" => $product]);
+            $bestSellers = DB::table('order_product')
+                ->join('product', 'product.id', '=', 'order_product.product_id')->where('store_name', "Red Brew")
+                ->select(
+
+                    'productname',
+                    'price',
+                    DB::raw('count(*) as productsold'),
+                    DB::raw('SUM(product_total) as total')
+                )
+
+                ->groupBy('productname', 'price')
+                ->orderByDesc('productsold')
+                ->limit(3)
+                ->get();
+            $bestproduct = Product::whereIn('productname', [$bestSellers[0]->productname, $bestSellers[1]->productname, $bestSellers[2]->productname])->get();
+            $product = Product::where("store_name", "Red Brew")->whereNotIn('productname', [$bestSellers[0]->productname, $bestSellers[1]->productname, $bestSellers[2]->productname])->get();
+            return view("menu1", ["product" => $product, "storename" => $storeName, "bestseller" => $bestproduct]);
         }
         if (Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store != 'Red Brew') {
             Alert::warning('You have pending items from ' . Cart::where("user_id", $userid)->where("cart_status", "pending")->get()->first()->store, '')->showConfirmButton('Confirm', '#FCAE28');
@@ -726,6 +748,10 @@ class mainController extends Controller
             $storeName = "La Mudras Corner";
             $bg = "images/lmbg.png";
             $logo = "images/La Mudras Corner.png";
+        } elseif ($user->role == 'vendor-rb') {
+            $storeName = "Red Brew";
+            $bg = "images/lmbg.png";
+            $logo = "images/Red Brew.png";
         }
 
 
@@ -848,6 +874,10 @@ class mainController extends Controller
             $storeName = "La Mudras Corner";
             $bg = "images/lmbg.png";
             $logo = "images/La Mudras Corner.png";
+        } elseif ($user->role == 'vendor-rb') {
+            $storeName = "Red Brew";
+            $bg = "images/lmbg.png";
+            $logo = "images/Red Brew.png";
         }
 
         $user = Auth::user()->role;
@@ -905,6 +935,10 @@ class mainController extends Controller
             $storeName = "La Mudras Corner";
             $bg = "images/lmbg.png";
             $logo = "images/La Mudras Corner.png";
+        } elseif ($user->role == 'vendor-rb') {
+            $storeName = "Red Brew";
+            $bg = "images/lmbg.png";
+            $logo = "images/Red Brew.png";
         }
 
         $user = Auth::user()->role;
@@ -1057,12 +1091,17 @@ class mainController extends Controller
             ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
             ->sum('product_total');
 
+        $monthlySales_rb = DB::table('order_product')
+            ->join('product', 'product.id', '=', 'order_product.product_id')
+            ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
+            ->sum('product_total');
+
         $productlist = DB::table('order_product')
             ->join('product', 'product.id', '=', 'order_product.product_id')
             ->select(
                 'productname',
                 'price',
-                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_quantity) as productsold'),
                 DB::raw('SUM(product_total * product_quantity) as total')
             )
             ->whereBetween('order_product.created_at', [$startOfDay, $endOfDay])
@@ -1077,7 +1116,7 @@ class mainController extends Controller
             ->select(
                 'productname',
                 'price',
-                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_quantity) as productsold'),
                 DB::raw('SUM(product_total * product_quantity) as total')
             )
             ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
@@ -1090,7 +1129,7 @@ class mainController extends Controller
             ->select(
                 'productname',
                 'price',
-                DB::raw('count(*) as productsold'),
+                DB::raw('SUM(product_quantity) as productsold'),
                 DB::raw('SUM(product_total * product_quantity) as total')
             )
             ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
@@ -1098,12 +1137,27 @@ class mainController extends Controller
             ->groupBy('productname', 'price')
             ->get();
 
+        $productlist_month_rb = DB::table('order_product')
+            ->join('product', 'product.id', '=', 'order_product.product_id')
+            ->select(
+                'productname',
+                'price',
+                DB::raw('SUM(product_quantity) as productsold'),
+                DB::raw('SUM(product_total * product_quantity) as total')
+            )
+            ->whereBetween('order_product.created_at', [$startOfMonth, $endOfMonth])
+            ->where('store_name', 'Red Brew')
+            ->groupBy('productname', 'price')
+            ->get();
+
         return view('viewreports', [
             "product_month_ke" => $productlist_month_ke,
             "product_month_lm" => $productlist_month_lm,
+            "product_month_rb" => $productlist_month_rb,
             "product" => $productlist,
             'monthly_sales_ke' => $monthlySales_ke,
             'monthly_sales_lm' => $monthlySales_lm,
+            'monthly_sales_rb' => $monthlySales_rb,
         ]);
     }
 
