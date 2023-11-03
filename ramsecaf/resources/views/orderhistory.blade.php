@@ -2,8 +2,8 @@
 <html>
     
 <head>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     
   <!-- Basic -->
   <meta charset="utf-8" />
@@ -39,7 +39,7 @@
 <body>
 @include('sweetalert::alert')
 <div class="bg-box" id="customerbg">
-    <img src="images/apccaf.jpg"  alt="" id="apccafbg">
+    <img src="/images/apccaf.jpg"  alt="" id="apccafbg">
   </div>
   <!-- header section -->
   <header class="header_section">
@@ -75,13 +75,13 @@
 
   <ol class="list-group list-group m-5">
   <li class="list-group-item d-flex justify-content-between align-items-start">
-    <div class="text-center">
+    <div class="text-center w-100">
       <h1>Completed Orders</h1>
       <a href="/profile">
-        <button type="button" class="btn btn-outline-warning">Current Orders</button>
+        <button type="button" class="btn btn-outline-warning">Current</button>
       </a>
       <a href="/complete">
-        <button type="button" class="btn btn-outline-success active">Completed Orders</button>
+        <button type="button" class="btn btn-outline-success active">Completed</button>
       </a>
     </div>
   </li>

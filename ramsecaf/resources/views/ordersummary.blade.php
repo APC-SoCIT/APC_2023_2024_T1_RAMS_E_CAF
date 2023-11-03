@@ -44,7 +44,7 @@
 <body>
     <div class="hero_area">
     <div class="bg-box" id="customerbg">
-    <img src="images/apccaf.jpg" " alt="" id="apccafbg">
+    <img src="/images/apccaf.jpg" alt="" id="apccafbg">
   </div>
   <!-- header section -->
   <header class="header_section">

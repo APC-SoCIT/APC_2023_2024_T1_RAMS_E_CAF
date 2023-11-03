@@ -94,7 +94,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 
     <!-- end header section -->
 
-    <div class="container">
+    <div class="container-fluid">
 
         <div class="row">
 
@@ -138,15 +138,15 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 </div>
 
 
-            <div class="col-6" id="dailysalesscroll">
-                <ol class="list-group" id="dailysales" >
+            <div class="col-6">
+                <ol class="list-group" id="dailysalesscroll" >
                     <li class="list-group-item d-flex justify-content-between align-items-start" id="dailysales" >
                         <div class="">
                             <h1 class="kcursive">Daily Sales</h1>
                             <p class="fs-5 small">{{ \Carbon\Carbon::now()->format('F j, Y') }}</p>
                         </div>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-start"id="dailysales">
+                    <li class="list-group-item d-flex justify-content-between align-items-start"id="dailysales" id="dailysalesscroll">
                         
                         <table class="table">
                         <thead>
@@ -184,8 +184,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                 </ol>
             </div>
 
-            <div class="col-6 mt-4" id="weeklysalesscroll">
-                <ol class="list-group list-group">
+            <div class="col-6 mt-4">
+                <ol class="list-group list-group"  id="weeklysalesscroll">
                     <li class="list-group-item d-flex justify-content-between align-items-start" id="weeklysales">
                         <div class="">
                         <h1 class="kcursive">Weekly Sales</h1>

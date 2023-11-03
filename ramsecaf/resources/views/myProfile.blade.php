@@ -80,13 +80,13 @@
 
   <ol class="list-group list-group m-5">
     <li class="list-group-item d-flex justify-content-between align-items-start">
-        <div class="text-center">
+        <div class="text-center w-100">
             <h1>Pending Orders</h1>
             <a href="/profile">
-                <button type="button" class="btn btn-outline-warning active">Current Orders</button>
+                <button type="button" class="btn btn-outline-warning active">Current</button>
             </a>
             <a href="/complete">
-                <button type="button" class="btn btn-outline-success">Completed Orders</button>
+                <button type="button" class="btn btn-outline-success">Completed</button>
             </a>
         </div>
     </li>

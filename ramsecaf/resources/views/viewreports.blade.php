@@ -88,8 +88,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     </header>
 
     <!-- end header section -->
-
-    <div class="container">
+    
+    <div class="container-fluid">
 
         <div class="row">
 
@@ -134,6 +134,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         </li>
     </ol>
 </div>
+
 
 <div class="col-4 mt-4">
     <ol class="list-group list-group">
@@ -206,7 +207,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                         <td>₱{{ $product_month_rb->price }}</td>
                         <td>₱{{$product_month_rb->productsold * $product_month_rb->price }}</td>
                         @php
-                        $monthly_sales_lm += $product_month_rb->productsold * $product_month_rb->price;
+                        $monthly_sales_rb += $product_month_rb->productsold * $product_month_rb->price;
                         @endphp
                     </tr>
                     @endforeach

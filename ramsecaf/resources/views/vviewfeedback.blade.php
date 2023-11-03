@@ -91,7 +91,7 @@
     <!-- end header section -->
 <body>
 
-<div class="container">
+<div class="container-fluid">
 <div class="row">
 
     <div class="col-12 my-4"> <!-- Added the "my-4" class for vertical margin -->
@@ -102,6 +102,10 @@
                     <div class="input-group mb-3">
                         <input type="date" id="startDate" class="form-control" oninput="filterByDate()">
                         <input type="date" id="endDate" class="form-control" oninput="filterByDate()">
+                        <button class="btn btn-primary" id="setWeek1Button">First Week</button>
+                        <button class="btn btn-primary" id="setWeek2Button">Second Week</button>
+                        <button class="btn btn-primary" id="setWeek3Button">Third Week</button>
+                        <button class="btn btn-primary" id="setWeek4Button">Fourth Week</button>
                     </div>
                 </div>
             </li>
@@ -121,7 +125,7 @@
                 </div>
 
                 </li>
-                <div class="comment_1">
+                <div class="comment_1 list-group-item" id="vendorfeedbackscroll">
                     @if (!$feedbacklist->isEmpty())
                         @forEach($feedbacklist as $feedbacklists)
                             <div class="card m-3 text-center {{$feedbacklists->sentiment_1}} food">
@@ -151,7 +155,7 @@
                         <button class="btn btn-outline-danger active m-2" onclick="filterFeedback('vendor', 'Negative')">Negative Feedback</button>
                     </div>
                 </li>
-                <div class="comment_2">
+                <div class="comment_2 list-group-item" id="vendorfeedbackscroll">
                     @if (!$feedbacklist->isEmpty())
                         @forEach($feedbacklist as $feedbacklist)
                             <div class="card m-3 text-center {{$feedbacklist->sentiment_2}} vendor">
@@ -174,6 +178,13 @@
 </div>
 
 <script>
+    function formatDateInput(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-based, so add 1
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     function filterFeedback(type, sentiment) {
         const feedbackItems = document.querySelectorAll(`.${type}`);
         feedbackItems.forEach(item => {
@@ -208,6 +219,43 @@
             }
         });
     }
+
+    function setDateFilterToWeek(weekNumber) {
+        console.log(`Setting date filter for week ${weekNumber}`);
+    
+    // Get the current date
+        const currentDate = new Date();
+
+    // Calculate the first day of the current month
+        const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+
+    // Calculate the first day of the selected week by adding (weekNumber - 1) * 7 days to the first day of the month
+        const firstDayOfWeek = new Date(firstDayOfMonth);
+        firstDayOfWeek.setDate(firstDayOfMonth.getDate() + (weekNumber - 1) * 7);
+
+    // Calculate the last day of the selected week by adding 6 days to the first day of the week
+        const lastDayOfWeek = new Date(firstDayOfWeek);
+        lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6);
+
+    // Format the dates in YYYY-MM-DD format (required for date input fields)
+        const startDateFormatted = formatDateInput(firstDayOfWeek);
+        const endDateFormatted = formatDateInput(lastDayOfWeek);
+
+    // Set the calculated dates in the input fields
+        document.getElementById('startDate').value = startDateFormatted;
+        document.getElementById('endDate').value = endDateFormatted;
+
+    // Call the filterByDate function to apply the filter
+        filterByDate();
+    }
+
+    // Add buttons for each week
+    document.getElementById('setWeek1Button').addEventListener('click', () => setDateFilterToWeek(1));
+    document.getElementById('setWeek2Button').addEventListener('click', () => setDateFilterToWeek(2));
+    document.getElementById('setWeek3Button').addEventListener('click', () => setDateFilterToWeek(3));
+    document.getElementById('setWeek4Button').addEventListener('click', () => setDateFilterToWeek(4));
+
+
 </script>
 
 
